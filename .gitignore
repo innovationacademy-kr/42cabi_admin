@@ -112,3 +112,5 @@ dist
 # views
 backend/views/assets/*
 backend/views/index.html
+
+backend/.gitignore
