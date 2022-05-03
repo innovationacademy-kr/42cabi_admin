@@ -14,8 +14,11 @@ app.get("/api1", async (req, res) => {
   console.log("api1");
   let connection;
   connection = await pool.getConnection();
+  const content = "SELECT * from user";
+
+  const userData = await connection.query(content);
   pool.end();
-  res.send("Hello World! api1");
+  res.send(userData);
 });
 
 app.get("/api2", async (req, res) => {
