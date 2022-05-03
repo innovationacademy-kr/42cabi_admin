@@ -10,7 +10,12 @@ const pool = mariadb.createPool({
   database: process.env.DATABASE,
 });
 
-let cabinetList;
+let cabinetList = {
+  location: [],
+  floor: [],
+  section: [],
+  cabinet: [],
+};
 
 function sendResponse(res, data, status, code) {
   res.status(status).json({
@@ -20,19 +25,69 @@ function sendResponse(res, data, status, code) {
   });
 }
 
-async function getLentUserInfo(res) {
+// 전체 사물함 정보 가져옴
+async function getCabinets() {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+
+    const content1 = `SELECT DISTINCT cabinet.location FROM cabinet`;
+    const result1 = await connection.query(content1);
+    result1.forEach(async (element1) => {
+      let floorList = [];
+      let tmpSectionlist = [];
+      let tmpCabinetList = [];
+
+      cabinetList.location.push(element1.location);
+
+      const content2 = `SELECT DISTINCT cabinet.floor FROM cabinet WHERE location='${element1.location}' order by floor`;
+      const result2 = await connection.query(content2);
+      result2.forEach(async (element2) => {
+        let sectionList = [];
+        cabinetList = [];
+
+        floorList.push(element2.floor);
+
+        const content3 = `SELECT DISTINCT cabinet.section FROM cabinet WHERE location='${element1.location}' and floor='${element2.floor}'`;
+        const result3 = await connection.query(content3);
+        result3.forEach(async (element3) => {
+          let cabinet = [];
+          sectionList.push(element3.section);
+
+          // content4 쿼리에서 activation==1인 경우만 모아야 하나?
+          const content4 = `SELECT * FROM cabinet WHERE location='${element1.location}' AND floor='${element2.floor}' AND section='${element3.section}' AND activation=1 order by cabinet_num`;
+          const result4 = await connection.query(content4);
+          result4.forEach(async (element4) => {
+            cabinet.push(element4);
+          });
+          cabinetList.push(cabinet);
+        });
+        tmpSectionlist.push(sectionList);
+        tmpCabinetList.push(cabinetList);
+      });
+      cabinetList.floor?.push(floorList);
+      cabinetList.section?.push(tmpSectionlist);
+      cabinetList.cabinet?.push(tmpCabinetList);
+    });
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } finally {
+    connection.release();
+  }
+}
+
+async function getLentUserInfo() {
+  let connection;
   try {
     // TODO DB error가 주요 에러인데, 이 함수를 wrap함수로 묶어서 에러처리를 한번에 해야할지..
-    let connection;
     let lentInfo = [];
 
     const content =
       "SELECT u.intra_id, l.* FROM user u RIGHT JOIN lent l ON l.lent_user_id=u.user_id";
 
-    // 자체 ORM
     connection = await pool.getConnection();
     const lockerRentalUser = await connection.query(content);
-    pool.end();
 
     for (let i = 0; i < lockerRentalUser.length; i++) {
       lentInfo.push({
@@ -45,35 +100,98 @@ async function getLentUserInfo(res) {
         intra_id: lockerRentalUser[i].intra_id,
       });
     }
-    console.log(lentInfo);
+    // pool.end();
+    // console.log(lentInfo);
     return { lentInfo: lentInfo };
   } catch (err) {
     console.log(err);
     throw err;
-    return sendResponse(res, {}, 400, "error");
+    // return sendResponse(res, {}, 400, "error");
+  } finally {
+    connection.release();
   }
-  // await pool
-  //   .query(content)
-  //   .then((res) => {
-  //     for (let i = 0; i < res.length; i++) {
-  //       lentInfo.push({
-  //         lent_id: res[i].lent_id,
-  //         lent_cabinet_id: res[i].lent_cabinet_id,
-  //         lent_user_id: res[i].lent_user_id,
-  //         lent_time: res[i].lent_time,
-  //         expire_time: res[i].expire_time,
-  //         extension: res[i].extension,
-  //         intra_id: res[i].intra_id,
-  //       });
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //     throw err;
-  //   });
-  // if (pool) pool.end();
-  // return { lentInfo: lentInfo };
 }
+
+// 특정 사물함 + (user + lent) 정보 가져옴
+async function getCabinet(cabinetIdx) {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+
+    const [result] = await connection.query(
+      `
+      SELECT *
+      FROM cabinet c
+      LEFT JOIN lent l ON c.cabinet_id=l.lent_cabinet_id
+      LEFT JOIN user u ON l.lent_user_id=u.user_id 
+      WHERE c.cabinet_id=${cabinetIdx}
+      `
+    );
+    return result;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } finally {
+    connection.release();
+  }
+}
+
+// 반납할 사물함의 lent 정보 가져옴
+async function getUserLent(connection, cabinetIdx) {
+  const [result] = await connection.query(
+    `
+    SELECT lent_cabinet_id, lent_user_id, DATE_FORMAT(lent_time, '%Y-%m-%d %H:%i:%s') AS lent_time
+    FROM lent
+    WHERE lent_cabinet_id = ${cabinetIdx}
+    `
+  );
+  return result;
+}
+
+// lent 테이블에서 사물함 정보 삭제
+async function deleteLent(connection, userLentInfo) {
+  await connection.query(
+    `
+    DELETE 
+    FROM lent 
+    WHERE lent_cabinet_id=${userLentInfo.lent_cabinet_id}
+    `
+  );
+}
+
+// lent_log에 반납되는 사물함 정보 추가
+async function addLentLog(connection, userLentInfo) {
+  await connection.query(
+    `
+    INSERT INTO lent_log(log_cabinet_id, log_user_id, lent_time, return_time) 
+    VALUES (${userLentInfo.lent_cabinet_id}, ${userLentInfo.lent_user_id}, '${userLentInfo.lent_time}', now())
+    `
+  );
+}
+// await pool
+//   .query(content)
+//   .then((res) => {
+//     for (let i = 0; i < res.length; i++) {
+//       lentInfo.push({
+//         lent_id: res[i].lent_id,
+//         lent_cabinet_id: res[i].lent_cabinet_id,
+//         lent_user_id: res[i].lent_user_id,
+//         lent_time: res[i].lent_time,
+//         expire_time: res[i].expire_time,
+//         extension: res[i].extension,
+//         intra_id: res[i].intra_id,
+//       });
+//     }
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//     throw err;
+//   });
+// if (pool) pool.end();
+// return { lentInfo: lentInfo };
+
+// 전체 사물함 정보
+getCabinets();
 
 app.get("/api/cabinet", (_req, res) => {
   if (!cabinetList) {
@@ -85,8 +203,8 @@ app.get("/api/cabinet", (_req, res) => {
   }
 });
 
-app.get("/api/lent_info", async (req, res) => {
-  const lentInfo = await getLentUserInfo(res);
+app.get("/api/lent_info", async (_req, res) => {
+  const lentInfo = await getLentUserInfo();
   return sendResponse(res, lentInfo, 200, "ok");
   // return res.json(lentInfo);
   // return sendResponse(res, getLentUser(res), 200, "ok");
@@ -99,6 +217,46 @@ app.get("/api/lent_info", async (req, res) => {
 //   // await req.res.cookie("acc", 50);
 //   return res.send("listen on 3000!");
 // });
+
+// 특정 사물함의 정보 ( 대여중이라면: + 유저 + 렌트 정보) 가져옴
+app.get("/api/return_info", async (req, res) => {
+  const { cabinetIdx } = req.query;
+  if (!cabinetIdx) {
+    return sendResponse(res, {}, 400, "req.query error");
+  }
+
+  const cabinetInfo = await getCabinet(cabinetIdx);
+  if (!cabinetInfo) {
+    return sendResponse(res, {}, 400, "error");
+  }
+  return sendResponse(res, cabinetInfo, 200, "ok");
+});
+
+// 특정 유저의 사물함 반납
+app.patch("/api/return", async (req, res) => {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    const { cabinetIdx } = req.query;
+    if (!cabinetIdx) {
+      return sendResponse(res, {}, 400, "req.query error");
+    }
+
+    // 해당 사물함의 user, lent 정보 가져옴
+    const userLentInfo = await getUserLent(connection, cabinetIdx);
+    if (!userLentInfo) {
+      return sendResponse(res, {}, 400, "getUserLent error");
+    }
+    await deleteLent(connection, userLentInfo); // lent 테이블에서 반납 사물함 삭제
+    await addLentLog(connection, userLentInfo); // lent_log 테이블에 반납 사물함 추가
+
+    // TODO : 슬랙메시지 발송
+    return sendResponse(res, "return", 200, "ok");
+  } catch (err) {
+  } finally {
+    connection.release();
+  }
+});
 
 app.listen(3000, () => {
   console.log("Example app listening on port 3000!");
