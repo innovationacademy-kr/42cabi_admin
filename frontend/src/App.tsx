@@ -31,6 +31,7 @@ function App() {
       .get(url)
       .then((res) => {
         console.log(res);
+        console.log(data);
         setData(res.data);
       })
       .catch((e) => console.error(e));
@@ -56,7 +57,7 @@ function App() {
       <button onClick={handleAPI2}>API2</button>
       <button onClick={handleAPI3}>API3</button>
       <div>
-        <h1>{data}</h1>
+        <h1>data.id</h1>
       </div>
     </div>
   );

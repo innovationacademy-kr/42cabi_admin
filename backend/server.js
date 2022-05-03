@@ -20,7 +20,7 @@ app.get("/api1", async (req, res) => {
 
   const userData = await connection.query(content);
   connection.release();
-  res.send(userData);
+  res.send(userData[0]);
 });
 
 app.get("/api2/:num", async (req, res) => {
