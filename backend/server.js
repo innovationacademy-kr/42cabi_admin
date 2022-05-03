@@ -23,11 +23,12 @@ app.get("/api1", async (req, res) => {
   res.send(userData[0]);
 });
 
-app.get("/api2/:num", async (req, res) => {
+app.get("/api2/:id", async (req, res) => {
   let connection;
-  const num = req.params.num;
+  const { id } = req.params;
+  console.log(`========${id}`);
   connection = await pool.getConnection();
-  const content = `insert into user values (${num},"yoyoo")`;
+  const content = `insert into user values (${id},"yoyoo")`;
   await connection.query(content);
   connection.release();
   // pool.end();

@@ -5,6 +5,8 @@ import axios from "axios";
 
 function App() {
   const [data, setData] = useState<string>("Before");
+  const [id, setId] = useState<number>(0);
+  const [name, setName] = useState<string>("");
   const handleAPI1 = () => {
     const url: string = "http://localhost:8080/api1";
     axios
@@ -12,11 +14,15 @@ function App() {
       .then((res) => {
         console.log(res);
         setData(res.data);
+        setId(res.data[0].id);
+        setName(res.data[0].name);
       })
       .catch((e) => console.error(e));
   };
   const handleAPI2 = () => {
-    const url: string = "http://localhost:8080/api2";
+    const id = 7;
+    const url: string = `http://localhost:8080/api2/${id}`;
+    // const params = { id: 6 };
     axios
       .get(url)
       .then((res) => {
@@ -54,6 +60,7 @@ function App() {
     //   </header> */}
 
       <button onClick={handleAPI1}>API1</button>
+      <input type="text"></input>
       <button onClick={handleAPI2}>API2</button>
       <button onClick={handleAPI3}>API3</button>
       <div>
