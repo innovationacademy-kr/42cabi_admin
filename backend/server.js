@@ -1,6 +1,8 @@
 const express = require("express");
 const mariadb = require("mariadb");
 const app = express();
+const cors = require("cors");
+app.use(cors());
 
 require("dotenv").config();
 const pool = mariadb.createPool({
