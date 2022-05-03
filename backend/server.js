@@ -10,19 +10,27 @@ const pool = mariadb.createPool({
   database: process.env.DATABASE,
 });
 
-app.get("/api1", (req, res) => {
+app.get("/api1", async (req, res) => {
   console.log("api1");
-
+  let connection;
+  connection = await pool.getConnection();
+  pool.end();
   res.send("Hello World! api1");
 });
 
-app.get("/api2", (req, res) => {
+app.get("/api2", async (req, res) => {
+  let connection;
+  connection = await pool.getConnection();
+  pool.end();
   console.log("api2");
 
   res.send("Hello World! api2");
 });
 
-app.get("/api3", (req, res) => {
+app.get("/api3", async (req, res) => {
+  let connection;
+  connection = await pool.getConnection();
+  pool.end();
   console.log("api3");
 
   res.send("Hello World! api3");
