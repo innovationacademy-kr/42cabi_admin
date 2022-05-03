@@ -17,7 +17,7 @@ app.get("/api1", async (req, res) => {
   const content = "SELECT * from user";
 
   const userData = await connection.query(content);
-  pool.end();
+  connection.release();
   res.send(userData);
 });
 
@@ -37,7 +37,7 @@ app.get("/api2/:num", async (req, res) => {
 app.get("/api3", async (req, res) => {
   let connection;
   connection = await pool.getConnection();
-  pool.end();
+  connection.release();
   console.log("api3");
 
   res.send("Hello World! api3");
