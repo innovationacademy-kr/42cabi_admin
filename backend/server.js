@@ -21,10 +21,14 @@ app.get("/api1", async (req, res) => {
   res.send(userData);
 });
 
-app.get("/api2", async (req, res) => {
+app.get("/api2/:num", async (req, res) => {
   let connection;
+  const num = req.params.num;
   connection = await pool.getConnection();
-  pool.end();
+  const content = `insert into user values (${num},"yoyoo")`;
+  await connection.query(content);
+  connection.release();
+  // pool.end();
   console.log("api2");
 
   res.send("Hello World! api2");
