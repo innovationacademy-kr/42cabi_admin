@@ -168,6 +168,16 @@ async function addLentLog(connection, userLentInfo) {
     `
   );
 }
+
+// 사물함 activation 상태 변경
+async function modifyCabinetActivation(connection, cabinetIdx, activation) {
+  const content = `
+  UPDATE cabinet c
+  SET activation=${activation}
+  WHERE cabinet_id=${cabinetIdx}
+  `;
+  await connection.query(content);
+}
 // await pool
 //   .query(content)
 //   .then((res) => {
@@ -251,6 +261,23 @@ app.patch("/api/return", async (req, res) => {
     await addLentLog(connection, userLentInfo); // lent_log 테이블에 반납 사물함 추가
 
     // TODO : 슬랙메시지 발송
+    return sendResponse(res, "return", 200, "ok");
+  } catch (err) {
+  } finally {
+    connection.release();
+  }
+});
+
+app.post("/api/activation/:cabinetIdx/:activation", async (req, res) => {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    console.log(`----req.params------: ${req.params.activation}`);
+    const { cabinetIdx, activation } = req.params;
+    if (!cabinetIdx) {
+      return sendResponse(res, {}, 400, "req.params error");
+    }
+    await modifyCabinetActivation(connection, cabinetIdx, activation);
     return sendResponse(res, "return", 200, "ok");
   } catch (err) {
   } finally {
