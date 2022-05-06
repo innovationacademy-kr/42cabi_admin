@@ -105,7 +105,6 @@ async function getLentUserInfo() {
   } catch (err) {
     console.log(err);
     throw err;
-    // return sendResponse(res, {}, 400, "error");
   } finally {
     connection.release();
   }
@@ -177,27 +176,6 @@ async function modifyCabinetActivation(connection, cabinetIdx, activation) {
   `;
   await connection.query(content);
 }
-// await pool
-//   .query(content)
-//   .then((res) => {
-//     for (let i = 0; i < res.length; i++) {
-//       lentInfo.push({
-//         lent_id: res[i].lent_id,
-//         lent_cabinet_id: res[i].lent_cabinet_id,
-//         lent_user_id: res[i].lent_user_id,
-//         lent_time: res[i].lent_time,
-//         expire_time: res[i].expire_time,
-//         extension: res[i].extension,
-//         intra_id: res[i].intra_id,
-//       });
-//     }
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//     throw err;
-//   });
-// if (pool) pool.end();
-// return { lentInfo: lentInfo };
 
 // 전체 사물함 정보
 getCabinets();
@@ -215,17 +193,7 @@ app.get("/api/cabinet", (_req, res) => {
 app.get("/api/lent_info", async (_req, res) => {
   const lentInfo = await getLentUserInfo();
   return sendResponse(res, lentInfo, 200, "ok");
-  // return res.json(lentInfo);
-  // return sendResponse(res, getLentUser(res), 200, "ok");
 });
-
-// app.get("/", async (req, res) => {
-//   console.log("=========");
-//   console.log(req.res.cookie);
-//   console.log(res.cookie);
-//   // await req.res.cookie("acc", 50);
-//   return res.send("listen on 3000!");
-// });
 
 // 특정 사물함의 정보 ( 대여중이라면: + 유저 + 렌트 정보) 가져옴
 app.get("/api/return_info", async (req, res) => {
@@ -289,20 +257,15 @@ app.get("/api/cabinet/number", async (req, res) => {
   let connection;
   try {
     connection = await pool.getConnection();
-    // const totalNumber = await connection.query(`select count(*) from cabinet`);
     const content = await connection.query(
       `select c.floor, count(*) as count from cabinet c group by c.floor`
     );
-    // const content = await connection.query(
-    //   `select c.floor, count(*) as count from cabinet c group by c.floor`
-    // );
 
     let ret = {};
     content.forEach((element) => {
       ret[element.floor] = Number(element.count);
     });
     return sendResponse(res, ret, 200, "ok");
-    // const content = `select c.floor, count(*) from cabinet c group by c.floor`;
   } catch (err) {
     console.log(err);
     throw err;
