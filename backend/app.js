@@ -252,6 +252,7 @@ app.post("/api/activation/:cabinetIdx/:activation", async (req, res) => {
   }
 });
 
+// 층별 사물함 수
 app.get("/api/cabinet/number", async (req, res) => {
   let connection;
   try {
