@@ -100,7 +100,6 @@ async function getLentUserInfo() {
         intra_id: lockerRentalUser[i].intra_id,
       });
     }
-    // pool.end();
     // console.log(lentInfo);
     return { lentInfo: lentInfo };
   } catch (err) {
@@ -268,6 +267,7 @@ app.patch("/api/return", async (req, res) => {
   }
 });
 
+// 사물함 고장 상태 변경
 app.post("/api/activation/:cabinetIdx/:activation", async (req, res) => {
   let connection;
   try {
@@ -281,6 +281,33 @@ app.post("/api/activation/:cabinetIdx/:activation", async (req, res) => {
     return sendResponse(res, "return", 200, "ok");
   } catch (err) {
   } finally {
+    connection.release();
+  }
+});
+
+app.get("/api/cabinet/number", async (req, res) => {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    // const totalNumber = await connection.query(`select count(*) from cabinet`);
+    const content = await connection.query(
+      `select c.floor, count(*) as count from cabinet c group by c.floor`
+    );
+    // const content = await connection.query(
+    //   `select c.floor, count(*) as count from cabinet c group by c.floor`
+    // );
+
+    let ret = {};
+    content.forEach((element) => {
+      ret[element.floor] = Number(element.count);
+    });
+    return sendResponse(res, ret, 200, "ok");
+    // const content = `select c.floor, count(*) from cabinet c group by c.floor`;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } finally {
+    console.log("finally");
     connection.release();
   }
 });
