@@ -1,73 +1,25 @@
-import React, { useState } from "react";
-import logo from "./logo.svg";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PageNotFound from "./PageNotFound";
+import Login from "./Login";
+import Home from "./Pages/Home";
+import Status from "./Pages/Status";
+import Search from "./Pages/Search";
+import Map from "./Pages/Map";
 import "./App.css";
-import axios from "axios";
 
-function App() {
-  const [data, setData] = useState<string>("Before");
-  const [id, setId] = useState<number>(0);
-  const [name, setName] = useState<string>("");
-  const handleAPI1 = () => {
-    const url: string = "http://localhost:8080/api1";
-    axios
-      .get(url)
-      .then((res) => {
-        console.log(res);
-        setData(res.data);
-        setId(res.data[0].id);
-        setName(res.data[0].name);
-      })
-      .catch((e) => console.error(e));
-  };
-  const handleAPI2 = () => {
-    const id = 7;
-    const url: string = `http://localhost:8080/api2/${id}`;
-    // const params = { id: 6 };
-    axios
-      .get(url)
-      .then((res) => {
-        console.log(res);
-        setData(res.data);
-      })
-      .catch((e) => console.error(e));
-  };
-  const handleAPI3 = () => {
-    const url: string = "http://localhost:8080/api3";
-    axios
-      .get(url)
-      .then((res) => {
-        console.log(res);
-        console.log(data);
-        setData(res.data);
-      })
-      .catch((e) => console.error(e));
-  };
+const App = () => {
   return (
-    <div className="App">
-      {/* //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.tsx</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header> */}
-
-      <button onClick={handleAPI1}>API1</button>
-      <input type="text"></input>
-      <button onClick={handleAPI2}>API2</button>
-      <button onClick={handleAPI3}>API3</button>
-      <div>
-        <h1>data.id</h1>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />}></Route>
+        <Route path="/serom" element={<Home />}></Route>
+        <Route path="/serom/status" element={<Status />}></Route>
+        <Route path="/serom/search" element={<Search />}></Route>
+        <Route path="/serom/map" element={<Map />}></Route>
+        <Route path="/*" element={<PageNotFound />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
