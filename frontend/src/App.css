@@ -1,38 +1,24 @@
-.App {
-  text-align: center;
+html {
+  height: 100%;
+  font-size: 62.5%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  font-size: 1.6rem;
+  background: #cccccc;
+  /* background: linear-gradient(#000000, #ff0000); */
+  font-family: "EliceDigitalBaeum_Regular";
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+button {
+  font-size: 1.6rem;
+  font-family: "EliceDigitalBaeum_Regular";
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+@font-face {
+  font-family: "EliceDigitalBaeum_Regular";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/EliceDigitalBaeum_Regular.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
 }
