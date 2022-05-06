@@ -105,7 +105,6 @@ async function getLentUserInfo() {
   } catch (err) {
     console.log(err);
     throw err;
-    // return sendResponse(res, {}, 400, "error");
   } finally {
     connection.release();
   }
