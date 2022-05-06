@@ -100,7 +100,6 @@ async function getLentUserInfo() {
         intra_id: lockerRentalUser[i].intra_id,
       });
     }
-    // console.log(lentInfo);
     return { lentInfo: lentInfo };
   } catch (err) {
     console.log(err);
