@@ -219,14 +219,6 @@ app.get("/api/lent_info", async (_req, res) => {
   // return sendResponse(res, getLentUser(res), 200, "ok");
 });
 
-// app.get("/", async (req, res) => {
-//   console.log("=========");
-//   console.log(req.res.cookie);
-//   console.log(res.cookie);
-//   // await req.res.cookie("acc", 50);
-//   return res.send("listen on 3000!");
-// });
-
 // 특정 사물함의 정보 ( 대여중이라면: + 유저 + 렌트 정보) 가져옴
 app.get("/api/return_info", async (req, res) => {
   const { cabinetIdx } = req.query;
