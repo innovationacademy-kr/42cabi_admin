@@ -270,7 +270,6 @@ app.get("/api/cabinet/number", async (req, res) => {
     console.log(err);
     throw err;
   } finally {
-    console.log("finally");
     connection.release();
   }
 });
