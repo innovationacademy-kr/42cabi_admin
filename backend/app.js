@@ -100,7 +100,6 @@ async function getLentUserInfo() {
         intra_id: lockerRentalUser[i].intra_id,
       });
     }
-    // console.log(lentInfo);
     return { lentInfo: lentInfo };
   } catch (err) {
     console.log(err);
@@ -253,6 +252,7 @@ app.post("/api/activation/:cabinetIdx/:activation", async (req, res) => {
   }
 });
 
+// 층별 사물함 수
 app.get("/api/cabinet/number", async (req, res) => {
   let connection;
   try {
