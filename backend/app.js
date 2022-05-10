@@ -248,7 +248,8 @@ async function getInfoByIntraId(intraId) {
   }
 }
 
-async function searchCabinetNum(cabinetNum, floor) {
+async function getInfoByCabinetNum(cabinetNum, floor) {
+
   let connection;
   try {
     connection = await pool.getConnection();
