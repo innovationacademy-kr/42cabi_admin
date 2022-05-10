@@ -113,27 +113,17 @@ async function getLentUserInfo() {
 }
 
 // 특정 사물함 + (user + lent) 정보 가져옴
-async function getCabinet(cabinetIdx) {
-  let connection;
-  try {
-    connection = await pool.getConnection();
-
-    const [result] = await connection.query(
-      `
+async function getCabinet(connection, cabinetIdx) {
+  const [result] = await connection.query(
+    `
       SELECT *
       FROM cabinet c
       LEFT JOIN lent l ON c.cabinet_id=l.lent_cabinet_id
       LEFT JOIN user u ON l.lent_user_id=u.user_id 
       WHERE c.cabinet_id=${cabinetIdx}
       `
-    );
-    return result;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  } finally {
-    connection.release();
-  }
+  );
+  return result;
 }
 
 // 반납할 사물함의 lent 정보 가져옴
@@ -199,16 +189,26 @@ app.get("/api/lent_info", async (_req, res) => {
 
 // 특정 사물함의 정보 ( 대여중이라면: + 유저 + 렌트 정보) 가져옴
 app.get("/api/return_info", async (req, res) => {
-  const { cabinetIdx } = req.query;
-  if (!cabinetIdx) {
-    return sendResponse(res, {}, 400, "req.query error");
-  }
+  let connection;
 
-  const cabinetInfo = await getCabinet(cabinetIdx);
-  if (!cabinetInfo) {
-    return sendResponse(res, {}, 400, "error");
+  try {
+    connection = await pool.getConnection();
+    const { cabinetIdx } = req.query;
+    if (!cabinetIdx) {
+      return sendResponse(res, {}, 400, "req.query error");
+    }
+
+    const cabinetInfo = await getCabinet(cabinetIdx);
+    if (!cabinetInfo) {
+      return sendResponse(res, {}, 400, "error");
+    }
+    return sendResponse(res, cabinetInfo, 200, "ok");
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } finally {
+    connection.release();
   }
-  return sendResponse(res, cabinetInfo, 200, "ok");
 });
 
 // 특정 유저의 사물함 반납
@@ -232,6 +232,8 @@ app.patch("/api/return", async (req, res) => {
     // TODO : 슬랙메시지 발송
     return sendResponse(res, "return", 200, "ok");
   } catch (err) {
+    console.log(err);
+    throw err;
   } finally {
     connection.release();
   }
