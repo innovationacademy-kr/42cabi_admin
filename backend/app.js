@@ -42,16 +42,26 @@ app.get("/api/lent_info", async (_req, res) => {
 
 // 특정 사물함의 정보 ( 대여중이라면: + 유저 + 렌트 정보) 가져옴
 app.get("/api/return_info", async (req, res) => {
-  const { cabinetIdx } = req.query;
-  if (!cabinetIdx) {
-    return sendResponse(res, {}, 400, "req.query error");
-  }
+  let connection;
 
-  const cabinetInfo = await getCabinet(cabinetIdx);
-  if (!cabinetInfo) {
-    return sendResponse(res, {}, 400, "error");
+  try {
+    connection = await pool.getConnection();
+    const { cabinetIdx } = req.query;
+    if (!cabinetIdx) {
+      return sendResponse(res, {}, 400, "req.query error");
+    }
+
+    const cabinetInfo = await getCabinet(cabinetIdx);
+    if (!cabinetInfo) {
+      return sendResponse(res, {}, 400, "error");
+    }
+    return sendResponse(res, cabinetInfo, 200, "ok");
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } finally {
+    connection.release();
   }
-  return sendResponse(res, cabinetInfo, 200, "ok");
 });
 
 // 특정 유저의 사물함 반납
