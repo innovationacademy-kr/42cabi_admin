@@ -42,16 +42,26 @@ app.get("/api/lent_info", async (_req, res) => {
 
 // 특정 사물함의 정보 ( 대여중이라면: + 유저 + 렌트 정보) 가져옴
 app.get("/api/return_info", async (req, res) => {
-  const { cabinetIdx } = req.query;
-  if (!cabinetIdx) {
-    return sendResponse(res, {}, 400, "req.query error");
-  }
+  let connection;
 
-  const cabinetInfo = await getCabinet(cabinetIdx);
-  if (!cabinetInfo) {
-    return sendResponse(res, {}, 400, "error");
+  try {
+    connection = await pool.getConnection();
+    const { cabinetIdx } = req.query;
+    if (!cabinetIdx) {
+      return sendResponse(res, {}, 400, "req.query error");
+    }
+
+    const cabinetInfo = await getCabinet(cabinetIdx);
+    if (!cabinetInfo) {
+      return sendResponse(res, {}, 400, "error");
+    }
+    return sendResponse(res, cabinetInfo, 200, "ok");
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } finally {
+    connection.release();
   }
-  return sendResponse(res, cabinetInfo, 200, "ok");
 });
 
 // 특정 유저의 사물함 반납
@@ -61,10 +71,20 @@ app.patch("/api/return", async (req, res) => {
     return sendResponse(res, {}, 400, "req.query error");
   }
 
+<<<<<<< HEAD
   // 해당 사물함의 user, lent 정보 가져옴
   const userLentInfo = await getUserLent(cabinetIdx);
   if (!userLentInfo) {
     return sendResponse(res, {}, 400, "getUserLent error");
+=======
+    // TODO : 슬랙메시지 발송
+    return sendResponse(res, "return", 200, "ok");
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } finally {
+    connection.release();
+>>>>>>> dcbd9c1 (🎨 try catch문 통일)
   }
   await deleteLent(userLentInfo); // lent 테이블에서 반납 사물함 삭제
   await addLentLog(userLentInfo); // lent_log 테이블에 반납 사물함 추가
