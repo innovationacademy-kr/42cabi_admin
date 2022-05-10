@@ -137,6 +137,23 @@ app.use((err, _req, res, _next) => {
   return sendResponse(res, 500, {}, "DB error");
 });
 
+// intra_id 검색 기능
+app.get("/api/search", async (req, res) => {
+  const { intraId, cabinetNum, floor } = req.query;
+  console.log(req.query);
+  console.log(intraId);
+  let result;
+
+  if (intraId) {
+    result = await searchIntraId(intraId);
+  } else if (cabinetNum && floor) {
+    result = await searchCabinetNum(cabinetNum, floor);
+  } else {
+    return sendResponse(res, {}, 400, "req.query error");
+  }
+  return sendResponse(res, result, 200, "ok");
+});
+
 app.listen(3000, () => {
   console.log("Example app listening on port 3000!");
 });
