@@ -17,6 +17,9 @@ let cabinetList = {
   cabinet: [],
 };
 
+// git test
+// test용 주석
+
 function sendResponse(res, data, status, code) {
   res.status(status).json({
     status: status,
