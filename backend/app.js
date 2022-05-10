@@ -136,7 +136,7 @@ async function getCabinet(cabinetIdx) {
 }
 
 // 반납할 사물함의 lent 정보 가져옴
-async function getUserLent(connection, cabinetIdx) {
+async function getUserLent(cabinetIdx) {
   let connection;
   try {
     connection = await pool.getConnection();
@@ -157,7 +157,7 @@ async function getUserLent(connection, cabinetIdx) {
 }
 
 // lent 테이블에서 사물함 정보 삭제
-async function deleteLent(connection, userLentInfo) {
+async function deleteLent(userLentInfo) {
   let connection;
   try {
     connection = await pool.getConnection();
@@ -177,7 +177,7 @@ async function deleteLent(connection, userLentInfo) {
 }
 
 // lent_log에 반납되는 사물함 정보 추가
-async function addLentLog(connection, userLentInfo) {
+async function addLentLog(userLentInfo) {
   let connection;
   try {
     connection = await pool.getConnection();
@@ -196,7 +196,7 @@ async function addLentLog(connection, userLentInfo) {
 }
 
 // 사물함 activation 상태 변경
-async function modifyCabinetActivation(connection, cabinetIdx, activation) {
+async function modifyCabinetActivation(cabinetIdx, activation) {
   let connection;
   try {
     connection = await pool.getConnection();
@@ -258,8 +258,8 @@ app.patch("/api/return", async (req, res) => {
   if (!userLentInfo) {
     return sendResponse(res, {}, 400, "getUserLent error");
   }
-  await deleteLent(connection, userLentInfo); // lent 테이블에서 반납 사물함 삭제
-  await addLentLog(connection, userLentInfo); // lent_log 테이블에 반납 사물함 추가
+  await deleteLent(userLentInfo); // lent 테이블에서 반납 사물함 삭제
+  await addLentLog(userLentInfo); // lent_log 테이블에 반납 사물함 추가
 
   // TODO : 슬랙메시지 발송
   return sendResponse(res, "return", 200, "ok");
@@ -277,7 +277,7 @@ app.post("/api/activation/:cabinetIdx/:activation", async (req, res) => {
 });
 
 // 층별 사물함 수
-app.get("/api/cabinet/number", async (req, res) => {
+app.get("/api/cabinet/number", async (_req, res) => {
   let connection;
   try {
     connection = await pool.getConnection();
