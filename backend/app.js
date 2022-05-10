@@ -214,7 +214,7 @@ async function modifyCabinetActivation(cabinetIdx, activation) {
   }
 }
 
-async function searchIntraId(intraId) {
+async function getInfoByIntraId(intraId) {
   let connection;
   try {
     connection = await pool.getConnection();
