@@ -4,7 +4,7 @@ require("dotenv").config();
 
 // TODO wrap 함수로 t-c 처리
 const { wrap, sendResponse } = require("./util");
-
+const cors = require("cors");
 const {
   getInfoByIntraId,
   getInfoByCabinetNum,
@@ -16,10 +16,11 @@ const {
   addLentLog,
   deleteLent,
   // getNumberofCabinetByFloor,
-  cabinetList,
+  // cabinetList,
   getCabinetInfoByFloor,
 } = require("./routes/query");
 
+app.use(cors());
 /* 전체 사물함 정보
 // TODO cabinetList 갱신 기준
 getCabinets();
@@ -42,26 +43,16 @@ app.get("/api/lent_info", async (_req, res) => {
 
 // 특정 사물함의 정보 ( 대여중이라면: + 유저 + 렌트 정보) 가져옴
 app.get("/api/return_info", async (req, res) => {
-  let connection;
-
-  try {
-    connection = await pool.getConnection();
-    const { cabinetIdx } = req.query;
-    if (!cabinetIdx) {
-      return sendResponse(res, {}, 400, "req.query error");
-    }
-
-    const cabinetInfo = await getCabinet(cabinetIdx);
-    if (!cabinetInfo) {
-      return sendResponse(res, {}, 400, "error");
-    }
-    return sendResponse(res, cabinetInfo, 200, "ok");
-  } catch (err) {
-    console.log(err);
-    throw err;
-  } finally {
-    connection.release();
+  const { cabinetIdx } = req.query;
+  if (!cabinetIdx) {
+    return sendResponse(res, {}, 400, "req.query error");
   }
+
+  const cabinetInfo = await getCabinet(cabinetIdx);
+  if (!cabinetInfo) {
+    return sendResponse(res, {}, 400, "error");
+  }
+  return sendResponse(res, cabinetInfo, 200, "ok");
 });
 
 // 특정 유저의 사물함 반납
@@ -71,21 +62,12 @@ app.patch("/api/return", async (req, res) => {
     return sendResponse(res, {}, 400, "req.query error");
   }
 
-<<<<<<< HEAD
   // 해당 사물함의 user, lent 정보 가져옴
   const userLentInfo = await getUserLent(cabinetIdx);
   if (!userLentInfo) {
     return sendResponse(res, {}, 400, "getUserLent error");
-=======
-    // TODO : 슬랙메시지 발송
-    return sendResponse(res, "return", 200, "ok");
-  } catch (err) {
-    console.log(err);
-    throw err;
-  } finally {
-    connection.release();
->>>>>>> dcbd9c1 (🎨 try catch문 통일)
   }
+  // TODO 병렬처리
   await deleteLent(userLentInfo); // lent 테이블에서 반납 사물함 삭제
   await addLentLog(userLentInfo); // lent_log 테이블에 반납 사물함 추가
 
@@ -94,7 +76,7 @@ app.patch("/api/return", async (req, res) => {
 });
 
 // 사물함 고장 상태 변경
-// TODO modifyCabinetActivation api 테스트 해야함 : 완료
+// TODO req.body로 처리
 app.post("/api/activation/:cabinetIdx/:activation", async (req, res) => {
   const { cabinetIdx, activation } = req.params;
   if (!cabinetIdx) {
@@ -130,6 +112,7 @@ app.get("/api/search", async (req, res) => {
   } else {
     return sendResponse(res, {}, 400, "req.query error");
   }
+  //TODO 쿼리문 입력대로 안올 때 에러처리
   console.log("====/api/search=====");
   console.log(result.resultFromLent);
   console.log(result.resultFromLentLog);
@@ -153,23 +136,6 @@ app.use((err, _req, res, _next) => {
   console.log("error middleware");
   console.log(err);
   return sendResponse(res, 500, {}, "DB error");
-});
-
-// intra_id 검색 기능
-app.get("/api/search", async (req, res) => {
-  const { intraId, cabinetNum, floor } = req.query;
-  console.log(req.query);
-  console.log(intraId);
-  let result;
-
-  if (intraId) {
-    result = await searchIntraId(intraId);
-  } else if (cabinetNum && floor) {
-    result = await searchCabinetNum(cabinetNum, floor);
-  } else {
-    return sendResponse(res, {}, 400, "req.query error");
-  }
-  return sendResponse(res, result, 200, "ok");
 });
 
 app.listen(3000, () => {
