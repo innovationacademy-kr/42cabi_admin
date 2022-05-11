@@ -1,9 +1,10 @@
 import { Outlet } from "react-router-dom";
+import SearchBar from "../Components/SearchBar";
 
 const Search = () => {
   return (
     <div>
-      서치바
+      <SearchBar />
       <Outlet />
     </div>
   );
