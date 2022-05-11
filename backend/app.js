@@ -214,6 +214,69 @@ async function modifyCabinetActivation(cabinetIdx, activation) {
   }
 }
 
+async function getInfoByIntraId(intraId) {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    const content = `
+    SELECT u.intra_id, c.location, c.section, c.floor, c.cabinet_num, l.lent_time, l.expire_time
+    FROM user u
+    JOIN lent l
+    ON u.user_id=l.lent_user_id
+    JOIN cabinet c
+    ON l.lent_cabinet_id=c.cabinet_id
+    WHERE u.intra_id='${intraId}'
+    union
+    SELECT u.intra_id, c.location, c.section, c.floor, c.cabinet_num, ll.lent_time, ll.return_time as expire_time
+    FROM user u
+    JOIN lent_log ll
+    ON u.user_id=ll.log_user_id
+    JOIN cabinet c
+    ON ll.log_cabinet_id=c.cabinet_id
+    WHERE u.intra_id='${intraId}'
+    ORDER BY lent_time DESC;
+    `;
+    const result = await connection.query(content);
+    console.log("=====searchIntraId=====");
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } finally {
+    connection.release();
+  }
+}
+
+async function getInfoByCabinetNum(cabinetNum, floor) {
+
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    const content = `
+    SELECT c.cabinet_id, c.cabinet_num, c.floor, c.activation, (SELECT u.intra_id FROM user u WHERE ll.log_user_id=u.user_id) as intra_id, ll.lent_time, ll.return_time
+    FROM cabinet c
+    JOIN lent_log ll
+    ON c.cabinet_id=ll.log_cabinet_id
+    WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor}
+    union
+    SELECT c.cabinet_id, c.cabinet_num, c.floor, c.activation, (SELECT u.intra_id FROM user u WHERE l.lent_user_id=u.user_id) as intra_id, l.lent_time, l.expire_time as return_time
+    FROM cabinet c
+    JOIN lent l
+    ON c.cabinet_id=l.lent_cabinet_id
+    WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor}
+    ORDER BY return_time DESC;
+    `;
+    const result = await connection.query(content);
+    return result;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } finally {
+    connection.release();
+  }
+}
+
 // 전체 사물함 정보
 getCabinets();
 
@@ -296,6 +359,23 @@ app.get("/api/cabinet/number", async (_req, res) => {
   } finally {
     connection.release();
   }
+});
+
+// intra_id 검색 기능
+app.get("/api/search", async (req, res) => {
+  const { intraId, cabinetNum, floor } = req.query;
+  console.log(req.query);
+  console.log(intraId);
+  let result;
+
+  if (intraId) {
+    result = await searchIntraId(intraId);
+  } else if (cabinetNum && floor) {
+    result = await searchCabinetNum(cabinetNum, floor);
+  } else {
+    return sendResponse(res, {}, 400, "req.query error");
+  }
+  return sendResponse(res, result, 200, "ok");
 });
 
 app.listen(3000, () => {
