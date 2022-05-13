@@ -290,24 +290,24 @@ async function getCabinetInfoByFloor() {
   }
 }
 
-async function getNumberofCabinetByFloor() {
-  let connection;
-  try {
-    connection = await pool.getConnection();
-    const content = await connection.query(
-      `select c.floor, count(*) as count from cabinet c
-      left join lent l
-      on l.lent_cabinet_id=c.cabinet_id
-      group by c.floor`
-    );
-    console.log(`content: ${content}`);
-    return content;
-  } catch (err) {
-    throw err;
-  } finally {
-    connection.release();
-  }
-}
+// async function getNumberofCabinetByFloor() {
+//   let connection;
+//   try {
+//     connection = await pool.getConnection();
+//     const content = await connection.query(
+//       `select c.floor, count(*) as count from cabinet c
+//       left join lent l
+//       on l.lent_cabinet_id=c.cabinet_id
+//       group by c.floor`
+//     );
+//     console.log(`content: ${content}`);
+//     return content;
+//   } catch (err) {
+//     throw err;
+//   } finally {
+//     connection.release();
+//   }
+// }
 
 module.exports = {
   getInfoByIntraId,
@@ -319,7 +319,7 @@ module.exports = {
   getLentUserInfo,
   addLentLog,
   deleteLent,
-  getNumberofCabinetByFloor,
+  // getNumberofCabinetByFloor,
   cabinetList,
   getCabinetInfoByFloor,
 };

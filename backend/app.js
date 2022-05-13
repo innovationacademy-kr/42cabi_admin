@@ -15,7 +15,7 @@ const {
   getLentUserInfo,
   addLentLog,
   deleteLent,
-  getNumberofCabinetByFloor,
+  // getNumberofCabinetByFloor,
   cabinetList,
   getCabinetInfoByFloor,
 } = require("./routes/query");
@@ -86,17 +86,17 @@ app.post("/api/activation/:cabinetIdx/:activation", async (req, res) => {
 });
 
 // 층별 사물함 수
-app.get(
-  "/api/cabinet/number",
-  wrap(async (_req, res, _next) => {
-    const content = await getNumberofCabinetByFloor();
-    let ret = {};
-    content.forEach((element) => {
-      ret[element.floor] = Number(element.count);
-    });
-    return sendResponse(res, ret, 200, "ok");
-  })
-);
+// app.get(
+//   "/api/cabinet/number",
+//   wrap(async (_req, res, _next) => {
+//     const content = await getNumberofCabinetByFloor();
+//     let ret = {};
+//     content.forEach((element) => {
+//       ret[element.floor] = Number(element.count);
+//     });
+//     return sendResponse(res, ret, 200, "ok");
+//   })
+// );
 
 // intra_id 검색 기능
 app.get("/api/search", async (req, res) => {
