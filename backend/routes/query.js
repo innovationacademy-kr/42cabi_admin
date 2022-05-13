@@ -78,6 +78,7 @@ async function getInfoByCabinetNum(cabinetNum, floor) {
     connection.release();
   }
 }
+
 async function getCabinets() {
   let connection;
   try {
@@ -96,7 +97,7 @@ async function getCabinets() {
       const result2 = await connection.query(content2);
       result2.forEach(async (element2) => {
         let sectionList = [];
-        cabinetList = [];
+        let cabinetInfo = [];
 
         floorList.push(element2.floor);
 
@@ -112,10 +113,10 @@ async function getCabinets() {
           result4.forEach(async (element4) => {
             cabinet.push(element4);
           });
-          cabinetList.push(cabinet);
+          cabinetInfo.push(cabinet);
         });
         tmpSectionlist.push(sectionList);
-        tmpCabinetList.push(cabinetList);
+        tmpCabinetList.push(cabinetInfo);
       });
       cabinetList.floor?.push(floorList);
       cabinetList.section?.push(tmpSectionlist);
@@ -128,6 +129,7 @@ async function getCabinets() {
     connection.release();
   }
 }
+
 // 사물함 activation 상태 변경
 async function modifyCabinetActivation(cabinetIdx, activation) {
   let connection;
