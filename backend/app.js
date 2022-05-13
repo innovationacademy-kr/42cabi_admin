@@ -17,6 +17,7 @@ const {
   deleteLent,
   getNumberofCabinetByFloor,
   cabinetList,
+  getCabinetInfoByFloor,
 } = require("./routes/query");
 
 // 전체 사물함 정보
@@ -117,6 +118,15 @@ app.get("/api/search", async (req, res) => {
     return sendResponse(res, {}, 400, "no data");
   }
   return sendResponse(res, result, 200, "ok");
+});
+
+// 현황탭 - 층별 사물함 정보(sum)
+app.get("/api/cabinet/count/floor", async (_req, res) => {
+  const cabientInfoByFloor = await getCabinetInfoByFloor();
+  console.log("======cabientInfoByFloor===========");
+  console.log(cabientInfoByFloor);
+  if (!cabientInfoByFloor) return sendResponse(res, {}, 400, "no data");
+  return sendResponse(res, cabientInfoByFloor, 200, "ok");
 });
 
 app.use((err, _req, res, _next) => {

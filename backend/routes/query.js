@@ -8,6 +8,7 @@ const pool = mariadb.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DATABASE,
+  bigIntAsNumber: true,
 });
 
 let cabinetList = {
@@ -261,13 +262,45 @@ async function deleteLent(userLentInfo) {
   }
 }
 
+// 현황탭 층별 사물함 정보(sum)
+async function getCabinetInfoByFloor() {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    const content = `
+    SELECT c.floor,
+    count(*) as total,
+    count(case when c.cabinet_id=l.lent_cabinet_id then 1 end) as used,
+    count(case when l.expire_time<now() then 1 end) as overdue,
+    count(case when c.activation=0 then 1 end) as disabled
+    FROM cabinet c
+    LEFT JOIN lent l
+    ON c.cabinet_id=l.lent_cabinet_id
+    group by floor;
+    `;
+    const result = await connection.query(content);
+    console.log("------getCabinetInfoByFloor------");
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } finally {
+    connection.release();
+  }
+}
+
 async function getNumberofCabinetByFloor() {
   let connection;
   try {
     connection = await pool.getConnection();
     const content = await connection.query(
-      `select c.floor, count(*) as count from cabinet c group by c.floor`
+      `select c.floor, count(*) as count from cabinet c
+      left join lent l
+      on l.lent_cabinet_id=c.cabinet_id
+      group by c.floor`
     );
+    console.log(`content: ${content}`);
     return content;
   } catch (err) {
     throw err;
@@ -275,6 +308,7 @@ async function getNumberofCabinetByFloor() {
     connection.release();
   }
 }
+
 module.exports = {
   getInfoByIntraId,
   getInfoByCabinetNum,
@@ -287,4 +321,5 @@ module.exports = {
   deleteLent,
   getNumberofCabinetByFloor,
   cabinetList,
+  getCabinetInfoByFloor,
 };
