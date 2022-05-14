@@ -76,7 +76,7 @@ const SearchBar = () => {
           )}
         </DropDownContainer>
         <SearchInput ref={searchText} />
-        <Link to="cabinet">
+        <Link to="searchDashboard">
           <SearchButton onClick={searchAPI}>검색</SearchButton>
         </Link>
       </SearchBarContainer>

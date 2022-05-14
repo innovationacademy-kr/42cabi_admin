@@ -1,0 +1,42 @@
+[
+  {
+    "cabinet_id": 1,
+    "cabinet_num": 89,
+    "location": "새롬관",
+    "floor": 2,
+    "section": "Oasis",
+    "activation": 1
+  },
+  {
+    "cabinet_id": 2,
+    "cabinet_num": 90,
+    "location": "새롬관",
+    "floor": 2,
+    "section": "Oasis",
+    "activation": 1
+  },
+  {
+    "cabinet_id": 3,
+    "cabinet_num": 91,
+    "location": "새롬관",
+    "floor": 2,
+    "section": "Oasis",
+    "activation": 1
+  },
+  {
+    "cabinet_id": 4,
+    "cabinet_num": 92,
+    "location": "새롬관",
+    "floor": 2,
+    "section": "Oasis",
+    "activation": 1
+  },
+  {
+    "cabinet_id": 5,
+    "cabinet_num": 93,
+    "location": "새롬관",
+    "floor": 2,
+    "section": "Oasis",
+    "activation": 1
+  }
+]

@@ -8,6 +8,7 @@ import Search from "./Pages/Search";
 import Map from "./Pages/Map";
 import Layout from "./Components/Layout";
 import CabinetInfo from "./Pages/CabinetInfo";
+import SearchDashboard from "./Pages/SearchDashboard";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="status" element={<Status />} />
           <Route path="search" element={<Search />}>
             <Route path="cabinet" element={<CabinetInfo />} />
+            <Route path="searchDashboard" element={<SearchDashboard />} />
           </Route>
           <Route path="map" element={<Map />} />
         </Route>
