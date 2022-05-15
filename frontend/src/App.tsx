@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import PageNotFound from "./PageNotFound";
 import Login from "./Login";
@@ -11,6 +11,16 @@ import CabinetInfo from "./Pages/CabinetInfo";
 import SearchDashboard from "./Pages/SearchDashboard";
 
 const App = () => {
+  const PrivateRoute = () => {
+    const isHavePrevState: boolean =
+      localStorage.getItem("reduxPrevState") !== null;
+    return isHavePrevState ? (
+      <SearchDashboard />
+    ) : (
+      <Navigate to="/saerom/search/" />
+    );
+  };
+
   return (
     <BrowserRouter>
       <Routes>
@@ -20,7 +30,17 @@ const App = () => {
           <Route path="status" element={<Status />} />
           <Route path="search" element={<Search />}>
             <Route path="cabinet" element={<CabinetInfo />} />
-            <Route path="searchDashboard" element={<SearchDashboard />} />
+            {/* <Route
+              path="searchDashboard"
+              element={
+                isHavePrevState ? (
+                  <SearchDashboard />
+                ) : (
+                  <Navigate to="/saerom/search/" />
+                )
+              }
+            /> */}
+            <Route path="searchDashboard" element={<PrivateRoute />} />
           </Route>
           <Route path="map" element={<Map />} />
         </Route>

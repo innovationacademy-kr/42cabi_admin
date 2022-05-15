@@ -1,26 +1,25 @@
-import React, { useMemo } from "react";
-import MINI_DATA from "./MINI_DATA.json";
+import { useMemo } from "react";
 import { cabinetMiniDataStruct } from "./cabinetMiniDataStruct";
 import { usePagination, useTable } from "react-table";
 import "./table.css";
+import { useSelector } from "react-redux";
+import { RootState } from "../ReduxModules/rootReducer";
 
 export const MiniTable = () => {
+  const SearchCabinetRedux = useSelector(
+    (state: RootState) => state.SearchCabinet
+  );
+
   const columns = useMemo(() => cabinetMiniDataStruct, []);
-  const data = useMemo(() => MINI_DATA, []);
+  // const columns = cabinetMiniDataStruct;
+  const data = useMemo(() => SearchCabinetRedux, [SearchCabinetRedux]);
+  // const data = SearchCabinetRedux;
 
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     page,
-    nextPage,
-    previousPage,
-    canNextPage,
-    canPreviousPage,
-    pageOptions,
-    gotoPage,
-    pageCount,
-    setPageSize,
     state,
     prepareRow,
   } = useTable(
@@ -32,8 +31,6 @@ export const MiniTable = () => {
     },
     usePagination
   );
-
-  const { pageIndex, pageSize } = state;
 
   return (
     <div className="table">
@@ -63,70 +60,6 @@ export const MiniTable = () => {
           })}
         </tbody>
       </table>
-
-      <div
-        className="table-pagination"
-        style={{
-          margin: "5px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-          {"<<"}
-        </button>
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          Previous
-        </button>
-        <span>
-          <strong
-            style={{ display: "block", width: "100px", textAlign: "center" }}
-          >
-            {pageIndex + 1} / {pageOptions.length}
-          </strong>
-        </span>
-        <span>
-          Go to page:{" "}
-          <input
-            type="number"
-            defaultValue={pageIndex + 1}
-            onChange={(e) => {
-              const pageNumber = e.target.value
-                ? Number(e.target.value) - 1
-                : 0;
-              gotoPage(pageNumber);
-            }}
-            style={{ width: "40px", marginRight: "30px" }}
-          />
-        </span>
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
-          Next
-        </button>
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {">>"}
-        </button>
-      </div>
-      <div
-        className="table-pagesize"
-        style={{
-          margin: "5px",
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-        }}
-      >
-        <select
-          value={pageSize}
-          onChange={(e) => setPageSize(Number(e.target.value))}
-        >
-          {[20, 50, 100].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              {pageSize}개 씩 보기
-            </option>
-          ))}
-        </select>
-      </div>
     </div>
   );
 };

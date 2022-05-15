@@ -3,6 +3,32 @@ import Detail from "../Components/Detail";
 import CabiButton from "../Components/CabiButton";
 import MiniTable from "../Tables/MiniTable";
 
+export type searchCabinetData = {
+  intra_id?: string;
+  cabinet_id?: number;
+  cabinet_num?: number;
+  location?: string;
+  floor?: number;
+  section?: string;
+  activation?: number;
+  lent_user_id?: number;
+  lent_time?: string;
+  expire_time?: string;
+};
+
+export type searchUserData = {
+  intra_id?: string;
+  cabinet_id?: number;
+  cabinet_num?: number;
+  location?: string;
+  floor?: number;
+  section?: string;
+  activation?: boolean;
+  lent_user_id?: number;
+  lent_time?: string;
+  expire_time?: string;
+};
+
 const SearchDashboard = () => {
   return (
     <div>

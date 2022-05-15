@@ -13,6 +13,6 @@ export const cabinetMiniDataStruct = [
   },
   {
     Header: "이용자 아이디",
-    accessor: "user_id",
+    accessor: "intra_id",
   },
 ];

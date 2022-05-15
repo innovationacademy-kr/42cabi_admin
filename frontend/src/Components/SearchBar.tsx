@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   DropDownContainer,
   DropDownHeader,
@@ -10,10 +10,20 @@ import {
   ListItem,
 } from "./Dropdown";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { GetTargetCabinet } from "../ReduxModules/SearchCabinet";
+
+//for test
+import MINI_DATA from "../Tables/MINI_DATA.json";
+import MINI_DATA2 from "../Tables/MINI_DATA2.json";
+
+import { RootState } from "../ReduxModules/rootReducer";
 
 const options = ["ID", "2F", "4F", "5F"];
 
 const SearchBar = () => {
+  const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(false);
   const toggling = () => setIsOpen(!isOpen);
   const [selectedOption, setSelectedOption] = useState("ID");
@@ -27,8 +37,22 @@ const SearchBar = () => {
   const searchType = useRef<HTMLInputElement>(null);
   const searchText = useRef<HTMLInputElement>(null);
 
+  const dispatch = useDispatch();
+  const SearchCabinetRedux = useSelector(
+    (state: RootState) => state.SearchCabinet
+  );
+
   const searchAPI = () => {
     let params = {};
+
+    //for test
+    if (searchText.current?.value === "2") {
+      dispatch(GetTargetCabinet(MINI_DATA2));
+    } else {
+      dispatch(GetTargetCabinet(MINI_DATA));
+    }
+    // localStorage.setItem("reduxPrevState", JSON.stringify(SearchCabinetRedux));
+
     if (selectedOption === "ID") {
       params = {
         intraId: searchText.current?.value,
@@ -44,9 +68,12 @@ const SearchBar = () => {
     axios
       .get(url, { params })
       .then((res) => {
+        dispatch(GetTargetCabinet(res.data));
         console.log(res);
+        navigate("/saerom/search/searchDashboard");
       })
       .catch((e) => {
+        navigate("/saerom/search/searchDashboard"); // for test
         console.log(e);
       });
   };
@@ -76,9 +103,7 @@ const SearchBar = () => {
           )}
         </DropDownContainer>
         <SearchInput ref={searchText} />
-        <Link to="searchDashboard">
-          <SearchButton onClick={searchAPI}>검색</SearchButton>
-        </Link>
+        <SearchButton onClick={searchAPI}>검색</SearchButton>
       </SearchBarContainer>
     </div>
   );
