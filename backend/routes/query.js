@@ -43,14 +43,8 @@ async function getInfoByIntraId(intraId) {
     ORDER BY lent_time DESC
     LIMIT 5;
     `;
-    const resultFromLent = await connection.query(
-      getInfoFromLentQuery,
-      intraId
-    );
-    const resultFromLentLog = await connection.query(
-      getInfoFromLentLogQuery,
-      intraId
-    );
+    const resultFromLent = await connection.query(getInfoFromLentQuery);
+    const resultFromLentLog = await connection.query(getInfoFromLentLogQuery);
     // console.log("=====searchIntraId=====");
     const result = {
       resultFromLent: resultFromLent,
@@ -65,25 +59,37 @@ async function getInfoByIntraId(intraId) {
   }
 }
 
+// 검색 by 사물함 번호
 async function getInfoByCabinetNum(cabinetNum, floor) {
   let connection;
   try {
     connection = await pool.getConnection();
-    const content = `
-    SELECT c.cabinet_id, c.cabinet_num, c.floor, c.activation, (SELECT u.intra_id FROM user u WHERE ll.log_user_id=u.user_id) as intra_id, ll.lent_time, ll.return_time
-    FROM cabinet c
-    JOIN lent_log ll
-    ON c.cabinet_id=ll.log_cabinet_id
-    WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor}
-    union
-    SELECT c.cabinet_id, c.cabinet_num, c.floor, c.activation, (SELECT u.intra_id FROM user u WHERE l.lent_user_id=u.user_id) as intra_id, l.lent_time, l.expire_time as return_time
-    FROM cabinet c
-    JOIN lent l
-    ON c.cabinet_id=l.lent_cabinet_id
-    WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor}
-    ORDER BY return_time DESC;
-    `;
-    const result = await connection.query(content);
+    const getInfoByCabinetNumFromLentQuery = `
+      SELECT c.cabinet_id, c.cabinet_num, c.floor, c.activation, (SELECT u.intra_id FROM user u WHERE l.lent_user_id=u.user_id) as intra_id, l.lent_time, l.expire_time as return_time
+      FROM cabinet c
+      JOIN lent l
+      ON c.cabinet_id=l.lent_cabinet_id
+      WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor};
+      `;
+    const getInfoByCabinetNumFromLentLogQuery = `
+      SELECT c.cabinet_id, c.cabinet_num, c.floor, c.activation, (SELECT u.intra_id FROM user u WHERE ll.log_user_id=u.user_id) as intra_id, ll.lent_time, ll.return_time
+      FROM cabinet c
+      JOIN lent_log ll
+      ON c.cabinet_id=ll.log_cabinet_id
+      WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor}
+      ORDER BY lent_time DESC
+      LIMIT 5;
+      `;
+    const resultFromLent = await connection.query(
+      getInfoByCabinetNumFromLentQuery
+    );
+    const resultFromLentLog = await connection.query(
+      getInfoByCabinetNumFromLentLogQuery
+    );
+    const result = {
+      resultFromLent: resultFromLent,
+      resultFromLentLog: resultFromLentLog,
+    };
     return result;
   } catch (err) {
     console.log(err);

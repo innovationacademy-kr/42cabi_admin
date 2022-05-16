@@ -99,7 +99,7 @@ app.get(
 );
 */
 
-// intra_id 검색 기능
+// intra_id, cabinetNum 검색 기능
 app.get("/api/search", async (req, res) => {
   const { intraId, cabinetNum, floor } = req.query;
   let result;
@@ -111,6 +111,7 @@ app.get("/api/search", async (req, res) => {
   } else {
     return sendResponse(res, {}, 400, "req.query error");
   }
+  console.log("====/api/search=====");
   console.log(result.resultFromLent);
   console.log(result.resultFromLentLog);
   // if (!result.resultFromLent && !result.resultFromLentLog) {
