@@ -9,6 +9,7 @@ import Map from "./Pages/Map";
 import Layout from "./Components/Layout";
 import CabinetInfo from "./Pages/CabinetInfo";
 import SearchDashboard from "./Pages/SearchDashboard";
+import NoResult from "./Pages/NoResult";
 
 const App = () => {
   const PrivateRoute = () => {
@@ -41,6 +42,7 @@ const App = () => {
               }
             /> */}
             <Route path="searchDashboard" element={<PrivateRoute />} />
+            <Route path="noResult" element={<NoResult />} />
           </Route>
           <Route path="map" element={<Map />} />
         </Route>
