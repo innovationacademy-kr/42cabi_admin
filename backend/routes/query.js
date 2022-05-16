@@ -80,6 +80,7 @@ async function getInfoByCabinetNum(cabinetNum, floor) {
   }
 }
 
+/* 전체 사물함 정보 가져오기
 async function getCabinets() {
   let connection;
   try {
@@ -130,6 +131,7 @@ async function getCabinets() {
     connection.release();
   }
 }
+*/
 
 // 사물함 activation 상태 변경
 async function modifyCabinetActivation(cabinetIdx, activation) {
@@ -169,6 +171,7 @@ async function getUserLent(cabinetIdx) {
     connection.release();
   }
 }
+
 // 특정 사물함 + (user + lent) 정보 가져옴
 async function getCabinet(cabinetIdx) {
   let connection;
@@ -191,8 +194,8 @@ async function getCabinet(cabinetIdx) {
     connection.release();
   }
 }
-// 전체 사물함 정보 가져옴
 
+// 대여 사물함(user + cabinet) 정보 가져옴
 async function getLentUserInfo() {
   let connection;
   try {
@@ -223,6 +226,7 @@ async function getLentUserInfo() {
     connection.release();
   }
 }
+
 // lent_log에 반납되는 사물함 정보 추가
 async function addLentLog(userLentInfo) {
   let connection;
@@ -290,29 +294,31 @@ async function getCabinetInfoByFloor() {
   }
 }
 
-// async function getNumberofCabinetByFloor() {
-//   let connection;
-//   try {
-//     connection = await pool.getConnection();
-//     const content = await connection.query(
-//       `select c.floor, count(*) as count from cabinet c
-//       left join lent l
-//       on l.lent_cabinet_id=c.cabinet_id
-//       group by c.floor`
-//     );
-//     console.log(`content: ${content}`);
-//     return content;
-//   } catch (err) {
-//     throw err;
-//   } finally {
-//     connection.release();
-//   }
-// }
+/* 층별 사물함 개수
+async function getNumberofCabinetByFloor() {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    const content = await connection.query(
+      `select c.floor, count(*) as count from cabinet c
+      left join lent l
+      on l.lent_cabinet_id=c.cabinet_id
+      group by c.floor`
+    );
+    console.log(`content: ${content}`);
+    return content;
+  } catch (err) {
+    throw err;
+  } finally {
+    connection.release();
+  }
+}
+*/
 
 module.exports = {
   getInfoByIntraId,
   getInfoByCabinetNum,
-  getCabinets,
+  // getCabinets,
   modifyCabinetActivation,
   getUserLent,
   getCabinet,

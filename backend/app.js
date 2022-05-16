@@ -8,7 +8,7 @@ const { wrap, sendResponse } = require("./util");
 const {
   getInfoByIntraId,
   getInfoByCabinetNum,
-  getCabinets,
+  // getCabinets,
   modifyCabinetActivation,
   getUserLent,
   getCabinet,
@@ -20,10 +20,9 @@ const {
   getCabinetInfoByFloor,
 } = require("./routes/query");
 
-// 전체 사물함 정보
+/* 전체 사물함 정보
 // TODO cabinetList 갱신 기준
 getCabinets();
-
 app.get("/api/cabinet", (_req, res) => {
   if (!cabinetList) {
     return sendResponse(res, {}, 400, "error");
@@ -33,7 +32,9 @@ app.get("/api/cabinet", (_req, res) => {
     // res.send(cabinetList);
   }
 });
+*/
 
+// 대여 정보(user + cabinet) 가져옴
 app.get("/api/lent_info", async (_req, res) => {
   const lentInfo = await getLentUserInfo();
   return sendResponse(res, lentInfo, 200, "ok");
@@ -61,7 +62,7 @@ app.patch("/api/return", async (req, res) => {
   }
 
   // 해당 사물함의 user, lent 정보 가져옴
-  // TODO getUserLent api test
+  // TODO getUserLent api test : 완료
   const userLentInfo = await getUserLent(cabinetIdx);
   if (!userLentInfo) {
     return sendResponse(res, {}, 400, "getUserLent error");
@@ -74,9 +75,8 @@ app.patch("/api/return", async (req, res) => {
 });
 
 // 사물함 고장 상태 변경
-// TODO modifyCabinetActivation api 테스트 해야함
+// TODO modifyCabinetActivation api 테스트 해야함 : 완료
 app.post("/api/activation/:cabinetIdx/:activation", async (req, res) => {
-  console.log(`----req.params------: ${req.params.activation}`);
   const { cabinetIdx, activation } = req.params;
   if (!cabinetIdx) {
     return sendResponse(res, {}, 400, "req.params error");
@@ -85,18 +85,19 @@ app.post("/api/activation/:cabinetIdx/:activation", async (req, res) => {
   return sendResponse(res, "return", 200, "ok");
 });
 
-// 층별 사물함 수
-// app.get(
-//   "/api/cabinet/number",
-//   wrap(async (_req, res, _next) => {
-//     const content = await getNumberofCabinetByFloor();
-//     let ret = {};
-//     content.forEach((element) => {
-//       ret[element.floor] = Number(element.count);
-//     });
-//     return sendResponse(res, ret, 200, "ok");
-//   })
-// );
+/* 층별 사물함 수
+app.get(
+  "/api/cabinet/number",
+  wrap(async (_req, res, _next) => {
+    const content = await getNumberofCabinetByFloor();
+    let ret = {};
+    content.forEach((element) => {
+      ret[element.floor] = Number(element.count);
+    });
+    return sendResponse(res, ret, 200, "ok");
+  })
+);
+*/
 
 // intra_id 검색 기능
 app.get("/api/search", async (req, res) => {
@@ -134,6 +135,7 @@ app.use((err, _req, res, _next) => {
   console.log(err);
   return sendResponse(res, 500, {}, "DB error");
 });
+
 app.listen(3000, () => {
   console.log("Example app listening on port 3000!");
 });
