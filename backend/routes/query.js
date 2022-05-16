@@ -2,7 +2,6 @@
 
 const mariadb = require("mariadb");
 
-// 해당 부분 DB를 옮겨야할지..
 const pool = mariadb.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -22,6 +21,7 @@ let cabinetList = {
 async function getInfoByIntraId(intraId) {
   let connection;
   try {
+    // TODO l.expire_time => expire_time?
     connection = await pool.getConnection();
     const getInfoFromLentQuery = `
     SELECT u.intra_id, c.location, c.section, c.floor, c.cabinet_num, l.lent_time, l.expire_time as return_time

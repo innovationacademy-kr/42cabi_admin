@@ -19,12 +19,8 @@ const wrap = (asyncFn) => {
   };
 };
 
-function sendResponse(res, data, status, code) {
-  res.status(status).json({
-    status: status,
-    data: data,
-    code: code,
-  });
+function sendResponse(res, data, status) {
+  res.status(status).json(data);
 }
 module.exports = {
   wrap,
