@@ -1,41 +1,35 @@
 import styled from "styled-components";
-import Detail from "../Components/Detail";
+import CabinetDetail from "../Components/CabinetDetail";
+import UserDetail from "../Components/UserDetail";
 import CabiButton from "../Components/CabiButton";
-import MiniTable from "../Tables/MiniTable";
-
-export type searchCabinetData = {
-  intra_id?: string;
-  cabinet_id?: number;
-  cabinet_num?: number;
-  location?: string;
-  floor?: number;
-  section?: string;
-  activation?: number;
-  lent_user_id?: number;
-  lent_time?: string;
-  expire_time?: string;
-};
-
-export type searchUserData = {
-  intra_id?: string;
-  cabinet_id?: number;
-  cabinet_num?: number;
-  location?: string;
-  floor?: number;
-  section?: string;
-  activation?: boolean;
-  lent_user_id?: number;
-  lent_time?: string;
-  expire_time?: string;
-};
+// import MiniTable from "../Tables/MiniTable";
+import PrevCabinetTable from "../Tables/PrevCabinetTable";
+import PrevUserTable from "../Tables/PrevUserTable";
+import { useSelector } from "react-redux";
+import { RootState } from "../ReduxModules/rootReducer";
 
 const SearchDashboard = () => {
+  const SearchTypeRedux = useSelector((state: RootState) => state.SearchType);
+  const DetailType = () => {
+    if (SearchTypeRedux === "User") {
+      return <UserDetail />;
+    } else {
+      return <CabinetDetail />;
+    }
+  };
+  const TableType = () => {
+    if (SearchTypeRedux === "User") {
+      return <PrevUserTable />;
+    } else {
+      return <PrevCabinetTable />;
+    }
+  };
   return (
     <div>
       <DashboardBox>
         <LeftBox>
           <DetailBox>
-            <Detail />
+            <DetailType />
           </DetailBox>
           <ButtonBox>
             <CabiButton Color="#6667ab" isActive={true}>
@@ -54,12 +48,13 @@ const SearchDashboard = () => {
         </LeftBox>
         <RightBox>
           <TableBox>
-            <p>이전 사용자 정보</p>
-            <MiniTable />
+            {/* <p>이전 사용자 정보</p>
+            <PrevIdTable />
           </TableBox>
           <TableBox>
             <p>이전 대여 기록</p>
-            <MiniTable />
+            <PrevCabinetTable /> */}
+            <TableType />
           </TableBox>
         </RightBox>
       </DashboardBox>

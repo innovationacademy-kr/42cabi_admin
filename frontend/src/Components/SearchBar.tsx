@@ -12,12 +12,14 @@ import {
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { GetTargetCabinet } from "../ReduxModules/SearchCabinet";
+import { GetTargetUser } from "../ReduxModules/SearchUser";
+import { GetTargetType } from "../ReduxModules/SearchType";
 
 //for test
-import MINI_DATA from "../Tables/MINI_DATA.json";
-import MINI_DATA2 from "../Tables/MINI_DATA2.json";
-
-import { RootState } from "../ReduxModules/rootReducer";
+// import MINI_DATA from "../Tables/MINI_DATA.json";
+// import MINI_DATA2 from "../Tables/MINI_DATA2.json";
+import RESPONSE_BY_CABINET from "../Tables/RESPONSE_BY_CABINET.json";
+import RESPONSE_BY_ID from "../Tables/RESPONSE_BY_ID.json";
 
 const options = ["ID", "2F", "4F", "5F"];
 
@@ -38,18 +40,16 @@ const SearchBar = () => {
   const searchText = useRef<HTMLInputElement>(null);
 
   const dispatch = useDispatch();
-  const SearchCabinetRedux = useSelector(
-    (state: RootState) => state.SearchCabinet
-  );
 
   const searchAPI = () => {
     let params = {};
-
     //for test
-    if (searchText.current?.value === "2") {
-      dispatch(GetTargetCabinet(MINI_DATA2));
+    if (selectedOption === "ID") {
+      dispatch(GetTargetUser(RESPONSE_BY_ID));
+      dispatch(GetTargetType("User"));
     } else {
-      dispatch(GetTargetCabinet(MINI_DATA));
+      dispatch(GetTargetCabinet(RESPONSE_BY_CABINET));
+      dispatch(GetTargetType("Cabinet"));
     }
     // localStorage.setItem("reduxPrevState", JSON.stringify(SearchCabinetRedux));
 
@@ -74,6 +74,7 @@ const SearchBar = () => {
       })
       .catch((e) => {
         navigate("/saerom/search/searchDashboard"); // for test
+        // navigate("/saerom/search/noResult");
         console.log(e);
       });
   };
