@@ -67,6 +67,7 @@ app.patch("/api/return", async (req, res) => {
   if (!userLentInfo) {
     return sendResponse(res, {}, 400, "getUserLent error");
   }
+  // TODO 병렬처리
   await deleteLent(userLentInfo); // lent 테이블에서 반납 사물함 삭제
   await addLentLog(userLentInfo); // lent_log 테이블에 반납 사물함 추가
 
