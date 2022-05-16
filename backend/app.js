@@ -102,8 +102,6 @@ app.get(
 // intra_id 검색 기능
 app.get("/api/search", async (req, res) => {
   const { intraId, cabinetNum, floor } = req.query;
-  console.log(req.query);
-  console.log(intraId);
   let result;
 
   if (intraId) {
@@ -113,11 +111,12 @@ app.get("/api/search", async (req, res) => {
   } else {
     return sendResponse(res, {}, 400, "req.query error");
   }
-  console.log(result);
-  if (!result[0]) {
-    // result값이 없을 때, cabinetNum=2 and floor=6
-    return sendResponse(res, {}, 400, "no data");
-  }
+  console.log(result.resultFromLent);
+  console.log(result.resultFromLentLog);
+  // if (!result.resultFromLent && !result.resultFromLentLog) {
+  //   // result값이 없을 때, cabinetNum=2 and floor=6
+  //   return sendResponse(res, {}, 400, "no data");
+  // }
   return sendResponse(res, result, 200, "ok");
 });
 

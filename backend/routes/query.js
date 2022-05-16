@@ -18,31 +18,44 @@ let cabinetList = {
   cabinet: [],
 };
 
+// 검색 by intraId
 async function getInfoByIntraId(intraId) {
   let connection;
   try {
     connection = await pool.getConnection();
-    const content = `
-    SELECT u.intra_id, c.location, c.section, c.floor, c.cabinet_num, l.lent_time, l.expire_time
+    const getInfoFromLentQuery = `
+    SELECT u.intra_id, c.location, c.section, c.floor, c.cabinet_num, l.lent_time, l.expire_time as return_time
     FROM user u
     JOIN lent l
     ON u.user_id=l.lent_user_id
     JOIN cabinet c
     ON l.lent_cabinet_id=c.cabinet_id
-    WHERE u.intra_id='${intraId}'
-    union
-    SELECT u.intra_id, c.location, c.section, c.floor, c.cabinet_num, ll.lent_time, ll.return_time as expire_time
+    WHERE u.intra_id='${intraId}';
+    `;
+    const getInfoFromLentLogQuery = `
+    SELECT u.intra_id, c.location, c.section, c.floor, c.cabinet_num, ll.lent_time, ll.return_time
     FROM user u
     JOIN lent_log ll
     ON u.user_id=ll.log_user_id
     JOIN cabinet c
     ON ll.log_cabinet_id=c.cabinet_id
     WHERE u.intra_id='${intraId}'
-    ORDER BY lent_time DESC;
+    ORDER BY lent_time DESC
+    LIMIT 5;
     `;
-    const result = await connection.query(content);
-    console.log("=====searchIntraId=====");
-    console.log(result);
+    const resultFromLent = await connection.query(
+      getInfoFromLentQuery,
+      intraId
+    );
+    const resultFromLentLog = await connection.query(
+      getInfoFromLentLogQuery,
+      intraId
+    );
+    // console.log("=====searchIntraId=====");
+    const result = {
+      resultFromLent: resultFromLent,
+      resultFromLentLog: resultFromLentLog,
+    };
     return result;
   } catch (err) {
     console.log(err);
