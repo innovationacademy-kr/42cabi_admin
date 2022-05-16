@@ -18,31 +18,38 @@ let cabinetList = {
   cabinet: [],
 };
 
+// 검색 by intraId
 async function getInfoByIntraId(intraId) {
   let connection;
   try {
     connection = await pool.getConnection();
-    const content = `
-    SELECT u.intra_id, c.location, c.section, c.floor, c.cabinet_num, l.lent_time, l.expire_time
+    const getInfoFromLentQuery = `
+    SELECT u.intra_id, c.location, c.section, c.floor, c.cabinet_num, l.lent_time, l.expire_time as return_time
     FROM user u
     JOIN lent l
     ON u.user_id=l.lent_user_id
     JOIN cabinet c
     ON l.lent_cabinet_id=c.cabinet_id
-    WHERE u.intra_id='${intraId}'
-    union
-    SELECT u.intra_id, c.location, c.section, c.floor, c.cabinet_num, ll.lent_time, ll.return_time as expire_time
+    WHERE u.intra_id='${intraId}';
+    `;
+    const getInfoFromLentLogQuery = `
+    SELECT u.intra_id, c.location, c.section, c.floor, c.cabinet_num, ll.lent_time, ll.return_time
     FROM user u
     JOIN lent_log ll
     ON u.user_id=ll.log_user_id
     JOIN cabinet c
     ON ll.log_cabinet_id=c.cabinet_id
     WHERE u.intra_id='${intraId}'
-    ORDER BY lent_time DESC;
+    ORDER BY lent_time DESC
+    LIMIT 5;
     `;
-    const result = await connection.query(content);
-    console.log("=====searchIntraId=====");
-    console.log(result);
+    const resultFromLent = await connection.query(getInfoFromLentQuery);
+    const resultFromLentLog = await connection.query(getInfoFromLentLogQuery);
+    // console.log("=====searchIntraId=====");
+    const result = {
+      resultFromLent: resultFromLent,
+      resultFromLentLog: resultFromLentLog,
+    };
     return result;
   } catch (err) {
     console.log(err);
@@ -52,25 +59,37 @@ async function getInfoByIntraId(intraId) {
   }
 }
 
+// 검색 by 사물함 번호
 async function getInfoByCabinetNum(cabinetNum, floor) {
   let connection;
   try {
     connection = await pool.getConnection();
-    const content = `
-    SELECT c.cabinet_id, c.cabinet_num, c.floor, c.activation, (SELECT u.intra_id FROM user u WHERE ll.log_user_id=u.user_id) as intra_id, ll.lent_time, ll.return_time
-    FROM cabinet c
-    JOIN lent_log ll
-    ON c.cabinet_id=ll.log_cabinet_id
-    WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor}
-    union
-    SELECT c.cabinet_id, c.cabinet_num, c.floor, c.activation, (SELECT u.intra_id FROM user u WHERE l.lent_user_id=u.user_id) as intra_id, l.lent_time, l.expire_time as return_time
-    FROM cabinet c
-    JOIN lent l
-    ON c.cabinet_id=l.lent_cabinet_id
-    WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor}
-    ORDER BY return_time DESC;
-    `;
-    const result = await connection.query(content);
+    const getInfoByCabinetNumFromLentQuery = `
+      SELECT c.cabinet_id, c.cabinet_num, c.floor, c.activation, (SELECT u.intra_id FROM user u WHERE l.lent_user_id=u.user_id) as intra_id, l.lent_time, l.expire_time as return_time
+      FROM cabinet c
+      JOIN lent l
+      ON c.cabinet_id=l.lent_cabinet_id
+      WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor};
+      `;
+    const getInfoByCabinetNumFromLentLogQuery = `
+      SELECT c.cabinet_id, c.cabinet_num, c.floor, c.activation, (SELECT u.intra_id FROM user u WHERE ll.log_user_id=u.user_id) as intra_id, ll.lent_time, ll.return_time
+      FROM cabinet c
+      JOIN lent_log ll
+      ON c.cabinet_id=ll.log_cabinet_id
+      WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor}
+      ORDER BY lent_time DESC
+      LIMIT 5;
+      `;
+    const resultFromLent = await connection.query(
+      getInfoByCabinetNumFromLentQuery
+    );
+    const resultFromLentLog = await connection.query(
+      getInfoByCabinetNumFromLentLogQuery
+    );
+    const result = {
+      resultFromLent: resultFromLent,
+      resultFromLentLog: resultFromLentLog,
+    };
     return result;
   } catch (err) {
     console.log(err);
@@ -80,6 +99,7 @@ async function getInfoByCabinetNum(cabinetNum, floor) {
   }
 }
 
+/* 전체 사물함 정보 가져오기
 async function getCabinets() {
   let connection;
   try {
@@ -130,6 +150,7 @@ async function getCabinets() {
     connection.release();
   }
 }
+*/
 
 // 사물함 activation 상태 변경
 async function modifyCabinetActivation(cabinetIdx, activation) {
@@ -169,6 +190,7 @@ async function getUserLent(cabinetIdx) {
     connection.release();
   }
 }
+
 // 특정 사물함 + (user + lent) 정보 가져옴
 async function getCabinet(cabinetIdx) {
   let connection;
@@ -191,8 +213,8 @@ async function getCabinet(cabinetIdx) {
     connection.release();
   }
 }
-// 전체 사물함 정보 가져옴
 
+// 대여 사물함(user + cabinet) 정보 가져옴
 async function getLentUserInfo() {
   let connection;
   try {
@@ -223,6 +245,7 @@ async function getLentUserInfo() {
     connection.release();
   }
 }
+
 // lent_log에 반납되는 사물함 정보 추가
 async function addLentLog(userLentInfo) {
   let connection;
@@ -290,29 +313,31 @@ async function getCabinetInfoByFloor() {
   }
 }
 
-// async function getNumberofCabinetByFloor() {
-//   let connection;
-//   try {
-//     connection = await pool.getConnection();
-//     const content = await connection.query(
-//       `select c.floor, count(*) as count from cabinet c
-//       left join lent l
-//       on l.lent_cabinet_id=c.cabinet_id
-//       group by c.floor`
-//     );
-//     console.log(`content: ${content}`);
-//     return content;
-//   } catch (err) {
-//     throw err;
-//   } finally {
-//     connection.release();
-//   }
-// }
+/* 층별 사물함 개수
+async function getNumberofCabinetByFloor() {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    const content = await connection.query(
+      `select c.floor, count(*) as count from cabinet c
+      left join lent l
+      on l.lent_cabinet_id=c.cabinet_id
+      group by c.floor`
+    );
+    console.log(`content: ${content}`);
+    return content;
+  } catch (err) {
+    throw err;
+  } finally {
+    connection.release();
+  }
+}
+*/
 
 module.exports = {
   getInfoByIntraId,
   getInfoByCabinetNum,
-  getCabinets,
+  // getCabinets,
   modifyCabinetActivation,
   getUserLent,
   getCabinet,
