@@ -1,0 +1,64 @@
+{
+  "status": 200,
+  "data": {
+    "resultFromLent": [
+      {
+        "cabinet_id": 1,
+        "cabinet_num": 12,
+        "floor": 2,
+        "activation": 1,
+        "intra_id": "cabinet_search",
+        "lent_time": "2022-05-16T08:27:16.000Z",
+        "return_time": "2022-05-23T08:27:16.000Z"
+      }
+    ],
+    "resultFromLentLog": [
+      {
+        "cabinet_id": 1,
+        "cabinet_num": 23,
+        "floor": 2,
+        "activation": 1,
+        "intra_id": "cabinet_1",
+        "lent_time": "2022-05-03T08:51:51.000Z",
+        "return_time": "2022-05-03T08:52:03.000Z"
+      },
+      {
+        "cabinet_id": 1,
+        "cabinet_num": 34,
+        "floor": 2,
+        "activation": 1,
+        "intra_id": "cabinet_2",
+        "lent_time": "2022-05-02T12:47:05.000Z",
+        "return_time": "2022-05-02T13:45:57.000Z"
+      },
+      {
+        "cabinet_id": 1,
+        "cabinet_num": 45,
+        "floor": 2,
+        "activation": 1,
+        "intra_id": "cabinet_3",
+        "lent_time": "2022-05-02T07:05:44.000Z",
+        "return_time": "2022-05-02T07:05:50.000Z"
+      },
+      {
+        "cabinet_id": 1,
+        "cabinet_num": 89,
+        "floor": 2,
+        "activation": 1,
+        "intra_id": "cabinet_4",
+        "lent_time": "2022-05-02T06:30:00.000Z",
+        "return_time": "2022-05-02T06:39:45.000Z"
+      },
+      {
+        "cabinet_id": 1,
+        "cabinet_num": 56,
+        "floor": 2,
+        "activation": 1,
+        "intra_id": "cabinet_5",
+        "lent_time": "2022-05-02T06:18:33.000Z",
+        "return_time": "2022-05-02T06:25:32.000Z"
+      }
+    ]
+  },
+  "code": "ok"
+}

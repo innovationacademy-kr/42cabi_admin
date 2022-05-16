@@ -1,13 +1,13 @@
-import { searchCabinetData } from "../Pages/SearchDashboard";
+import { searchCabinetData } from "../DataTypes";
 
-const GET_TARGET_CABINET = "SearchCabinetData/GET_TARGET_CABINET";
-const INITIALIZE = "SearchCabinetData/INITIALIZE";
+const GET_TARGET_CABINET = "SearchCabinet/GET_TARGET_CABINET";
+const INITIALIZE = "SearchCabinet/INITIALIZE";
 
-export const GetTargetCabinet = (data: searchCabinetData[]) => ({
+export const GetTargetCabinet = (data: searchCabinetData) => ({
   type: GET_TARGET_CABINET,
   payload: data,
 });
-export const dataInitialize = (data: searchCabinetData[]) => ({
+export const dataInitialize = () => ({
   type: INITIALIZE,
   payload: {},
 });
@@ -16,7 +16,7 @@ const initialState: searchCabinetData = {};
 
 type actionType = {
   type: string;
-  payload: searchCabinetData[];
+  payload: searchCabinetData;
 };
 
 const SearchCabinet = (state = initialState, action: actionType) => {
