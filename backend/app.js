@@ -101,6 +101,11 @@ app.get(
 );
 */
 
+// num이 숫자라면 true 리턴
+function isNumeric(num) {
+  return !isNaN(num);
+}
+
 // intra_id, cabinetNum 검색 기능
 app.get("/api/search", async (req, res) => {
   const { intraId, cabinetNum, floor } = req.query;
@@ -108,12 +113,7 @@ app.get("/api/search", async (req, res) => {
 
   if (intraId && typeof intraId === String) {
     result = await getInfoByIntraId(intraId);
-  } else if (
-    cabinetNum &&
-    floor &&
-    isNumeric(cabinetNum) &&
-    isNumberic(floor)
-  ) {
+  } else if (cabinetNum && floor && isNumeric(cabinetNum) && isNumeric(floor)) {
     /* cabinetNum, floor 형식적 validation
     // isValidate = await getCabinetByCabinetNum(cabinetNum, floor);
     // if (!isValidate[0]) return sendResponse(res, {}, 400, "no cabinet");
