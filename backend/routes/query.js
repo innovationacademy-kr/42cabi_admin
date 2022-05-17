@@ -2,7 +2,6 @@
 
 const mariadb = require("mariadb");
 
-// 해당 부분 DB를 옮겨야할지..
 const pool = mariadb.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -11,20 +10,21 @@ const pool = mariadb.createPool({
   bigIntAsNumber: true,
 });
 
-let cabinetList = {
-  location: [],
-  floor: [],
-  section: [],
-  cabinet: [],
-};
+// let cabinetList = {
+//   location: [],
+//   floor: [],
+//   section: [],
+//   cabinet: [],
+// };
 
 // 검색 by intraId
 async function getInfoByIntraId(intraId) {
   let connection;
   try {
+    // TODO l.expire_time => expire_time?
     connection = await pool.getConnection();
     const getInfoFromLentQuery = `
-    SELECT u.intra_id, c.location, c.section, c.floor, c.cabinet_num, l.lent_time, l.expire_time as return_time
+    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_time, l.expire_time
     FROM user u
     JOIN lent l
     ON u.user_id=l.lent_user_id
@@ -33,7 +33,7 @@ async function getInfoByIntraId(intraId) {
     WHERE u.intra_id='${intraId}';
     `;
     const getInfoFromLentLogQuery = `
-    SELECT u.intra_id, c.location, c.section, c.floor, c.cabinet_num, ll.lent_time, ll.return_time
+    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.lent_time, ll.return_time
     FROM user u
     JOIN lent_log ll
     ON u.user_id=ll.log_user_id
@@ -65,14 +65,14 @@ async function getInfoByCabinetNum(cabinetNum, floor) {
   try {
     connection = await pool.getConnection();
     const getInfoByCabinetNumFromLentQuery = `
-      SELECT c.cabinet_id, c.cabinet_num, c.floor, c.activation, (SELECT u.intra_id FROM user u WHERE l.lent_user_id=u.user_id) as intra_id, l.lent_time, l.expire_time as return_time
+      SELECT (select intra_id from user u where u.user_id=l.lent_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_time, l.expire_time
       FROM cabinet c
       JOIN lent l
       ON c.cabinet_id=l.lent_cabinet_id
       WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor};
       `;
     const getInfoByCabinetNumFromLentLogQuery = `
-      SELECT c.cabinet_id, c.cabinet_num, c.floor, c.activation, (SELECT u.intra_id FROM user u WHERE ll.log_user_id=u.user_id) as intra_id, ll.lent_time, ll.return_time
+      SELECT (select intra_id from user u where u.user_id=ll.log_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.lent_time, ll.return_time
       FROM cabinet c
       JOIN lent_log ll
       ON c.cabinet_id=ll.log_cabinet_id
@@ -345,6 +345,6 @@ module.exports = {
   addLentLog,
   deleteLent,
   // getNumberofCabinetByFloor,
-  cabinetList,
+  // cabinetList,
   getCabinetInfoByFloor,
 };

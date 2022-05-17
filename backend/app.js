@@ -4,7 +4,7 @@ require("dotenv").config();
 
 // TODO wrap 함수로 t-c 처리
 const { wrap, sendResponse } = require("./util");
-
+const cors = require("cors");
 const {
   getInfoByIntraId,
   getInfoByCabinetNum,
@@ -16,10 +16,11 @@ const {
   addLentLog,
   deleteLent,
   // getNumberofCabinetByFloor,
-  cabinetList,
+  // cabinetList,
   getCabinetInfoByFloor,
 } = require("./routes/query");
 
+app.use(cors());
 /* 전체 사물함 정보
 // TODO cabinetList 갱신 기준
 getCabinets();
@@ -62,11 +63,11 @@ app.patch("/api/return", async (req, res) => {
   }
 
   // 해당 사물함의 user, lent 정보 가져옴
-  // TODO getUserLent api test : 완료
   const userLentInfo = await getUserLent(cabinetIdx);
   if (!userLentInfo) {
     return sendResponse(res, {}, 400, "getUserLent error");
   }
+  // TODO 병렬처리
   await deleteLent(userLentInfo); // lent 테이블에서 반납 사물함 삭제
   await addLentLog(userLentInfo); // lent_log 테이블에 반납 사물함 추가
 
@@ -75,7 +76,7 @@ app.patch("/api/return", async (req, res) => {
 });
 
 // 사물함 고장 상태 변경
-// TODO modifyCabinetActivation api 테스트 해야함 : 완료
+// TODO req.body로 처리
 app.post("/api/activation/:cabinetIdx/:activation", async (req, res) => {
   const { cabinetIdx, activation } = req.params;
   if (!cabinetIdx) {
@@ -111,6 +112,7 @@ app.get("/api/search", async (req, res) => {
   } else {
     return sendResponse(res, {}, 400, "req.query error");
   }
+  //TODO 쿼리문 입력대로 안올 때 에러처리
   console.log("====/api/search=====");
   console.log(result.resultFromLent);
   console.log(result.resultFromLentLog);
