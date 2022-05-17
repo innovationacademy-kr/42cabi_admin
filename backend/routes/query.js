@@ -20,22 +20,22 @@ async function getInfoByIntraId(intraId) {
     const getInfoFromLentQuery = `
     SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_time, l.expire_time
     FROM user u
-    JOIN lent l
+    LEFT JOIN lent l
     ON u.user_id=l.lent_user_id
-    JOIN cabinet c
+    LEFT JOIN cabinet c
     ON l.lent_cabinet_id=c.cabinet_id
     WHERE u.intra_id='${intraId}';
     `;
     const getInfoFromLentLogQuery = `
     SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.lent_time, ll.return_time
     FROM user u
-    JOIN lent_log ll
+    LEFT JOIN lent_log ll
     ON u.user_id=ll.log_user_id
-    JOIN cabinet c
+    LEFT JOIN cabinet c
     ON ll.log_cabinet_id=c.cabinet_id
     WHERE u.intra_id='${intraId}'
     ORDER BY lent_time DESC
-    LIMIT 5;
+    LIMIT 10;
     `;
     const resultFromLent = await connection.query(getInfoFromLentQuery);
     const resultFromLentLog = await connection.query(getInfoFromLentLogQuery);
@@ -77,18 +77,18 @@ async function getInfoByCabinetNum(cabinetNum, floor) {
     const getInfoByCabinetNumFromLentQuery = `
       SELECT (select intra_id from user u where u.user_id=l.lent_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_time, l.expire_time
       FROM cabinet c
-      JOIN lent l
+      LEFT JOIN lent l
       ON c.cabinet_id=l.lent_cabinet_id
       WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor};
       `;
     const getInfoByCabinetNumFromLentLogQuery = `
       SELECT (select intra_id from user u where u.user_id=ll.log_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.lent_time, ll.return_time
       FROM cabinet c
-      JOIN lent_log ll
+      LEFT JOIN lent_log ll
       ON c.cabinet_id=ll.log_cabinet_id
       WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor}
       ORDER BY lent_time DESC
-      LIMIT 5;
+      LIMIT 10;
       `;
     const resultFromLent = await connection.query(
       getInfoByCabinetNumFromLentQuery
