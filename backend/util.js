@@ -19,10 +19,15 @@ const wrap = (asyncFn) => {
   };
 };
 
+const isNumeric = (num) => {
+  return !isNaN(num);
+};
+
 function sendResponse(res, data, status) {
   res.status(status).json(data);
 }
 module.exports = {
   wrap,
   sendResponse,
+  isNumeric,
 };

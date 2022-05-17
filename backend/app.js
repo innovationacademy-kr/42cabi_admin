@@ -3,7 +3,8 @@ const app = express();
 require("dotenv").config();
 
 // TODO wrap 함수로 t-c 처리
-const { wrap, sendResponse } = require("./util");
+const { wrap, sendResponse, isNumeric } = require("./util");
+
 const cors = require("cors");
 const {
   getInfoByIntraId,
@@ -101,17 +102,12 @@ app.get(
 );
 */
 
-// num이 숫자라면 true 리턴
-function isNumeric(num) {
-  return !isNaN(num);
-}
-
 // intra_id, cabinetNum 검색 기능
 app.get("/api/search", async (req, res) => {
   const { intraId, cabinetNum, floor } = req.query;
   let result;
 
-  if (intraId && typeof intraId === String) {
+  if (intraId) {
     result = await getInfoByIntraId(intraId);
   } else if (cabinetNum && floor && isNumeric(cabinetNum) && isNumeric(floor)) {
     /* cabinetNum, floor 형식적 validation
