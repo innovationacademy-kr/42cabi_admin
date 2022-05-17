@@ -4,7 +4,7 @@ require("dotenv").config();
 
 // TODO wrap 함수로 t-c 처리
 const { wrap, sendResponse } = require("./util");
-
+const cors = require("cors");
 const {
   getInfoByIntraId,
   getInfoByCabinetNum,
@@ -16,10 +16,11 @@ const {
   addLentLog,
   deleteLent,
   // getNumberofCabinetByFloor,
-  cabinetList,
+  // cabinetList,
   getCabinetInfoByFloor,
 } = require("./routes/query");
 
+app.use(cors());
 /* 전체 사물함 정보
 // TODO cabinetList 갱신 기준
 getCabinets();
