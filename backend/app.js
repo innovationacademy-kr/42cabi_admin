@@ -111,12 +111,13 @@ app.get("/api/search", async (req, res) => {
   } else if (
     cabinetNum &&
     floor &&
-    typeof cabinetNum === Number &&
-    typeof floor === Number
+    isNumeric(cabinetNum) &&
+    isNumberic(floor)
   ) {
-    // cabinetNum, floor 형식적 validation
+    /* cabinetNum, floor 형식적 validation
     // isValidate = await getCabinetByCabinetNum(cabinetNum, floor);
     // if (!isValidate[0]) return sendResponse(res, {}, 400, "no cabinet");
+    */
     // search by cabinetNum
     result = await getInfoByCabinetNum(cabinetNum, floor);
   } else {
