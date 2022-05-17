@@ -6,12 +6,16 @@ import moment from "moment";
 
 const UserDetail = () => {
   const SearchUserRedux = useSelector((state: RootState) => state.SearchUser);
-  const data = useMemo(() => SearchUserRedux.data?.resultFromLent, []);
+  const data = useMemo(
+    () => SearchUserRedux.data?.resultFromLent,
+    [SearchUserRedux.data?.resultFromLent]
+  );
 
-  const UserInfo = data !== undefined ? data[0].intra_id : "정보 없음";
+  const UserInfo =
+    data !== undefined && data.length !== 0 ? data[0].intra_id : "정보 없음";
 
   const UserCabinetInfo =
-    data !== undefined
+    data !== undefined && data.length !== 0
       ? data[0].location?.toString() +
         " " +
         data[0].floor?.toString() +
@@ -23,7 +27,7 @@ const UserDetail = () => {
       : "정보 없음";
 
   const UserLentInfo =
-    data !== undefined
+    data !== undefined && data.length !== 0
       ? moment(data[0].lent_time?.toString()).format("YYYY.MM.DD") +
         " ~ " +
         moment(data[0].return_time?.toString()).format("YYYY.MM.DD")

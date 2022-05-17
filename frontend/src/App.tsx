@@ -7,21 +7,10 @@ import Status from "./Pages/Status";
 import Search from "./Pages/Search";
 import Map from "./Pages/Map";
 import Layout from "./Components/Layout";
-import CabinetInfo from "./Pages/CabinetInfo";
 import SearchDashboard from "./Pages/SearchDashboard";
 import NoResult from "./Pages/NoResult";
 
 const App = () => {
-  const PrivateRoute = () => {
-    const isHavePrevState: boolean =
-      localStorage.getItem("reduxPrevState") !== null;
-    return isHavePrevState ? (
-      <SearchDashboard />
-    ) : (
-      <Navigate to="/saerom/search/" />
-    );
-  };
-
   return (
     <BrowserRouter>
       <Routes>
@@ -30,18 +19,7 @@ const App = () => {
           <Route path="" element={<Home />} />
           <Route path="status" element={<Status />} />
           <Route path="search" element={<Search />}>
-            <Route path="cabinet" element={<CabinetInfo />} />
-            {/* <Route
-              path="searchDashboard"
-              element={
-                isHavePrevState ? (
-                  <SearchDashboard />
-                ) : (
-                  <Navigate to="/saerom/search/" />
-                )
-              }
-            /> */}
-            <Route path="searchDashboard" element={<PrivateRoute />} />
+            <Route path="searchDashboard" element={<SearchDashboard />} />
             <Route path="noResult" element={<NoResult />} />
           </Route>
           <Route path="map" element={<Map />} />

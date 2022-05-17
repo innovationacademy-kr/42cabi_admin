@@ -24,7 +24,7 @@ export const PrevCabinetTable = () => {
         // @ts-ignore
         columns,
         data,
-        initialState: { pageSize: 10 },
+        initialState: { pageSize: 3 },
       },
       usePagination
     );

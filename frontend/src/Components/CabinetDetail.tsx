@@ -8,10 +8,13 @@ const CabinetDetail = () => {
   const SearchCabinetRedux = useSelector(
     (state: RootState) => state.SearchCabinet
   );
-  const data = useMemo(() => SearchCabinetRedux.data?.resultFromLent, []);
+  const data = useMemo(
+    () => SearchCabinetRedux.data?.resultFromLent,
+    [SearchCabinetRedux.data?.resultFromLent]
+  );
 
   const CabinetInfo =
-    data !== undefined
+    data !== undefined && data.length !== 0
       ? data[0].floor?.toString() +
         "F " +
         data[0].cabinet_num?.toString() +
@@ -19,13 +22,14 @@ const CabinetDetail = () => {
       : "정보 없음";
 
   const CabinetLentInfo =
-    data !== undefined
+    data !== undefined && data.length !== 0
       ? moment(data[0].lent_time?.toString()).format("YYYY.MM.DD") +
         " ~ " +
         moment(data[0].return_time?.toString()).format("YYYY.MM.DD")
       : "정보 없음";
 
-  const CabinetUserInfo = data !== undefined ? data[0].intra_id : "정보 없음";
+  const CabinetUserInfo =
+    data !== undefined && data.length !== 0 ? data[0].intra_id : "정보 없음";
 
   return (
     <div>

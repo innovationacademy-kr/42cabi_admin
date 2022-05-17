@@ -6,18 +6,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import rootReducer from "./ReduxModules/rootReducer";
 
-const searchDataJSON = localStorage.getItem("reduxPrevState");
-
-const persistedState =
-  searchDataJSON !== null ? JSON.parse(searchDataJSON) : {};
-
 const store = configureStore({
   reducer: rootReducer,
-  preloadedState: persistedState,
-});
-
-store.subscribe(() => {
-  localStorage.setItem("reduxPrevState", JSON.stringify(store.getState()));
 });
 
 const root = ReactDOM.createRoot(
