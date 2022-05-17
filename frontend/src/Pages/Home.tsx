@@ -1,25 +1,20 @@
 import styled from "styled-components";
-import TotalStatusChart from "../Charts/TotalStatusChart";
-import FloorStatusChart from "../Charts/FloorStatusChart";
+import TotalStateChart from "../Charts/TotalStateChart";
+import FloorStateChart from "../Charts/FloorStateChart";
 
 const Home = () => {
   return (
-    <Container>
-      <div className="innerbox">
-        <TotalStatusChart />
-      </div>
-      <div className="innerbox">
-        <FloorStatusChart />
-      </div>
-    </Container>
+    <HomeContainer>
+      <TotalStateChart />
+      <FloorStateChart />
+    </HomeContainer>
   );
 };
 
-const Container = styled.div`
+const HomeContainer = styled.div`
   display: flex;
-  width: 50rem;
-  .innerbox {
-    flex: 1;
-  }
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 1rem;
 `;
 export default Home;
