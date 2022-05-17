@@ -1,5 +1,3 @@
-// 의존성없는 util 함수들
-
 /**
  * wrap function
  * @params {Object} req
