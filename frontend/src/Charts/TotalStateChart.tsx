@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
-import { FloorState } from "../type";
-
-export type PieData = { name: string; value: number };
+import { FloorStateData, PieData } from "../type";
 
 const TotalStateChart = () => {
   const [totalState, setTotalState] = useState<PieData[]>([]);
@@ -47,7 +45,7 @@ const TotalStateChart = () => {
         overdue = 0,
         disabled = 0,
         unused = 0;
-      res.data.forEach((element: FloorState) => {
+      res.data.forEach((element: FloorStateData) => {
         used += element.used;
         overdue += element.overdue;
         disabled += element.disabled;
@@ -59,7 +57,6 @@ const TotalStateChart = () => {
         { name: "고장", value: disabled },
         { name: "미사용", value: unused },
       ]);
-      // console.log(totalState);
     };
     fetchState();
   }, []);
@@ -67,16 +64,7 @@ const TotalStateChart = () => {
   const colors = ["#05a55a", "#f39c13", "#f56a54", "#bbbbbb"];
 
   return (
-    <PieChart
-      width={500}
-      height={300}
-      margin={{
-        top: 20,
-        right: 30,
-        left: 20,
-        bottom: 5,
-      }}
-    >
+    <PieChart width={500} height={300}>
       <Tooltip cursor={false} contentStyle={{ backgroundColor: "#ffffffaa" }} />
       <Legend />
       <Pie

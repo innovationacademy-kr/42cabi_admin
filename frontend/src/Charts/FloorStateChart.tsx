@@ -9,10 +9,10 @@ import {
   Legend,
   Tooltip,
 } from "recharts";
-import { FloorState } from "../type";
+import { FloorStateData } from "../type";
 
 const FloorStateChart = () => {
-  const [floorStateData, setFloorStateData] = useState<FloorState[]>([]);
+  const [floorStateData, setFloorStateData] = useState<FloorStateData[]>([]);
   useEffect(() => {
     const fetchState = async () => {
       // const res = await axios.get(
@@ -49,12 +49,10 @@ const FloorStateChart = () => {
         ],
       };
 
-      res.data.forEach((element: FloorState) => {
+      res.data.forEach((element: FloorStateData) => {
         element.floor += "F";
       });
-
       setFloorStateData(res.data);
-      console.log(res);
     };
     fetchState();
   }, []);
@@ -65,10 +63,8 @@ const FloorStateChart = () => {
       height={300}
       data={floorStateData}
       margin={{
-        top: 20,
-        right: 30,
-        left: 20,
-        bottom: 5,
+        top: 15,
+        right: 20,
       }}
     >
       <CartesianGrid strokeDasharray="3" />

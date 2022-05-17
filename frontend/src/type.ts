@@ -1,4 +1,4 @@
-export type FloorState = {
+export type FloorStateData = {
   disabled: number;
   floor: string;
   overdue: number;
@@ -6,3 +6,5 @@ export type FloorState = {
   used: number;
   unused: number;
 };
+
+export type PieData = { name: string; value: number };
