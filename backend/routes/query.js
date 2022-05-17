@@ -59,6 +59,22 @@ async function getInfoByIntraId(intraId) {
   }
 }
 
+// async function getCabinetByCabinetNum(cabinetNum, floor) {
+//   let connection;
+//   try {
+//     connection = await pool.getConnection();
+//     const getCabinetByCabinetNumQuery = `
+//     SELECT * FROM cabinet c WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor};`;
+//     const result = await connection.query(getCabinetByCabinetNumQuery);
+//     return result;
+//   } catch (err) {
+//     console.log(err);
+//     throw err;
+//   } finally {
+//     connection.release();
+//   }
+// }
+
 // 검색 by 사물함 번호
 async function getInfoByCabinetNum(cabinetNum, floor) {
   let connection;
@@ -291,15 +307,16 @@ async function getCabinetInfoByFloor() {
   try {
     connection = await pool.getConnection();
     const content = `
-    SELECT c.floor,
-    count(*) as total,
-    count(case when c.cabinet_id=l.lent_cabinet_id then 1 end) as used,
-    count(case when l.expire_time<now() then 1 end) as overdue,
-    count(case when c.activation=0 then 1 end) as disabled
-    FROM cabinet c
-    LEFT JOIN lent l
-    ON c.cabinet_id=l.lent_cabinet_id
-    group by floor;
+      SELECT c.floor,
+      COUNT(*) as total,
+      COUNT(case when c.cabinet_id=l.lent_cabinet_id and l.expire_time>now() then 1 end) as used,
+      COUNT(case when l.expire_time<now() then 1 end) as overdue,
+      COUNT(case when l.lent_cabinet_id is null and c.activation=1 then 1 end) as unused,
+      COUNT(case when c.activation=0 then 1 end) as disabled
+      FROM cabinet c
+      LEFT JOIN lent l
+      ON c.cabinet_id=l.lent_cabinet_id
+      group by floor;
     `;
     const result = await connection.query(content);
     console.log("------getCabinetInfoByFloor------");
@@ -337,6 +354,7 @@ async function getNumberofCabinetByFloor() {
 module.exports = {
   getInfoByIntraId,
   getInfoByCabinetNum,
+  // getCabinetByCabinetNum,
   // getCabinets,
   modifyCabinetActivation,
   getUserLent,
