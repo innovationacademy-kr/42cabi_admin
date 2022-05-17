@@ -6,7 +6,7 @@ const NavBar = () => {
     <NavBarStyles>
       <div className="left">
         <Link to="">
-          <img src="/assets/cabinet.ico" alt="" />
+          <img src="/assets/cabinet.ico" alt="logo" />
         </Link>
         <Link to="status" className="menu">
           현황

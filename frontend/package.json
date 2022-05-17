@@ -14,17 +14,15 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.0",
     "axios": "^0.27.2",
-    "chart.js": "^3.7.1",
     "react": "^18.1.0",
-    "react-chartjs-2": "^4.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "recharts": "^2.1.9",
     "styled-components": "^5.3.5",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@types/chart.js": "^2.9.37",
     "@types/node": "^16.11.33",
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.3",
