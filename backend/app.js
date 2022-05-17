@@ -8,6 +8,7 @@ const cors = require("cors");
 const {
   getInfoByIntraId,
   getInfoByCabinetNum,
+  // getCabinetByCabinetNum,
   // getCabinets,
   modifyCabinetActivation,
   getUserLent,
@@ -105,9 +106,18 @@ app.get("/api/search", async (req, res) => {
   const { intraId, cabinetNum, floor } = req.query;
   let result;
 
-  if (intraId) {
+  if (intraId && typeof intraId === String) {
     result = await getInfoByIntraId(intraId);
-  } else if (cabinetNum && floor) {
+  } else if (
+    cabinetNum &&
+    floor &&
+    typeof cabinetNum === Number &&
+    typeof floor === Number
+  ) {
+    // cabinetNum, floor 형식적 validation
+    // isValidate = await getCabinetByCabinetNum(cabinetNum, floor);
+    // if (!isValidate[0]) return sendResponse(res, {}, 400, "no cabinet");
+    // search by cabinetNum
     result = await getInfoByCabinetNum(cabinetNum, floor);
   } else {
     return sendResponse(res, {}, 400, "req.query error");
@@ -116,8 +126,10 @@ app.get("/api/search", async (req, res) => {
   console.log("====/api/search=====");
   console.log(result.resultFromLent);
   console.log(result.resultFromLentLog);
-  // if (!result.resultFromLent && !result.resultFromLentLog) {
-  //   // result값이 없을 때, cabinetNum=2 and floor=6
+  // 결과값이 없을 경우 + intra_id || cabinetNum || floor 값이 유효하지 않은 경우
+  // if (!result.resultFromLent[0] && !result.resultFromLentLog[0]) {
+  //   console.log("400");
+  //   console.log(result);
   //   return sendResponse(res, {}, 400, "no data");
   // }
   return sendResponse(res, result, 200, "ok");

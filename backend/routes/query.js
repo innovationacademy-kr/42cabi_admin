@@ -59,6 +59,22 @@ async function getInfoByIntraId(intraId) {
   }
 }
 
+// async function getCabinetByCabinetNum(cabinetNum, floor) {
+//   let connection;
+//   try {
+//     connection = await pool.getConnection();
+//     const getCabinetByCabinetNumQuery = `
+//     SELECT * FROM cabinet c WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor};`;
+//     const result = await connection.query(getCabinetByCabinetNumQuery);
+//     return result;
+//   } catch (err) {
+//     console.log(err);
+//     throw err;
+//   } finally {
+//     connection.release();
+//   }
+// }
+
 // 검색 by 사물함 번호
 async function getInfoByCabinetNum(cabinetNum, floor) {
   let connection;
@@ -337,6 +353,7 @@ async function getNumberofCabinetByFloor() {
 module.exports = {
   getInfoByIntraId,
   getInfoByCabinetNum,
+  // getCabinetByCabinetNum,
   // getCabinets,
   modifyCabinetActivation,
   getUserLent,
