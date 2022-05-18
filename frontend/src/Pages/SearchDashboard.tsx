@@ -35,13 +35,19 @@ const SearchDashboard = () => {
       shallowEqual
     );
     if (SearchTypeRedux === "User") {
-      if (SearchResponseRedux.resultFromLentLog?.length !== 0) {
+      if (
+        SearchResponseRedux.resultFromLent !== undefined &&
+        SearchResponseRedux.resultFromLentLog?.length !== 0
+      ) {
         return <PrevUserTable />;
       } else {
         return <NoPrevLog />;
       }
     } else {
-      if (SearchResponseRedux.resultFromLentLog?.length !== 0) {
+      if (
+        SearchResponseRedux.resultFromLentLog !== undefined &&
+        SearchResponseRedux.resultFromLentLog[0].lent_time !== null
+      ) {
         return <PrevCabinetTable />;
       } else {
         return <NoPrevLog />;
@@ -105,7 +111,6 @@ const SearchDashboard = () => {
 
 const DashboardBox = styled.div`
   display: flex;
-  position: sticky;
   width: 99%;
   height: 90%;
   border: 0.5rem solid gray;
@@ -117,7 +122,7 @@ const LeftBox = styled.div`
   text-align: center;
   width: 50%;
   margin: 0.3rem;
-  border: 0.2rem solid red;
+  // border: 0.2rem solid red;
 `;
 
 const RightBox = styled.div`
@@ -126,7 +131,7 @@ const RightBox = styled.div`
   text-align: center;
   width: 50%;
   margin: 0.3rem;
-  border: 0.2rem solid blue;
+  // border: 0.2rem solid blue;
 `;
 
 const DetailBox = styled.div`
@@ -144,7 +149,8 @@ const ButtonBox = styled.div`
 
 const TableBox = styled.div`
   margin: 1rem;
-  border: 0.2rem solid green;
+  overflow: scroll;
+  // border: 0.2rem solid green;
 `;
 
 export default SearchDashboard;

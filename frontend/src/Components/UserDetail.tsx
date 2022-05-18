@@ -47,9 +47,9 @@ const UserDetail = () => {
 };
 
 const DetailBox = styled.div`
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   text-align: center;
-  width: 85%;
   border: 0.5rem solid black;
   margin: 1rem;
   padding: 1rem;
@@ -57,7 +57,9 @@ const DetailBox = styled.div`
 
 const BigFontSize = styled.p`
   margin-top: 2rem;
+  margin-bottom: 2rem;
   font-size: 3rem;
+  font-weight: bold;
 `;
 
 export default UserDetail;

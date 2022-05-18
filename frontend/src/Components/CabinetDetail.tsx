@@ -1,8 +1,9 @@
 import { useSelector, shallowEqual } from "react-redux";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { RootState } from "../ReduxModules/rootReducer";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const CabinetDetail = () => {
   const SearchResponseRedux = useSelector(
@@ -14,25 +15,34 @@ const CabinetDetail = () => {
     [SearchResponseRedux.resultFromLent]
   );
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (data?.length === 0) {
+      navigate("/saerom/search/invalidCabinet");
+    }
+  });
+
   const CabinetInfo =
-    data !== undefined && data.length !== 0
+    data !== undefined
       ? data[0].floor?.toString() +
         "F " +
         data[0].section?.toString() +
         " " +
         data[0].cabinet_num?.toString() +
         "번"
-      : "정보 없음";
+      : "";
 
   const CabinetLentInfo =
-    data !== undefined && data.length !== 0
+    data !== undefined && data[0].lent_time !== null
       ? moment(data[0].lent_time?.toString()).format("YYYY.MM.DD") +
         " ~ " +
         moment(data[0].expire_time?.toString()).format("YYYY.MM.DD")
       : "정보 없음";
 
   const CabinetUserInfo =
-    data !== undefined && data.length !== 0 ? data[0].intra_id : "정보 없음";
+    data !== undefined && data[0].intra_id !== null
+      ? data[0].intra_id
+      : "정보 없음";
 
   return (
     <div>
@@ -47,9 +57,9 @@ const CabinetDetail = () => {
 };
 
 const DetailBox = styled.div`
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   text-align: center;
-  width: 85%;
   border: 0.5rem solid black;
   margin: 1rem;
   padding: 1rem;
@@ -57,7 +67,9 @@ const DetailBox = styled.div`
 
 const BigFontSize = styled.p`
   margin-top: 2rem;
+  margin-bottom: 2rem;
   font-size: 3rem;
+  font-weight: bold;
 `;
 
 export default CabinetDetail;

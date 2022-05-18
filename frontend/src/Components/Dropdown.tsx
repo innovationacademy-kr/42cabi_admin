@@ -13,6 +13,7 @@ export const DropDownContainer = styled.div`
 `;
 
 export const DropDownHeader = styled.div`
+  position: relative;
   margin-bottom: 0.2em;
   padding: 0.6em 2em 0.4em 1em;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
@@ -29,7 +30,10 @@ export const DropDownHeaderSymbol = styled.div`
   padding-right: 0em;
 `;
 
-export const DropDownListContainer = styled.div``;
+export const DropDownListContainer = styled.div`
+  position: absolute;
+  width: 7em;
+`;
 
 export const DropDownList = styled.ul`
   padding: 0;
