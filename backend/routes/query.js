@@ -1,6 +1,7 @@
 // DB에 종속되는 util함수들
 
 const mariadb = require("mariadb");
+require("dotenv").config({ path: "../.env" });
 
 const pool = mariadb.createPool({
   host: process.env.DB_HOST,
@@ -10,13 +11,6 @@ const pool = mariadb.createPool({
   bigIntAsNumber: true,
 });
 
-// let cabinetList = {
-//   location: [],
-//   floor: [],
-//   section: [],
-//   cabinet: [],
-// };
-
 // 검색 by intraId
 async function getInfoByIntraId(intraId) {
   let connection;
@@ -24,24 +18,24 @@ async function getInfoByIntraId(intraId) {
     // TODO l.expire_time => expire_time?
     connection = await pool.getConnection();
     const getInfoFromLentQuery = `
-    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_time, l.expire_time
+    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_id, l.lent_time, l.expire_time
     FROM user u
-    JOIN lent l
+    LEFT JOIN lent l
     ON u.user_id=l.lent_user_id
-    JOIN cabinet c
+    LEFT JOIN cabinet c
     ON l.lent_cabinet_id=c.cabinet_id
     WHERE u.intra_id='${intraId}';
     `;
     const getInfoFromLentLogQuery = `
-    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.lent_time, ll.return_time
+    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.log_id, ll.lent_time, ll.return_time
     FROM user u
-    JOIN lent_log ll
+    LEFT JOIN lent_log ll
     ON u.user_id=ll.log_user_id
-    JOIN cabinet c
+    LEFT JOIN cabinet c
     ON ll.log_cabinet_id=c.cabinet_id
     WHERE u.intra_id='${intraId}'
     ORDER BY lent_time DESC
-    LIMIT 5;
+    LIMIT 10;
     `;
     const resultFromLent = await connection.query(getInfoFromLentQuery);
     const resultFromLentLog = await connection.query(getInfoFromLentLogQuery);
@@ -81,20 +75,20 @@ async function getInfoByCabinetNum(cabinetNum, floor) {
   try {
     connection = await pool.getConnection();
     const getInfoByCabinetNumFromLentQuery = `
-      SELECT (select intra_id from user u where u.user_id=l.lent_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_time, l.expire_time
+      SELECT (select intra_id from user u where u.user_id=l.lent_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_id, l.lent_time, l.expire_time
       FROM cabinet c
-      JOIN lent l
+      LEFT JOIN lent l
       ON c.cabinet_id=l.lent_cabinet_id
       WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor};
       `;
     const getInfoByCabinetNumFromLentLogQuery = `
-      SELECT (select intra_id from user u where u.user_id=ll.log_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.lent_time, ll.return_time
+      SELECT (select intra_id from user u where u.user_id=ll.log_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.log_id, ll.lent_time, ll.return_time
       FROM cabinet c
-      JOIN lent_log ll
+      LEFT JOIN lent_log ll
       ON c.cabinet_id=ll.log_cabinet_id
       WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor}
       ORDER BY lent_time DESC
-      LIMIT 5;
+      LIMIT 10;
       `;
     const resultFromLent = await connection.query(
       getInfoByCabinetNumFromLentQuery
@@ -114,59 +108,6 @@ async function getInfoByCabinetNum(cabinetNum, floor) {
     connection.release();
   }
 }
-
-/* 전체 사물함 정보 가져오기
-async function getCabinets() {
-  let connection;
-  try {
-    connection = await pool.getConnection();
-
-    const content1 = `SELECT DISTINCT cabinet.location FROM cabinet`;
-    const result1 = await connection.query(content1);
-    result1.forEach(async (element1) => {
-      let floorList = [];
-      let tmpSectionlist = [];
-      let tmpCabinetList = [];
-
-      cabinetList.location.push(element1.location);
-
-      const content2 = `SELECT DISTINCT cabinet.floor FROM cabinet WHERE location='${element1.location}' order by floor`;
-      const result2 = await connection.query(content2);
-      result2.forEach(async (element2) => {
-        let sectionList = [];
-        let cabinetInfo = [];
-
-        floorList.push(element2.floor);
-
-        const content3 = `SELECT DISTINCT cabinet.section FROM cabinet WHERE location='${element1.location}' and floor='${element2.floor}'`;
-        const result3 = await connection.query(content3);
-        result3.forEach(async (element3) => {
-          let cabinet = [];
-          sectionList.push(element3.section);
-
-          // content4 쿼리에서 activation==1인 경우만 모아야 하나?
-          const content4 = `SELECT * FROM cabinet WHERE location='${element1.location}' AND floor='${element2.floor}' AND section='${element3.section}' AND activation=1 order by cabinet_num`;
-          const result4 = await connection.query(content4);
-          result4.forEach(async (element4) => {
-            cabinet.push(element4);
-          });
-          cabinetInfo.push(cabinet);
-        });
-        tmpSectionlist.push(sectionList);
-        tmpCabinetList.push(cabinetInfo);
-      });
-      cabinetList.floor?.push(floorList);
-      cabinetList.section?.push(tmpSectionlist);
-      cabinetList.cabinet?.push(tmpCabinetList);
-    });
-  } catch (err) {
-    console.log(err);
-    throw err;
-  } finally {
-    connection.release();
-  }
-}
-*/
 
 // 사물함 activation 상태 변경
 async function modifyCabinetActivation(cabinetIdx, activation) {
@@ -329,27 +270,6 @@ async function getCabinetInfoByFloor() {
     connection.release();
   }
 }
-
-/* 층별 사물함 개수
-async function getNumberofCabinetByFloor() {
-  let connection;
-  try {
-    connection = await pool.getConnection();
-    const content = await connection.query(
-      `select c.floor, count(*) as count from cabinet c
-      left join lent l
-      on l.lent_cabinet_id=c.cabinet_id
-      group by c.floor`
-    );
-    console.log(`content: ${content}`);
-    return content;
-  } catch (err) {
-    throw err;
-  } finally {
-    connection.release();
-  }
-}
-*/
 
 module.exports = {
   getInfoByIntraId,
