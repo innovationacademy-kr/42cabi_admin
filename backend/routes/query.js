@@ -18,7 +18,7 @@ async function getInfoByIntraId(intraId) {
     // TODO l.expire_time => expire_time?
     connection = await pool.getConnection();
     const getInfoFromLentQuery = `
-    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_time, l.expire_time
+    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_id, l.lent_time, l.expire_time
     FROM user u
     LEFT JOIN lent l
     ON u.user_id=l.lent_user_id
@@ -27,7 +27,7 @@ async function getInfoByIntraId(intraId) {
     WHERE u.intra_id='${intraId}';
     `;
     const getInfoFromLentLogQuery = `
-    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.lent_time, ll.return_time
+    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.log_id, ll.lent_time, ll.return_time
     FROM user u
     LEFT JOIN lent_log ll
     ON u.user_id=ll.log_user_id
@@ -75,14 +75,14 @@ async function getInfoByCabinetNum(cabinetNum, floor) {
   try {
     connection = await pool.getConnection();
     const getInfoByCabinetNumFromLentQuery = `
-      SELECT (select intra_id from user u where u.user_id=l.lent_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_time, l.expire_time
+      SELECT (select intra_id from user u where u.user_id=l.lent_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_id, l.lent_time, l.expire_time
       FROM cabinet c
       LEFT JOIN lent l
       ON c.cabinet_id=l.lent_cabinet_id
       WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor};
       `;
     const getInfoByCabinetNumFromLentLogQuery = `
-      SELECT (select intra_id from user u where u.user_id=ll.log_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.lent_time, ll.return_time
+      SELECT (select intra_id from user u where u.user_id=ll.log_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.log_id, ll.lent_time, ll.return_time
       FROM cabinet c
       LEFT JOIN lent_log ll
       ON c.cabinet_id=ll.log_cabinet_id
