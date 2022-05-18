@@ -8,7 +8,6 @@ import {
   DropDownList,
   ListItem,
 } from "./Dropdown";
-import { useDispatch } from "react-redux";
 import { useNavigate, createSearchParams } from "react-router-dom";
 
 const options = ["ID", "2F", "4F", "5F"];
@@ -21,16 +20,15 @@ const SearchBar = () => {
   const onOptionClicked = (value: string) => () => {
     setSelectedOption(value);
     setIsOpen(false);
-    console.log(selectedOption);
   };
 
   const searchType = useRef<HTMLInputElement>(null);
   const searchText = useRef<HTMLInputElement>(null);
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const goToResultPage = () => {
+    setIsOpen(false);
     if (selectedOption === "ID") {
       navigate({
         pathname: "/saerom/search/searchDashboard",

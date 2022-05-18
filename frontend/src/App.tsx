@@ -8,7 +8,7 @@ import Search from "./Pages/Search";
 import Map from "./Pages/Map";
 import Layout from "./Components/Layout";
 import SearchDashboard from "./Pages/SearchDashboard";
-import NoResult from "./Pages/NoResult";
+import InvalidCabinet from "./Pages/InvalidCabinet";
 
 const App = () => {
   return (
@@ -20,7 +20,7 @@ const App = () => {
           <Route path="status" element={<Status />} />
           <Route path="search" element={<Search />}>
             <Route path="searchDashboard" element={<SearchDashboard />} />
-            <Route path="noResult" element={<NoResult />} />
+            <Route path="invalidCabinet" element={<InvalidCabinet />} />
           </Route>
           <Route path="map" element={<Map />} />
         </Route>

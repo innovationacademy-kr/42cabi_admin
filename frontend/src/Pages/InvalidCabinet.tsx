@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-const NoResult = () => {
+const InvalidCabinet = () => {
   return (
     <div>
-      <DashboardBox>검색 결과가 없습니다.</DashboardBox>
+      <DashboardBox>존재하지 않는 사물함입니다.</DashboardBox>
     </div>
   );
 };
@@ -19,4 +19,4 @@ const DashboardBox = styled.div`
   font-size: 2rem;
 `;
 
-export default NoResult;
+export default InvalidCabinet;

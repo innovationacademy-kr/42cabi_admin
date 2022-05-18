@@ -4,48 +4,47 @@ import UserDetail from "../Components/UserDetail";
 import CabiButton from "../Components/CabiButton";
 import PrevCabinetTable from "../Tables/PrevCabinetTable";
 import PrevUserTable from "../Tables/PrevUserTable";
-import { useSelector, useDispatch } from "react-redux";
-import { GetTargetCabinet } from "../ReduxModules/SearchCabinet";
-import { GetTargetUser } from "../ReduxModules/SearchUser";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { GetTargetType } from "../ReduxModules/SearchType";
+import { GetTargetResponse } from "../ReduxModules/SearchResponse";
 import { RootState } from "../ReduxModules/rootReducer";
-import NoResult from "./NoResult";
+import NoPrevLog from "./NoPrevLog";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import ButtonSet from "../Components/ButtonSet";
 
 const SearchDashboard = () => {
-  const SearchTypeRedux = useSelector((state: RootState) => state.SearchType);
+  const SearchTypeRedux = useSelector(
+    (state: RootState) => state.SearchType,
+    shallowEqual
+  );
 
-  // let SearchRedux: any = {};
   const DetailType = () => {
     if (SearchTypeRedux === "User") {
-      // SearchRedux = SearchUserRedux;
       return <UserDetail />;
     } else {
       return <CabinetDetail />;
     }
   };
 
-  const cabinetId: number = 0;
-  const cabinetActivation: number = 0;
-
   const TableType = () => {
-    const SearchUserRedux = useSelector((state: RootState) => state.SearchUser);
-    const SearchCabinetRedux = useSelector(
-      (state: RootState) => state.SearchCabinet
+    const SearchResponseRedux = useSelector(
+      (state: RootState) => state.SearchResponse,
+      shallowEqual
     );
     if (SearchTypeRedux === "User") {
-      if (SearchUserRedux.data?.resultFromLentLog?.length !== 0) {
+      if (SearchResponseRedux.resultFromLentLog?.length !== 0) {
         return <PrevUserTable />;
       } else {
-        return <NoResult />;
+        return <NoPrevLog />;
       }
     } else {
-      if (SearchCabinetRedux.data?.resultFromLentLog?.length !== 0) {
+      if (SearchResponseRedux.resultFromLentLog?.length !== 0) {
         return <PrevCabinetTable />;
       } else {
-        return <NoResult />;
+        return <NoPrevLog />;
       }
     }
   };
@@ -56,34 +55,32 @@ const SearchDashboard = () => {
   const navigate = useNavigate();
 
   let params = {};
-  if (searchParams.get("intraId") !== null) {
-    dispatch(GetTargetType("User"));
-    params = {
-      intraId: searchParams.get("intraId"),
-    };
-  } else {
-    dispatch(GetTargetType("Cabinet"));
-    params = {
-      floor: searchParams.get("floor"),
-      cabinetNum: searchParams.get("cabinetNum"),
-    };
-  }
-  const url = `http://localhost:8080/api/search/`;
-  console.log(params, url);
-  axios
-    .get(url, { params })
-    .then((res) => {
-      if (SearchTypeRedux === "User") {
-        dispatch(GetTargetUser(res.data));
-      } else {
-        dispatch(GetTargetCabinet(res.data));
-      }
-      console.log(res);
-    })
-    .catch((e) => {
-      navigate("/saerom/search/noResult");
-      console.log(e);
-    });
+  useEffect(() => {
+    if (searchParams.get("intraId") !== null) {
+      dispatch(GetTargetType("User"));
+      params = {
+        intraId: searchParams.get("intraId"),
+      };
+    } else {
+      dispatch(GetTargetType("Cabinet"));
+      params = {
+        floor: searchParams.get("floor"),
+        cabinetNum: searchParams.get("cabinetNum"),
+      };
+    }
+
+    const url = `http://localhost:8080/api/search/`;
+    axios
+      .get(url, { params })
+      .then((res) => {
+        dispatch(GetTargetResponse(res.data));
+        // console.log(res);
+      })
+      .catch((e) => {
+        navigate("/saerom/search/invalidCabinet");
+        console.log(e);
+      });
+  });
 
   return (
     <div>
@@ -93,18 +90,7 @@ const SearchDashboard = () => {
             <DetailType />
           </DetailBox>
           <ButtonBox>
-            <CabiButton Color="#6667ab" isActive={true}>
-              반납하기
-            </CabiButton>
-            <CabiButton Color="#6667ab" isActive={true}>
-              연장처리
-            </CabiButton>
-            <CabiButton Color="#6667ab" isActive={true}>
-              상태관리
-            </CabiButton>
-            <CabiButton Color="#6667ab" isActive={true}>
-              슬랙 메시지 전송
-            </CabiButton>
+            <ButtonSet />
           </ButtonBox>
         </LeftBox>
         <RightBox>
