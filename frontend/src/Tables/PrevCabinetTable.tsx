@@ -2,21 +2,20 @@ import { useMemo } from "react";
 import { prevCabinetTableStruct } from "./prevCabinetTableStruct";
 import { usePagination, useTable } from "react-table";
 import "./table.css";
-import { useSelector } from "react-redux";
+import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
 
 export const PrevCabinetTable = () => {
-  const SearchUserRedux = useSelector(
-    (state: RootState) => state.SearchCabinet
+  const SearchResponseRedux = useSelector(
+    (state: RootState) => state.SearchResponse,
+    shallowEqual
   );
 
   const columns = useMemo(() => prevCabinetTableStruct, []);
-  // const columns = cabinetMiniDataStruct;
   const data = useMemo(
-    () => SearchUserRedux.data?.resultFromLentLog || [],
-    [SearchUserRedux.data?.resultFromLentLog]
+    () => SearchResponseRedux.resultFromLentLog || [],
+    [SearchResponseRedux.resultFromLentLog]
   );
-  // const data = SearchUserRedux;
 
   const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } =
     useTable(
@@ -28,7 +27,6 @@ export const PrevCabinetTable = () => {
       },
       usePagination
     );
-
   return (
     <div className="table">
       <p>이전 사용자 기록</p>

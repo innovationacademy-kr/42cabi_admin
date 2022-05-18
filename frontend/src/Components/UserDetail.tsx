@@ -1,24 +1,26 @@
-import { useSelector } from "react-redux";
+import { useSelector, shallowEqual } from "react-redux";
 import { useMemo } from "react";
 import styled from "styled-components";
 import { RootState } from "../ReduxModules/rootReducer";
 import moment from "moment";
+import { useSearchParams } from "react-router-dom";
 
 const UserDetail = () => {
-  const SearchUserRedux = useSelector((state: RootState) => state.SearchUser);
+  const SearchResponseRedux = useSelector(
+    (state: RootState) => state.SearchResponse,
+    shallowEqual
+  );
   const data = useMemo(
-    () => SearchUserRedux.data?.resultFromLent,
-    [SearchUserRedux.data?.resultFromLent]
+    () => SearchResponseRedux.resultFromLent,
+    [SearchResponseRedux.resultFromLent]
   );
 
-  const UserInfo =
-    data !== undefined && data.length !== 0 ? data[0].intra_id : "정보 없음";
+  const [searchParams] = useSearchParams();
+  const UserInfo = searchParams.get("intraId");
 
   const UserCabinetInfo =
     data !== undefined && data.length !== 0
-      ? data[0].location?.toString() +
-        " " +
-        data[0].floor?.toString() +
+      ? data[0].floor?.toString() +
         "F " +
         data[0].section?.toString() +
         " " +
@@ -30,7 +32,7 @@ const UserDetail = () => {
     data !== undefined && data.length !== 0
       ? moment(data[0].lent_time?.toString()).format("YYYY.MM.DD") +
         " ~ " +
-        moment(data[0].return_time?.toString()).format("YYYY.MM.DD")
+        moment(data[0].expire_time?.toString()).format("YYYY.MM.DD")
       : "정보 없음";
 
   return (

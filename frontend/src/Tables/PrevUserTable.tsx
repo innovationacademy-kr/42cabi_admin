@@ -2,21 +2,20 @@ import { useMemo } from "react";
 import { prevUserTableStruct } from "./prevUserTableStruct";
 import { usePagination, useTable } from "react-table";
 import "./table.css";
-import { useSelector } from "react-redux";
+import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
 
 export const PrevUserTable = () => {
-  const SearchCabinetRedux = useSelector(
-    (state: RootState) => state.SearchUser
+  const SearchResponseRedux = useSelector(
+    (state: RootState) => state.SearchResponse,
+    shallowEqual
   );
 
   const columns = useMemo(() => prevUserTableStruct, []);
-  // const columns = cabinetMiniDataStruct;
   const data = useMemo(
-    () => SearchCabinetRedux.data?.resultFromLentLog || [],
-    [SearchCabinetRedux.data?.resultFromLentLog]
+    () => SearchResponseRedux.resultFromLentLog || [],
+    [SearchResponseRedux.resultFromLentLog]
   );
-  // const data = SearchCabinetRedux;
 
   const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } =
     useTable(
