@@ -14,9 +14,6 @@ const NavBar = () => {
         <Link to="search" className="menu">
           검색
         </Link>
-        <Link to="map" className="menu">
-          지도
-        </Link>
       </div>
       <div className="right">
         <div className="menu">로그아웃</div>

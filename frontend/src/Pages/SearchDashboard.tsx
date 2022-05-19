@@ -11,14 +11,49 @@ import NoPrevLog from "../Components/NoPrevLog";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ButtonSet from "../Components/ButtonSet";
 
 const SearchDashboard = () => {
+  const [isLoading, setLoading] = useState(true);
   const SearchTypeRedux = useSelector(
     (state: RootState) => state.SearchType,
     shallowEqual
   );
+
+  const [searchParams] = useSearchParams();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  let params = {};
+  useEffect(() => {
+    if (searchParams.get("intraId") !== null) {
+      dispatch(GetTargetType("User"));
+      params = {
+        intraId: searchParams.get("intraId"),
+      };
+    } else {
+      dispatch(GetTargetType("Cabinet"));
+      params = {
+        floor: searchParams.get("floor"),
+        cabinetNum: searchParams.get("cabinetNum"),
+      };
+    }
+
+    const url = `http://localhost:8080/api/search/`;
+    axios
+      .get(url, { params })
+      .then((res) => {
+        dispatch(GetTargetResponse(res.data));
+        setLoading(false);
+        // console.log(res);
+      })
+      .catch((e) => {
+        navigate("/saerom/search/invalidCabinet");
+        console.log(e);
+      });
+  });
 
   const DetailType = () => {
     if (SearchTypeRedux === "User") {
@@ -47,6 +82,7 @@ const SearchDashboard = () => {
     } else {
       if (
         SearchResponseRedux.resultFromLentLog !== undefined &&
+        SearchResponseRedux.resultFromLentLog[0] != undefined &&
         SearchResponseRedux.resultFromLentLog[0].lent_time !== null
       ) {
         return <PrevCabinetTable />;
@@ -56,39 +92,9 @@ const SearchDashboard = () => {
     }
   };
 
-  const [searchParams] = useSearchParams();
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  let params = {};
-  useEffect(() => {
-    if (searchParams.get("intraId") !== null) {
-      dispatch(GetTargetType("User"));
-      params = {
-        intraId: searchParams.get("intraId"),
-      };
-    } else {
-      dispatch(GetTargetType("Cabinet"));
-      params = {
-        floor: searchParams.get("floor"),
-        cabinetNum: searchParams.get("cabinetNum"),
-      };
-    }
-
-    const url = `http://localhost:8080/api/search/`;
-    axios
-      .get(url, { params })
-      .then((res) => {
-        dispatch(GetTargetResponse(res.data));
-        // console.log(res);
-      })
-      .catch((e) => {
-        navigate("/saerom/search/invalidCabinet");
-        console.log(e);
-      });
-  });
-
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <DashboardBox>
       <LeftBox>

@@ -5,7 +5,6 @@ import Login from "./Login";
 import Home from "./Pages/Home";
 import Status from "./Pages/Status";
 import Search from "./Pages/Search";
-import Map from "./Pages/Map";
 import Layout from "./Components/Layout";
 import SearchDashboard from "./Pages/SearchDashboard";
 import InvalidCabinet from "./Pages/InvalidCabinet";
@@ -22,7 +21,6 @@ const App = () => {
             <Route path="searchDashboard" element={<SearchDashboard />} />
             <Route path="invalidCabinet" element={<InvalidCabinet />} />
           </Route>
-          <Route path="map" element={<Map />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

@@ -24,7 +24,7 @@ const CabinetDetail = () => {
   });
 
   const CabinetInfo =
-    data !== undefined
+    data !== undefined && data[0] !== undefined
       ? data[0].floor?.toString() +
         "F " +
         data[0].section?.toString() +
@@ -34,14 +34,14 @@ const CabinetDetail = () => {
       : "";
 
   const CabinetLentInfo =
-    data !== undefined && data[0].lent_time !== null
+    data !== undefined && data[0] !== undefined && data[0].lent_time !== null
       ? moment(data[0].lent_time?.toString()).format("YYYY.MM.DD") +
         " ~ " +
         moment(data[0].expire_time?.toString()).format("YYYY.MM.DD")
       : "정보 없음";
 
   const CabinetUserInfo =
-    data !== undefined && data[0].intra_id !== null
+    data !== undefined && data[0] !== undefined && data[0].intra_id !== null
       ? data[0].intra_id
       : "정보 없음";
 
