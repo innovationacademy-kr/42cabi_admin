@@ -4,6 +4,8 @@ import { usePagination, useTable } from "react-table";
 import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
 import { TableHead, TableSheet, Td, Th, Tr } from "./tableStyleComponent";
+import { useNavigate, createSearchParams } from "react-router-dom";
+import { SearchResponseFromLentLog } from "../DataTypes";
 
 export const PrevUserTable = () => {
   const SearchResponseRedux = useSelector(
@@ -16,6 +18,17 @@ export const PrevUserTable = () => {
     () => SearchResponseRedux.resultFromLentLog || [],
     [SearchResponseRedux.resultFromLentLog]
   );
+
+  const navigate = useNavigate();
+  const GoToCabinetPage = (data: SearchResponseFromLentLog) => {
+    navigate({
+      pathname: "/saerom/search/searchDashboard",
+      search: createSearchParams({
+        floor: data.floor?.toString() || "",
+        cabinetNum: data.cabinet_num?.toString() || "",
+      }).toString(),
+    });
+  };
 
   const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } =
     useTable(
@@ -46,7 +59,10 @@ export const PrevUserTable = () => {
           {page.map((row: any) => {
             prepareRow(row);
             return (
-              <Tr {...row.getRowProps()}>
+              <Tr
+                {...row.getRowProps()}
+                onClick={() => GoToCabinetPage(row.original)}
+              >
                 {row.cells.map((cell: any) => {
                   return (
                     <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>

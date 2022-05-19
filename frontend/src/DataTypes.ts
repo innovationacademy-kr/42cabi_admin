@@ -1,4 +1,4 @@
-type SearchResponseFromLent = {
+export type SearchResponseFromLent = {
   activation?: number;
   cabinet_id?: number;
   cabinet_num?: number;
@@ -11,7 +11,7 @@ type SearchResponseFromLent = {
   lent_id?: number;
 };
 
-type SearchResponseFromLentLog = {
+export type SearchResponseFromLentLog = {
   activation?: number;
   cabinet_id?: number;
   cabinet_num?: number;
@@ -28,3 +28,5 @@ export type SearchResponseData = {
   resultFromLent?: SearchResponseFromLent[];
   resultFromLentLog?: SearchResponseFromLentLog[];
 };
+
+export default SearchResponseData;

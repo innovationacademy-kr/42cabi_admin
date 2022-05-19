@@ -1,9 +1,11 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { prevCabinetTableStruct } from "./prevCabinetTableStruct";
 import { usePagination, useTable } from "react-table";
 import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
 import { TableHead, TableSheet, Td, Th, Tr } from "./tableStyleComponent";
+import { useNavigate, createSearchParams } from "react-router-dom";
+import { SearchResponseFromLentLog } from "../DataTypes";
 
 export const PrevCabinetTable = () => {
   const SearchResponseRedux = useSelector(
@@ -16,6 +18,16 @@ export const PrevCabinetTable = () => {
     () => SearchResponseRedux.resultFromLentLog || [],
     [SearchResponseRedux.resultFromLentLog]
   );
+
+  const navigate = useNavigate();
+  const GoToUserPage = (data: SearchResponseFromLentLog) => {
+    navigate({
+      pathname: "/saerom/search/searchDashboard",
+      search: createSearchParams({
+        intraId: data.intra_id || "",
+      }).toString(),
+    });
+  };
 
   const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } =
     useTable(
@@ -45,7 +57,10 @@ export const PrevCabinetTable = () => {
           {page.map((row: any) => {
             prepareRow(row);
             return (
-              <Tr {...row.getRowProps()}>
+              <Tr
+                {...row.getRowProps()}
+                onClick={() => GoToUserPage(row.original)}
+              >
                 {row.cells.map((cell: any) => {
                   return (
                     <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>

@@ -18,7 +18,7 @@ type actionType = {
 const SearchType = (state = "", action: actionType) => {
   switch (action.type) {
     case GET_TARGET_TYPE:
-      // console.log(action.searchType);
+      console.log(action.searchType);
       return action.searchType;
     case INITIALIZE:
       return "";
