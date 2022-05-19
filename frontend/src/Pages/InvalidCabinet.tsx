@@ -1,11 +1,7 @@
 import styled from "styled-components";
 
 const InvalidCabinet = () => {
-  return (
-    <div>
-      <DashboardBox>존재하지 않는 사물함입니다.</DashboardBox>
-    </div>
-  );
+  return <DashboardBox>존재하지 않는 사물함입니다.</DashboardBox>;
 };
 
 const DashboardBox = styled.div`

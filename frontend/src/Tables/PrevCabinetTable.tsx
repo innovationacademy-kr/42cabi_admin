@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { prevCabinetTableStruct } from "./prevCabinetTableStruct";
 import { usePagination, useTable } from "react-table";
-import "./table.css";
 import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
+import { TableHead, TableSheet, Td, Th, Tr } from "./tableStyleComponent";
 
 export const PrevCabinetTable = () => {
   const SearchResponseRedux = useSelector(
@@ -23,39 +23,39 @@ export const PrevCabinetTable = () => {
         // @ts-ignore
         columns,
         data,
-        initialState: { pageSize: 3 },
+        initialState: { pageSize: 10 },
       },
       usePagination
     );
   return (
-    <div className="table">
-      <p>이전 사용자 기록</p>
-      <table {...getTableProps()}>
-        <thead>
+    <div>
+      <h2>이전 사용자 기록</h2>
+      <TableSheet {...getTableProps()}>
+        <TableHead>
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+            <Tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+                <Th {...column.getHeaderProps()}>{column.render("Header")}</Th>
               ))}
-            </tr>
+            </Tr>
           ))}
-        </thead>
+        </TableHead>
 
         <tbody {...getTableBodyProps()}>
           {page.map((row: any) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
+              <Tr {...row.getRowProps()}>
                 {row.cells.map((cell: any) => {
                   return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
                   );
                 })}
-              </tr>
+              </Tr>
             );
           })}
         </tbody>
-      </table>
+      </TableSheet>
     </div>
   );
 };

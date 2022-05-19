@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import CabinetDetail from "../Components/CabinetDetail";
 import UserDetail from "../Components/UserDetail";
-import CabiButton from "../Components/CabiButton";
 import PrevCabinetTable from "../Tables/PrevCabinetTable";
 import PrevUserTable from "../Tables/PrevUserTable";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { GetTargetType } from "../ReduxModules/SearchType";
 import { GetTargetResponse } from "../ReduxModules/SearchResponse";
 import { RootState } from "../ReduxModules/rootReducer";
-import NoPrevLog from "./NoPrevLog";
+import NoPrevLog from "../Components/NoPrevLog";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -37,7 +36,9 @@ const SearchDashboard = () => {
     if (SearchTypeRedux === "User") {
       if (
         SearchResponseRedux.resultFromLent !== undefined &&
-        SearchResponseRedux.resultFromLentLog?.length !== 0
+        SearchResponseRedux.resultFromLentLog !== undefined &&
+        SearchResponseRedux.resultFromLentLog.length !== 0 &&
+        SearchResponseRedux.resultFromLentLog[0].lent_time !== null
       ) {
         return <PrevUserTable />;
       } else {
@@ -89,23 +90,21 @@ const SearchDashboard = () => {
   });
 
   return (
-    <div>
-      <DashboardBox>
-        <LeftBox>
-          <DetailBox>
-            <DetailType />
-          </DetailBox>
-          <ButtonBox>
-            <ButtonSet />
-          </ButtonBox>
-        </LeftBox>
-        <RightBox>
-          <TableBox>
-            <TableType />
-          </TableBox>
-        </RightBox>
-      </DashboardBox>
-    </div>
+    <DashboardBox>
+      <LeftBox>
+        <DetailBox>
+          <DetailType />
+        </DetailBox>
+        <ButtonBox>
+          <ButtonSet />
+        </ButtonBox>
+      </LeftBox>
+      <RightBox>
+        <TableBox>
+          <TableType />
+        </TableBox>
+      </RightBox>
+    </DashboardBox>
   );
 };
 
@@ -137,6 +136,7 @@ const RightBox = styled.div`
 const DetailBox = styled.div`
   display: flex;
   margin: 0.2rem;
+  margin-top: 0;
   flex-direction: column;
   // justify-content: center;
 `;
@@ -148,8 +148,7 @@ const ButtonBox = styled.div`
 `;
 
 const TableBox = styled.div`
-  margin: 1rem;
-  overflow: scroll;
+  margin: 0.2rem;
   // border: 0.2rem solid green;
 `;
 
