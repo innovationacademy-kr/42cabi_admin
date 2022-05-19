@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { RootState } from "../ReduxModules/rootReducer";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
+import ExpiredInfo from "./ExpiredInfo";
 
 const CabinetDetail = () => {
   const SearchResponseRedux = useSelector(
@@ -45,14 +46,13 @@ const CabinetDetail = () => {
       : "정보 없음";
 
   return (
-    <div>
-      <DetailBox>
-        <BigFontSize>{CabinetInfo}</BigFontSize>
-        <p>현재 대여자 : {CabinetUserInfo}</p>
-        <p>대여 기간 : {CabinetLentInfo}</p>
-        <p>고장 정보 : (상세 사유)</p>
-      </DetailBox>
-    </div>
+    <DetailBox>
+      <BigFontSize>{CabinetInfo}</BigFontSize>
+      <p>현재 대여자 : {CabinetUserInfo}</p>
+      <p>대여 기간 : {CabinetLentInfo}</p>
+      <p>고장 정보 : (상세 사유)</p>
+      <ExpiredInfo />
+    </DetailBox>
   );
 };
 

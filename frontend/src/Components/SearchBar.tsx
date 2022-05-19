@@ -47,34 +47,37 @@ const SearchBar = () => {
     }
   };
 
+  const handleEnterKey = (event: any) => {
+    if (event.key === "Enter") {
+      goToResultPage();
+    }
+  };
   return (
-    <div className="SearchBar">
-      <SearchBarContainer>
-        <DropDownContainer>
-          <DropDownHeader onClick={toggling}>
-            {selectedOption}
-            <DropDownHeaderSymbol>▼</DropDownHeaderSymbol>
-          </DropDownHeader>
-          {isOpen && (
-            <DropDownListContainer>
-              <DropDownList>
-                {options.map((option) => (
-                  <ListItem
-                    onClick={onOptionClicked(option)}
-                    key={Math.random()}
-                    ref={searchType}
-                  >
-                    {option}
-                  </ListItem>
-                ))}
-              </DropDownList>
-            </DropDownListContainer>
-          )}
-        </DropDownContainer>
-        <SearchInput ref={searchText} />
-        <SearchButton onClick={goToResultPage}>검색</SearchButton>
-      </SearchBarContainer>
-    </div>
+    <SearchBarContainer>
+      <DropDownContainer>
+        <DropDownHeader onClick={toggling}>
+          {selectedOption}
+          <DropDownHeaderSymbol>▼</DropDownHeaderSymbol>
+        </DropDownHeader>
+        {isOpen && (
+          <DropDownListContainer>
+            <DropDownList>
+              {options.map((option) => (
+                <ListItem
+                  onClick={onOptionClicked(option)}
+                  key={Math.random()}
+                  ref={searchType}
+                >
+                  {option}
+                </ListItem>
+              ))}
+            </DropDownList>
+          </DropDownListContainer>
+        )}
+      </DropDownContainer>
+      <SearchInput ref={searchText} onKeyDown={handleEnterKey} />
+      <SearchButton onClick={goToResultPage}>검색</SearchButton>
+    </SearchBarContainer>
   );
 };
 

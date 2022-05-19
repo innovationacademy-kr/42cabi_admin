@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { RootState } from "../ReduxModules/rootReducer";
 import moment from "moment";
 import { useSearchParams } from "react-router-dom";
+import ExpiredInfo from "./ExpiredInfo";
 
 const UserDetail = () => {
   const SearchResponseRedux = useSelector(
@@ -16,10 +17,10 @@ const UserDetail = () => {
   );
 
   const [searchParams] = useSearchParams();
-  const UserInfo = searchParams.get("intraId");
+  const UserInfo = searchParams.get("intraId")?.toLowerCase();
 
   const UserCabinetInfo =
-    data !== undefined && data.length !== 0
+    data !== undefined && data.length !== 0 && data[0].cabinet_id !== null
       ? data[0].floor?.toString() +
         "F " +
         data[0].section?.toString() +
@@ -29,20 +30,19 @@ const UserDetail = () => {
       : "정보 없음";
 
   const UserLentInfo =
-    data !== undefined && data.length !== 0
+    data !== undefined && data.length !== 0 && data[0].lent_time !== null
       ? moment(data[0].lent_time?.toString()).format("YYYY.MM.DD") +
         " ~ " +
         moment(data[0].expire_time?.toString()).format("YYYY.MM.DD")
       : "정보 없음";
 
   return (
-    <div>
-      <DetailBox>
-        <BigFontSize>{UserInfo}</BigFontSize>
-        <p>대여 중인 사물함 : {UserCabinetInfo}</p>
-        <p>대여기간 : {UserLentInfo}</p>
-      </DetailBox>
-    </div>
+    <DetailBox>
+      <BigFontSize>{UserInfo}</BigFontSize>
+      <p>대여 중인 사물함 : {UserCabinetInfo}</p>
+      <p>대여기간 : {UserLentInfo}</p>
+      <ExpiredInfo />
+    </DetailBox>
   );
 };
 
