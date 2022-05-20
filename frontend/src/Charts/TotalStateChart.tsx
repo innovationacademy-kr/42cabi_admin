@@ -7,9 +7,9 @@ const TotalStateChart = () => {
   const [totalState, setTotalState] = useState<PieData[]>([]);
   useEffect(() => {
     const fetchState = async () => {
-      //   const res = await axios.get(
-      //     "http://localhost:8080/api/cabinet/count/floor"
-      //   );
+      // const res = await axios.get(
+      //   "http://localhost:8080/api/cabinet/count/floor"
+      // );
 
       // 임시 데이터
       const res = {
@@ -54,7 +54,7 @@ const TotalStateChart = () => {
       setTotalState([
         { name: "사용 중", value: used },
         { name: "연체", value: overdue },
-        { name: "고장", value: disabled },
+        { name: "사용 불가", value: disabled },
         { name: "미사용", value: unused },
       ]);
     };
