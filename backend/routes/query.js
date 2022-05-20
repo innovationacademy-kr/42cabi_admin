@@ -12,31 +12,31 @@ const pool = mariadb.createPool({
 });
 
 // 검색 by intraId
-async function getInfoByIntraId(intraId) {
+exports.getInfoByIntraId = async (intraId) => {
   let connection;
   try {
     // TODO l.expire_time => expire_time?
     connection = await pool.getConnection();
     const getInfoFromLentQuery = `
-    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_id, l.lent_time, l.expire_time
-    FROM user u
-    LEFT JOIN lent l
-    ON u.user_id=l.lent_user_id
-    LEFT JOIN cabinet c
-    ON l.lent_cabinet_id=c.cabinet_id
-    WHERE u.intra_id='${intraId}';
-    `;
+      SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_id, l.lent_time, l.expire_time
+      FROM user u
+      LEFT JOIN lent l
+      ON u.user_id=l.lent_user_id
+      LEFT JOIN cabinet c
+      ON l.lent_cabinet_id=c.cabinet_id
+      WHERE u.intra_id='${intraId}';
+      `;
     const getInfoFromLentLogQuery = `
-    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.log_id, ll.lent_time, ll.return_time
-    FROM user u
-    LEFT JOIN lent_log ll
-    ON u.user_id=ll.log_user_id
-    LEFT JOIN cabinet c
-    ON ll.log_cabinet_id=c.cabinet_id
-    WHERE u.intra_id='${intraId}'
-    ORDER BY lent_time DESC
-    LIMIT 10;
-    `;
+      SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.log_id, ll.lent_time, ll.return_time
+      FROM user u
+      LEFT JOIN lent_log ll
+      ON u.user_id=ll.log_user_id
+      LEFT JOIN cabinet c
+      ON ll.log_cabinet_id=c.cabinet_id
+      WHERE u.intra_id='${intraId}'
+      ORDER BY lent_time DESC
+      LIMIT 10;
+      `;
     const resultFromLent = await connection.query(getInfoFromLentQuery);
     const resultFromLentLog = await connection.query(getInfoFromLentLogQuery);
     // console.log("=====searchIntraId=====");
@@ -51,26 +51,10 @@ async function getInfoByIntraId(intraId) {
   } finally {
     connection.release();
   }
-}
-
-// async function getCabinetByCabinetNum(cabinetNum, floor) {
-//   let connection;
-//   try {
-//     connection = await pool.getConnection();
-//     const getCabinetByCabinetNumQuery = `
-//     SELECT * FROM cabinet c WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor};`;
-//     const result = await connection.query(getCabinetByCabinetNumQuery);
-//     return result;
-//   } catch (err) {
-//     console.log(err);
-//     throw err;
-//   } finally {
-//     connection.release();
-//   }
-// }
+};
 
 // 검색 by 사물함 번호
-async function getInfoByCabinetNum(cabinetNum, floor) {
+exports.getInfoByCabinetNum = async (cabinetNum, floor) => {
   let connection;
   try {
     connection = await pool.getConnection();
@@ -107,17 +91,17 @@ async function getInfoByCabinetNum(cabinetNum, floor) {
   } finally {
     connection.release();
   }
-}
+};
 
 // 사물함 activation 상태 변경
-async function modifyCabinetActivation(cabinetIdx, activation) {
+exports.modifyCabinetActivation = async (cabinetIdx, activation) => {
   let connection;
   try {
     connection = await pool.getConnection();
     const content = `
-    UPDATE cabinet c
-    SET activation=${activation}
-    WHERE cabinet_id=${cabinetIdx}
+      UPDATE cabinet c
+      SET activation=${activation}
+      WHERE cabinet_id=${cabinetIdx}
     `;
     await connection.query(content);
   } catch (err) {
@@ -126,19 +110,18 @@ async function modifyCabinetActivation(cabinetIdx, activation) {
   } finally {
     connection.release();
   }
-}
+};
+
 // 반납할 사물함의 lent 정보 가져옴
-async function getUserLent(cabinetIdx) {
+exports.getUserLent = async (cabinetIdx) => {
   let connection;
   try {
     connection = await pool.getConnection();
-    const [result] = await connection.query(
-      `
-    SELECT lent_cabinet_id, lent_user_id, DATE_FORMAT(lent_time, '%Y-%m-%d %H:%i:%s') AS lent_time
-    FROM lent
-    WHERE lent_cabinet_id = ${cabinetIdx}
-    `
-    );
+    const [result] = await connection.query(`
+      SELECT lent_cabinet_id, lent_user_id, DATE_FORMAT(lent_time, '%Y-%m-%d %H:%i:%s') AS lent_time
+      FROM lent
+      WHERE lent_cabinet_id = ${cabinetIdx}
+      `);
     return result;
   } catch (err) {
     console.log(err);
@@ -146,22 +129,20 @@ async function getUserLent(cabinetIdx) {
   } finally {
     connection.release();
   }
-}
+};
 
 // 특정 사물함 + (user + lent) 정보 가져옴
-async function getCabinet(cabinetIdx) {
+exports.getCabinet = async (cabinetIdx) => {
   let connection;
   try {
     connection = await pool.getConnection();
-    const [result] = await connection.query(
-      `
+    const [result] = await connection.query(`
         SELECT *
         FROM cabinet c
         LEFT JOIN lent l ON c.cabinet_id=l.lent_cabinet_id
         LEFT JOIN user u ON l.lent_user_id=u.user_id 
         WHERE c.cabinet_id=${cabinetIdx}
-        `
-    );
+        `);
     return result;
   } catch (err) {
     console.log(err);
@@ -169,10 +150,10 @@ async function getCabinet(cabinetIdx) {
   } finally {
     connection.release();
   }
-}
+};
 
 // 대여 사물함(user + cabinet) 정보 가져옴
-async function getLentUserInfo() {
+exports.getLentUserInfo = async () => {
   let connection;
   try {
     let lentInfo = [];
@@ -201,49 +182,45 @@ async function getLentUserInfo() {
   } finally {
     connection.release();
   }
-}
+};
 
 // lent_log에 반납되는 사물함 정보 추가
-async function addLentLog(userLentInfo) {
+exports.addLentLog = async (userLentInfo) => {
   let connection;
   try {
     connection = await pool.getConnection();
-    await connection.query(
-      `
+    await connection.query(`
       INSERT INTO lent_log(log_cabinet_id, log_user_id, lent_time, return_time) 
       VALUES (${userLentInfo.lent_cabinet_id}, ${userLentInfo.lent_user_id}, '${userLentInfo.lent_time}', now())
-      `
-    );
+      `);
   } catch (err) {
     console.log(err);
     throw err;
   } finally {
     connection.release();
   }
-}
+};
 
 // lent 테이블에서 사물함 정보 삭제
-async function deleteLent(userLentInfo) {
+exports.deleteLent = async (userLentInfo) => {
   let connection;
   try {
     connection = await pool.getConnection();
-    await connection.query(
-      `
-    DELETE 
-    FROM lent 
-    WHERE lent_cabinet_id=${userLentInfo.lent_cabinet_id}
-    `
-    );
+    await connection.query(`
+      DELETE 
+      FROM lent 
+      WHERE lent_cabinet_id=${userLentInfo.lent_cabinet_id}
+    `);
   } catch (err) {
     console.log(err);
     throw err;
   } finally {
     connection.release();
   }
-}
+};
 
 // 현황탭 층별 사물함 정보(sum)
-async function getCabinetInfoByFloor() {
+exports.getCabinetInfoByFloor = async () => {
   let connection;
   try {
     connection = await pool.getConnection();
@@ -269,20 +246,4 @@ async function getCabinetInfoByFloor() {
   } finally {
     connection.release();
   }
-}
-
-module.exports = {
-  getInfoByIntraId,
-  getInfoByCabinetNum,
-  // getCabinetByCabinetNum,
-  // getCabinets,
-  modifyCabinetActivation,
-  getUserLent,
-  getCabinet,
-  getLentUserInfo,
-  addLentLog,
-  deleteLent,
-  // getNumberofCabinetByFloor,
-  // cabinetList,
-  getCabinetInfoByFloor,
 };
