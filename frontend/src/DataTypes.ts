@@ -1,3 +1,21 @@
+export type StatusResponseExpired = {
+  intra_id?: string;
+  floor?: number;
+  cabinet_num?: number;
+  expire_time?: string;
+};
+
+export type StatusResponseExpiredData = StatusResponseDisabled[];
+
+export type StatusResponseDisabled = {
+  intra_id?: string;
+  floor?: number;
+  cabinet_num?: number;
+  expire_time?: string;
+};
+
+export type StatusResponseDisabledData = StatusResponseDisabled[];
+
 export type SearchResponseFromLent = {
   activation?: number;
   cabinet_id?: number;

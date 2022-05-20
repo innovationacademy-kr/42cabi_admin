@@ -5,6 +5,7 @@ export const TableSheet = styled.table`
   border-collapse: collapse;
   width: 100%;
   font-size: 12px;
+  text-align: center;
 `;
 
 export const TableHead = styled.thead`
@@ -18,11 +19,11 @@ export const Td = styled.td`
 `;
 
 export const Tr = styled.tr`
-  :nth-child(even) {
-    background-color: #f2f2f2;
-  }
+  // :nth-child(even) {
+  background-color: #f2f2f2;
+  // }
   :hover {
-    background-color: #ddd;
+    background-color: #fff;
   }
 `;
 
