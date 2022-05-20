@@ -14,6 +14,7 @@ const {
 
 const { sendResponse, isNumeric } = require("../util");
 // 대여 정보(user + cabinet) 가져옴
+
 apiRouter.get("/lent_info", async (_req, res) => {
   const lentInfo = await getLentUserInfo();
   return sendResponse(res, lentInfo, 200);
