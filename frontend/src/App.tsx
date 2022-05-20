@@ -8,6 +8,7 @@ import PageNotFound from "./Pages/PageNotFound";
 import Layout from "./Components/Layout";
 import SearchDashboard from "./Pages/SearchDashboard";
 import NoResult from "./Pages/NoResult";
+import Footer from "./Components/Footer";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 };
