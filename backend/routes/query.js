@@ -12,7 +12,7 @@ const pool = mariadb.createPool({
 });
 
 // 검색 by intraId
-const getInfoByIntraId = async (intraId) => {
+export const getInfoByIntraId = async (intraId) => {
   let connection;
   try {
     // TODO l.expire_time => expire_time?
@@ -70,7 +70,7 @@ const getInfoByIntraId = async (intraId) => {
 // }
 
 // 검색 by 사물함 번호
-const getInfoByCabinetNum = async (cabinetNum, floor) => {
+export const getInfoByCabinetNum = async (cabinetNum, floor) => {
   let connection;
   try {
     connection = await pool.getConnection();
@@ -110,7 +110,7 @@ const getInfoByCabinetNum = async (cabinetNum, floor) => {
 };
 
 // 사물함 activation 상태 변경
-const modifyCabinetActivation = async (cabinetIdx, activation) => {
+export const modifyCabinetActivation = async (cabinetIdx, activation) => {
   let connection;
   try {
     connection = await pool.getConnection();
@@ -127,8 +127,9 @@ const modifyCabinetActivation = async (cabinetIdx, activation) => {
     connection.release();
   }
 };
+
 // 반납할 사물함의 lent 정보 가져옴
-const getUserLent = async (cabinetIdx) => {
+export const getUserLent = async (cabinetIdx) => {
   let connection;
   try {
     connection = await pool.getConnection();
@@ -147,7 +148,7 @@ const getUserLent = async (cabinetIdx) => {
 };
 
 // 특정 사물함 + (user + lent) 정보 가져옴
-const getCabinet = async (cabinetIdx) => {
+export const getCabinet = async (cabinetIdx) => {
   let connection;
   try {
     connection = await pool.getConnection();
@@ -168,7 +169,7 @@ const getCabinet = async (cabinetIdx) => {
 };
 
 // 대여 사물함(user + cabinet) 정보 가져옴
-const getLentUserInfo = async () => {
+export const getLentUserInfo = async () => {
   let connection;
   try {
     let lentInfo = [];
@@ -200,7 +201,7 @@ const getLentUserInfo = async () => {
 };
 
 // lent_log에 반납되는 사물함 정보 추가
-const addLentLog = async (userLentInfo) => {
+export const addLentLog = async (userLentInfo) => {
   let connection;
   try {
     connection = await pool.getConnection();
@@ -217,7 +218,7 @@ const addLentLog = async (userLentInfo) => {
 };
 
 // lent 테이블에서 사물함 정보 삭제
-const deleteLent = async (userLentInfo) => {
+export const deleteLent = async (userLentInfo) => {
   let connection;
   try {
     connection = await pool.getConnection();
@@ -235,7 +236,7 @@ const deleteLent = async (userLentInfo) => {
 };
 
 // 현황탭 층별 사물함 정보(sum)
-const getCabinetInfoByFloor = async () => {
+export const getCabinetInfoByFloor = async () => {
   let connection;
   try {
     connection = await pool.getConnection();
@@ -261,20 +262,4 @@ const getCabinetInfoByFloor = async () => {
   } finally {
     connection.release();
   }
-};
-
-module.exports = {
-  getInfoByIntraId,
-  getInfoByCabinetNum,
-  // getCabinetByCabinetNum,
-  // getCabinets,
-  modifyCabinetActivation,
-  getUserLent,
-  getCabinet,
-  getLentUserInfo,
-  addLentLog,
-  deleteLent,
-  // getNumberofCabinetByFloor,
-  // cabinetList,
-  getCabinetInfoByFloor,
 };
