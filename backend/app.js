@@ -4,6 +4,7 @@ require("dotenv").config();
 const { sendResponse } = require("./util");
 
 const cors = require("cors");
+const morgan = require("morgan");
 // const {
 //   getInfoByIntraId,
 //   getInfoByCabinetNum,
@@ -23,7 +24,7 @@ const cors = require("cors");
 app.use(express.json());
 app.set("port", process.env.PORT || 8080);
 app.use(cors());
-
+app.use(morgan("dev"));
 const { apiRouter } = require("./routes/apiRoute");
 app.use("/api", apiRouter);
 
