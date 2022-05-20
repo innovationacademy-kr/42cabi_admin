@@ -1,10 +1,10 @@
 import { useSelector, shallowEqual } from "react-redux";
 import { useMemo } from "react";
-import styled from "styled-components";
 import { RootState } from "../ReduxModules/rootReducer";
 import moment from "moment";
 import { useSearchParams } from "react-router-dom";
 import ExpiredInfo from "./ExpiredInfo";
+import { DetailBox, BigFontSize } from "./DetailStyleComponent";
 
 const UserDetail = () => {
   const SearchResponseRedux = useSelector(
@@ -45,21 +45,5 @@ const UserDetail = () => {
     </DetailBox>
   );
 };
-
-const DetailBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  border: 0.5rem solid black;
-  margin: 1rem;
-  padding: 1rem;
-`;
-
-const BigFontSize = styled.p`
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  font-size: 3rem;
-  font-weight: bold;
-`;
 
 export default UserDetail;

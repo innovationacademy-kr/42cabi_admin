@@ -61,17 +61,17 @@ const ButtonSet = () => {
   return (
     <div>
       <CabiButton Color="#6667ab" disabled={!isLent} onClick={ReturnAPI}>
-        반납하기
+        사물함 반납하기
       </CabiButton>
       {/* <CabiButton Color="#6667ab" disabled={isLent}>
         연장처리
       </CabiButton> */}
       <CabiButton Color="#6667ab" disabled={!isExist} onClick={ActivationAPI}>
-        상태관리
+        사물함 상태관리
       </CabiButton>
-      {/* <CabiButton Color="#6667ab" disabled={true}>
+      <CabiButton Color="#6667ab" disabled={true}>
         슬랙 메시지 전송
-      </CabiButton> */}
+      </CabiButton>
     </div>
   );
 };

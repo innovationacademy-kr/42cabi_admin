@@ -118,7 +118,7 @@ const DashboardBox = styled.div`
   display: flex;
   width: 99%;
   height: 90%;
-  border: 0.5rem solid gray;
+  // border: 0.5rem solid #6667ab;
 `;
 
 const LeftBox = styled.div`
@@ -155,7 +155,11 @@ const ButtonBox = styled.div`
 
 const TableBox = styled.div`
   margin: 0.2rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 1.5rem;
   // border: 0.2rem solid green;
+  background-color: #dddddd;
 `;
 
 export default SearchDashboard;
