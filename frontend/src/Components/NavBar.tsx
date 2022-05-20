@@ -16,7 +16,9 @@ const NavBar = () => {
         </Link>
       </div>
       <div className="right">
-        <div className="menu">로그아웃</div>
+        <Link to="/" className="menu">
+          로그아웃
+        </Link>
       </div>
     </NavBarStyles>
   );
