@@ -53,22 +53,6 @@ exports.getInfoByIntraId = async (intraId) => {
   }
 };
 
-// async function getCabinetByCabinetNum(cabinetNum, floor) {
-//   let connection;
-//   try {
-//     connection = await pool.getConnection();
-//     const getCabinetByCabinetNumQuery = `
-//     SELECT * FROM cabinet c WHERE c.cabinet_num=${cabinetNum} AND c.floor=${floor};`;
-//     const result = await connection.query(getCabinetByCabinetNumQuery);
-//     return result;
-//   } catch (err) {
-//     console.log(err);
-//     throw err;
-//   } finally {
-//     connection.release();
-//   }
-// }
-
 // 검색 by 사물함 번호
 exports.getInfoByCabinetNum = async (cabinetNum, floor) => {
   let connection;
