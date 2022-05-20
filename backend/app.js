@@ -5,26 +5,12 @@ const { sendResponse } = require("./util");
 
 const cors = require("cors");
 const morgan = require("morgan");
-// const {
-//   getInfoByIntraId,
-//   getInfoByCabinetNum,
-//   // getCabinetByCabinetNum,
-//   // getCabinets,
-//   modifyCabinetActivation,
-//   getUserLent,
-//   getCabinet,
-//   getLentUserInfo,
-//   addLentLog,
-//   deleteLent,
-//   // getNumberofCabinetByFloor,
-//   // cabinetList,
-//   getCabinetInfoByFloor,
-// } = require("./routes/query");
 
 app.use(express.json());
 app.set("port", process.env.PORT || 8080);
 app.use(cors());
 app.use(morgan("dev"));
+
 const { apiRouter } = require("./routes/apiRoute");
 app.use("/api", apiRouter);
 

@@ -1,8 +1,9 @@
 const express = require("express");
-const returnRouter = express.Router();
 const query = require("./query");
 const { sendResponse, isNumeric } = require("../util");
+const returnRouter = express.Router();
 
+// 특정 사물함의 정보 ( 대여중이라면: + 유저 + 렌트 정보) 가져옴
 const getReturn = async (req, res) => {
   const { cabinetIdx } = req.query;
 
@@ -17,6 +18,7 @@ const getReturn = async (req, res) => {
   return sendResponse(res, cabinetInfo, 200);
 };
 
+// 특정 사물함 반납 처리
 const patchReturn = async (req, res) => {
   const { cabinetIdx } = req.query;
 
@@ -35,10 +37,7 @@ const patchReturn = async (req, res) => {
   return sendResponse(res, "ok", 200);
 };
 
-// 특정 사물함의 정보 ( 대여중이라면: + 유저 + 렌트 정보) 가져옴
 returnRouter.get("/", getReturn);
-
-// 특정 사물함 반납 처리
 returnRouter.patch("/", patchReturn);
 
 module.exports = { returnRouter };

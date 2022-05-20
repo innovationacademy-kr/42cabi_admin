@@ -1,7 +1,7 @@
 const express = require("express");
-const lentRouter = express.Router();
 const { getLentUserInfo } = require("./query");
 const { sendResponse } = require("../util");
+const lentRouter = express.Router();
 
 const getLentInfo = async (_req, res) => {
   const lentInfo = await getLentUserInfo();
