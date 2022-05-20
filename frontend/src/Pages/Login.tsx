@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Login = () => {
@@ -11,12 +12,6 @@ const Login = () => {
 
   const handleInputPassword = (e: any) => {
     setInputPassword(e.target.value);
-  };
-
-  const handleLogin = () => {
-    console.log(inputId);
-    console.log(inputPassword);
-    window.location.href = "/saerom";
   };
 
   return (
@@ -38,7 +33,9 @@ const Login = () => {
           placeholder="Password"
         />
       </FormStyles>
-      <LoginButtonStyles onClick={handleLogin}>LOGIN</LoginButtonStyles>
+      <Link to="/saerom">
+        <LoginButtonStyles>LOGIN</LoginButtonStyles>
+      </Link>
     </LoginStyles>
   );
 };
