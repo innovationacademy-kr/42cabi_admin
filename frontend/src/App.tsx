@@ -7,7 +7,7 @@ import Search from "./Pages/Search";
 import PageNotFound from "./Pages/PageNotFound";
 import Layout from "./Components/Layout";
 import SearchDashboard from "./Pages/SearchDashboard";
-import NoResult from "./Pages/NoResult";
+import InvalidCabinet from "./Pages/InvalidCabinet";
 import Footer from "./Components/Footer";
 
 const App = () => {
