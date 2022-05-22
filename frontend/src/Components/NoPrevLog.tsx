@@ -7,7 +7,7 @@ const NoPrevLog = () => {
 const PrevLogBox = styled.div`
   display: flex;
   // border: 0.5rem solid gray;
-  padding: 16.5rem 3rem 16.5rem 3rem;
+  padding: 16.5rem 2rem 16.5rem 2rem;
   font-size: 2rem;
   justify-content: center;
   margin: 1rem;

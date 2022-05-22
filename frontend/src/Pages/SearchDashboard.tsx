@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import ButtonSet from "../Components/ButtonSet";
 
 const SearchDashboard = () => {
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setisLoading] = useState(true);
   const SearchTypeRedux = useSelector(
     (state: RootState) => state.SearchType,
     shallowEqual
@@ -26,8 +26,8 @@ const SearchDashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  let params = {};
   useEffect(() => {
+    let params = {};
     if (searchParams.get("intraId") !== null) {
       dispatch(GetTargetType("User"));
       params = {
@@ -46,18 +46,16 @@ const SearchDashboard = () => {
       .get(url, { params })
       .then((res) => {
         dispatch(GetTargetResponse(res.data));
-        setLoading(false);
+        setisLoading(false);
         // console.log(res);
       })
       .catch((e) => {
-        // if (SearchTypeRedux === "Cabinet") {
-        navigate("/saerom/search/invalidCabinet");
-        // } else {
-        // navigate("/saerom/search/invalidUser");
-        // }
+        navigate("/saerom/search/invalidSearchResult", {
+          state: { errorType: "Input" },
+        });
         console.log(e);
       });
-  });
+  }, [dispatch, navigate, searchParams]);
 
   const DetailType = () => {
     if (SearchTypeRedux === "User") {
@@ -86,7 +84,7 @@ const SearchDashboard = () => {
     } else {
       if (
         SearchResponseRedux.resultFromLentLog !== undefined &&
-        SearchResponseRedux.resultFromLentLog[0] != undefined &&
+        SearchResponseRedux.resultFromLentLog[0] !== undefined &&
         SearchResponseRedux.resultFromLentLog[0].lent_time !== null
       ) {
         return <PrevCabinetTable />;
@@ -97,7 +95,7 @@ const SearchDashboard = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <></>;
   }
   return (
     <DashboardBox>
@@ -124,10 +122,11 @@ const DashboardBox = styled.div`
   height: 90%;
   justify-content: center;
   // border: 0.5rem solid #6667ab;
-  @media screen and (max-width: 450px) {
+  @media screen and (max-width: 642px) {
     flex-direction: column;
     align-items: center;
   }
+  padding-bottom: 5rem;
 `;
 
 const LeftBox = styled.div`
@@ -138,7 +137,7 @@ const LeftBox = styled.div`
   width: 50%;
   margin: 0.3rem;
   // border: 0.2rem solid red;
-  @media screen and (max-width: 450px) {
+  @media screen and (max-width: 642px) {
     width: 95%;
   }
 `;
@@ -150,7 +149,7 @@ const RightBox = styled.div`
   width: 50%;
   margin: 0.3rem;
   // border: 0.2rem solid blue;
-  @media (max-width: 450px) {
+  @media (max-width: 642px) {
     width: 95%;
   }
 `;
@@ -177,9 +176,6 @@ const TableBox = styled.div`
   border-radius: 1.5rem;
   // border: 0.2rem solid green;
   background-color: #dddddd;
-  @media screen and (max-width: 450px) {
-    padding-bottom: 5rem;
-  }
 `;
 
 export default SearchDashboard;

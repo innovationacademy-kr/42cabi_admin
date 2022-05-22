@@ -30,36 +30,19 @@ const ActivationModal = (props: any) => {
   const [isActivate, setIsActivate] = useState(1);
   const [activation, setActivation] = useState(1);
 
-  useEffect(
-    () => {
+  useEffect(() => {
+    if (
+      SearchResponseRedux.resultFromLent !== undefined &&
+      SearchResponseRedux.resultFromLent.length !== 0
+    ) {
       setIsActivate(
-        SearchResponseRedux.resultFromLent !== undefined &&
-          // SearchResponseRedux.resultFromLent[0].activation !== undefined &&
-          SearchResponseRedux.resultFromLent.length !== 0 &&
-          SearchResponseRedux.resultFromLent[0].activation === 0
-          ? 0
-          : 1
+        SearchResponseRedux.resultFromLent[0].activation === 0 ? 0 : 1
       );
       setActivation(
-        SearchResponseRedux.resultFromLent !== undefined &&
-          // SearchResponseRedux.resultFromLent[0].activation !== undefined &&
-          SearchResponseRedux.resultFromLent.length !== 0 &&
-          SearchResponseRedux.resultFromLent[0].activation === 0
-          ? 0
-          : 1
+        SearchResponseRedux.resultFromLent[0].activation === 0 ? 0 : 1
       );
-      if (
-        SearchResponseRedux.resultFromLent !== undefined &&
-        SearchResponseRedux.resultFromLent.length !== 0
-      ) {
-        console.log(SearchResponseRedux.resultFromLent[0].activation);
-      }
-    },
-    SearchResponseRedux.resultFromLent !== undefined &&
-      SearchResponseRedux.resultFromLent.length !== 0
-      ? [SearchResponseRedux.resultFromLent[0].activation]
-      : []
-  );
+    }
+  }, [SearchResponseRedux.resultFromLent]);
 
   const DisabledReason = () => {
     return isActivate ? (

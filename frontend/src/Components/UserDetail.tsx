@@ -1,8 +1,8 @@
 import { useSelector, shallowEqual } from "react-redux";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { RootState } from "../ReduxModules/rootReducer";
 import moment from "moment";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import ExpiredInfo from "./ExpiredInfo";
 import { DetailBox, BigFontSize } from "./DetailStyleComponent";
 
@@ -15,6 +15,18 @@ const UserDetail = () => {
     () => SearchResponseRedux.resultFromLent,
     [SearchResponseRedux.resultFromLent]
   );
+  const [isLoading, setIsLoading] = useState(true);
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (data?.length === 0) {
+      navigate("/saerom/search/invalidSearchResult", {
+        state: { errorType: "User" },
+      });
+    } else if (isLoading !== false) {
+      setIsLoading(false);
+    }
+  }, [data, navigate, isLoading]);
 
   const [searchParams] = useSearchParams();
   const UserInfo = searchParams.get("intraId")?.toLowerCase();
@@ -27,23 +39,27 @@ const UserDetail = () => {
         " " +
         data[0].cabinet_num?.toString() +
         "번"
-      : "정보 없음";
+      : "없음";
 
   const UserLentInfo =
     data !== undefined && data.length !== 0 && data[0].lent_time !== null
       ? moment(data[0].lent_time?.toString()).format("YYYY.MM.DD") +
         " ~ " +
         moment(data[0].expire_time?.toString()).format("YYYY.MM.DD")
-      : "정보 없음";
+      : "없음";
 
-  return (
-    <DetailBox>
-      <BigFontSize>{UserInfo}</BigFontSize>
-      <p>대여 중인 사물함 : {UserCabinetInfo}</p>
-      <p>대여기간 : {UserLentInfo}</p>
-      <ExpiredInfo />
-    </DetailBox>
-  );
+  if (isLoading) {
+    return <></>;
+  } else {
+    return (
+      <DetailBox>
+        <BigFontSize>{UserInfo}</BigFontSize>
+        <p>대여 중인 사물함 : {UserCabinetInfo}</p>
+        <p>대여기간 : {UserLentInfo}</p>
+        <ExpiredInfo />
+      </DetailBox>
+    );
+  }
 };
 
 export default UserDetail;

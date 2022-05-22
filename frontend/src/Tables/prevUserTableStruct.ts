@@ -10,7 +10,7 @@ export const prevUserTableStruct = [
     accessor: "section",
   },
   {
-    Header: "표시 번호",
+    Header: "번호",
     accessor: "cabinet_num",
   },
   {
@@ -18,7 +18,7 @@ export const prevUserTableStruct = [
     accessor: "lent_time",
     Cell: (props: any) => {
       const date: string = props;
-      return moment(date).format("YYYY년 MM월 DD일");
+      return moment(date).format("YY-MM-DD");
     },
   },
   {
@@ -26,7 +26,7 @@ export const prevUserTableStruct = [
     accessor: "expire_time",
     Cell: (props: any) => {
       const date: string = props;
-      return moment(date).format("YYYY년 MM월 DD일");
+      return moment(date).format("YY-MM-DD");
     },
   },
 ];

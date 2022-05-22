@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { prevCabinetTableStruct } from "./prevCabinetTableStruct";
 import { usePagination, useTable } from "react-table";
 import { useSelector, shallowEqual } from "react-redux";
