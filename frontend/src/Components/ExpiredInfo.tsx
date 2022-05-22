@@ -10,9 +10,11 @@ const ExpiredInfo = () => {
   );
   if (
     SearchResponseRedux.resultFromLent === undefined ||
-    SearchResponseRedux.resultFromLent.length === 0
+    SearchResponseRedux.resultFromLent.length === 0 ||
+    (SearchResponseRedux.resultFromLent !== undefined &&
+      SearchResponseRedux.resultFromLent[0].lent_id === null)
   ) {
-    return <Message>연체 중이 아닙니다.</Message>;
+    return <></>;
   } else {
     const expire_time = new Date(
       moment(SearchResponseRedux.resultFromLent[0].expire_time).format(
