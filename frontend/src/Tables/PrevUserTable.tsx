@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { prevUserTableStruct } from "./prevUserTableStruct";
-import { usePagination, useTable } from "react-table";
+import { useTable, useSortBy } from "react-table";
 import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
 import { TableHead, TableSheet, Td, Th, Tr } from "./tableStyleComponent";
@@ -30,7 +30,7 @@ export const PrevUserTable = () => {
     });
   };
 
-  const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } =
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable(
       {
         // @ts-ignore
@@ -38,7 +38,7 @@ export const PrevUserTable = () => {
         data,
         initialState: { pageSize: 10 },
       },
-      usePagination
+      useSortBy
     );
 
   return (
@@ -48,15 +48,20 @@ export const PrevUserTable = () => {
         <TableHead>
           {headerGroups.map((headerGroup) => (
             <Tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <Th {...column.getHeaderProps()}>{column.render("Header")}</Th>
+              {headerGroup.headers.map((column?: any) => (
+                <Th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render("Header")}
+                  <span>
+                    {column.isSorted ? (column.isSortedDesc ? "▼" : "▲") : ""}
+                  </span>
+                </Th>
               ))}
             </Tr>
           ))}
         </TableHead>
 
         <tbody {...getTableBodyProps()}>
-          {page.map((row: any) => {
+          {rows.map((row: any) => {
             prepareRow(row);
             return (
               <Tr

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { prevCabinetTableStruct } from "./prevCabinetTableStruct";
-import { usePagination, useTable } from "react-table";
+import { useTable, useSortBy } from "react-table";
 import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
 import { TableHead, TableSheet, Td, Th, Tr } from "./tableStyleComponent";
@@ -29,7 +29,7 @@ export const PrevCabinetTable = () => {
     });
   };
 
-  const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } =
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable(
       {
         // @ts-ignore
@@ -37,7 +37,7 @@ export const PrevCabinetTable = () => {
         data,
         initialState: { pageSize: 10 },
       },
-      usePagination
+      useSortBy
     );
   return (
     <div>
@@ -46,15 +46,20 @@ export const PrevCabinetTable = () => {
         <TableHead>
           {headerGroups.map((headerGroup) => (
             <Tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <Th {...column.getHeaderProps()}>{column.render("Header")}</Th>
+              {headerGroup.headers.map((column?: any) => (
+                <Th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render("Header")}
+                  <span>
+                    {column.isSorted ? (column.isSortedDesc ? "▼" : "▲") : ""}
+                  </span>
+                </Th>
               ))}
             </Tr>
           ))}
         </TableHead>
 
         <tbody {...getTableBodyProps()}>
-          {page.map((row: any) => {
+          {rows.map((row: any) => {
             prepareRow(row);
             return (
               <Tr

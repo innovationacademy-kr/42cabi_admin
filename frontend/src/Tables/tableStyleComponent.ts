@@ -4,18 +4,19 @@ export const TableSheet = styled.table`
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
-  font-size: 12px;
+  font-size: 1.2rem;
   text-align: center;
 `;
 
 export const TableHead = styled.thead`
-  border: 1px solid #ddd;
-  padding: 8px;
+  border: 0.1rem solid #ddd;
+  padding: 0.5rem;
 `;
 
 export const Td = styled.td`
-  border: 1px solid #ddd;
-  padding: 8px;
+  border: 0.1rem solid #ddd;
+  padding: 0.8rem;
+  min-width: 2rem;
 `;
 
 export const Tr = styled.tr`
@@ -28,8 +29,8 @@ export const Tr = styled.tr`
 `;
 
 export const Th = styled.th`
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-top: 1.2rem;
+  padding-bottom: 1.2rem;
   text-align: center;
   background-color: #123456;
   color: white;
