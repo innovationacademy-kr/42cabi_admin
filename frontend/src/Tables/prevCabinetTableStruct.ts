@@ -2,7 +2,7 @@ import moment from "moment";
 
 export const prevCabinetTableStruct = [
   {
-    Header: "인트라 아이디",
+    Header: "인트라 ID",
     accessor: "intra_id",
   },
   {

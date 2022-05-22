@@ -50,7 +50,11 @@ const SearchDashboard = () => {
         // console.log(res);
       })
       .catch((e) => {
+        // if (SearchTypeRedux === "Cabinet") {
         navigate("/saerom/search/invalidCabinet");
+        // } else {
+        // navigate("/saerom/search/invalidUser");
+        // }
         console.log(e);
       });
   });
@@ -118,16 +122,25 @@ const DashboardBox = styled.div`
   display: flex;
   width: 99%;
   height: 90%;
+  justify-content: center;
   // border: 0.5rem solid #6667ab;
+  @media screen and (max-width: 450px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const LeftBox = styled.div`
-  display: block;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   text-align: center;
   width: 50%;
   margin: 0.3rem;
   // border: 0.2rem solid red;
+  @media screen and (max-width: 450px) {
+    width: 95%;
+  }
 `;
 
 const RightBox = styled.div`
@@ -137,10 +150,14 @@ const RightBox = styled.div`
   width: 50%;
   margin: 0.3rem;
   // border: 0.2rem solid blue;
+  @media (max-width: 450px) {
+    width: 95%;
+  }
 `;
 
 const DetailBox = styled.div`
   display: flex;
+  width: 100%;
   margin: 0.2rem;
   margin-top: 0;
   flex-direction: column;
@@ -160,6 +177,9 @@ const TableBox = styled.div`
   border-radius: 1.5rem;
   // border: 0.2rem solid green;
   background-color: #dddddd;
+  @media screen and (max-width: 450px) {
+    padding-bottom: 5rem;
+  }
 `;
 
 export default SearchDashboard;

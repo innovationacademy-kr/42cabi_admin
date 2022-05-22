@@ -7,7 +7,7 @@ import {
   DropDownListContainer,
   DropDownList,
   ListItem,
-} from "./Dropdown";
+} from "./DropdownStyleComponent";
 import { useNavigate, createSearchParams } from "react-router-dom";
 
 const options = ["ID", "2F", "4F", "5F"];
@@ -97,15 +97,17 @@ const SearchInput = styled.input`
   padding-right: 1rem;
   text-align: right;
   width: 23rem;
+  min-width: 7rem;
   height: 3rem;
   justifycontent: flex-center;
 `;
 
 const SearchButton = styled.button`
   margin-top: 1rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
+  margin-left: 1%;
+  margin-right: 5%;
   width: 8rem;
+  min-width: 5rem;
   height: 3.5rem;
 `;
 
