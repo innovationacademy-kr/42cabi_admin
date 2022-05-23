@@ -14,7 +14,7 @@ export const prevUserTableStruct = [
     accessor: "cabinet_num",
   },
   {
-    Header: "대여 시간",
+    Header: "대여일",
     accessor: "lent_time",
     Cell: (props: any) => {
       const date: string = props;
@@ -22,7 +22,7 @@ export const prevUserTableStruct = [
     },
   },
   {
-    Header: "반납 시간",
+    Header: "반납일",
     accessor: "expire_time",
     Cell: (props: any) => {
       const date: string = props;

@@ -13,6 +13,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ButtonSet from "../Components/ButtonSet";
+import Toast from "../Components/Toast";
 
 const SearchDashboard = () => {
   const [isLoading, setisLoading] = useState(true);
@@ -111,6 +112,7 @@ const SearchDashboard = () => {
         <TableBox>
           <TableType />
         </TableBox>
+        <Toast />
       </RightBox>
     </DashboardBox>
   );

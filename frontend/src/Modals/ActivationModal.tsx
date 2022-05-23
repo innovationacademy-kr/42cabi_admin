@@ -48,7 +48,12 @@ const ActivationModal = (props: any) => {
     return isActivate ? (
       <div></div>
     ) : (
-      <DisabledReasonBox type="text" show={1} ref={reasonText} />
+      <DisabledReasonBox
+        type="text"
+        placeholder="비활성화 이유를 입력해주세요"
+        show={1}
+        ref={reasonText}
+      />
     );
   };
 

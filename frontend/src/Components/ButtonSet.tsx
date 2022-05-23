@@ -4,6 +4,7 @@ import { RootState } from "../ReduxModules/rootReducer";
 import { useState, useEffect } from "react";
 import ReturnModal from "../Modals/ReturnModal";
 import ActivationModal from "../Modals/ActivationModal";
+import Toast from "./Toast";
 
 const ButtonSet = () => {
   const SearchResponseRedux = useSelector(
@@ -20,6 +21,10 @@ const ButtonSet = () => {
     SearchResponseRedux.resultFromLent?.length !== 0 &&
     SearchResponseRedux.resultFromLent !== undefined &&
     SearchResponseRedux.resultFromLent[0].cabinet_id !== null;
+  const isUser: boolean =
+    SearchResponseRedux.resultFromLent?.length !== 0 &&
+    SearchResponseRedux.resultFromLent !== undefined &&
+    SearchResponseRedux.resultFromLent[0].intra_id !== null;
 
   const [showReturnModal, setShowReturnModal] = useState(false);
   const openReturnModal = () => {
@@ -34,6 +39,35 @@ const ButtonSet = () => {
   };
   const closeActivationModal = () => {
     setShowActivationModal(false);
+  };
+
+  const [copySuccessToast, setCopySuccessToast] = useState(false);
+  const openCopySuccessToast = () => {
+    setCopySuccessToast(true);
+  };
+  const closeCopySuccessToast = () => {
+    setCopySuccessToast(false);
+  };
+
+  const HandleCopy = () => {
+    const text =
+      SearchResponseRedux.resultFromLent !== undefined &&
+      SearchResponseRedux.resultFromLent[0].intra_id !== undefined
+        ? SearchResponseRedux.resultFromLent[0].intra_id
+        : "";
+    if (navigator.clipboard) {
+      navigator.clipboard
+        .writeText(text)
+        .then(() => {
+          openCopySuccessToast();
+          setTimeout(() => closeCopySuccessToast(), 1500);
+        })
+        .catch(() => {
+          alert("다시 시도해주세요.");
+        });
+    } else {
+      alert("복사하기가 지원되지 않는 브라우저입니다.");
+    }
   };
 
   useEffect(() => {
@@ -88,9 +122,19 @@ const ButtonSet = () => {
           state={showActivationModal}
           close={closeActivationModal}
         />
+        <CabiButton Color="#6667ab" disabled={!isUser} onClick={HandleCopy}>
+          인트라 ID 복사
+        </CabiButton>
         <CabiButton Color="#6667ab" disabled={true}>
           슬랙 메시지 전송
         </CabiButton>
+        <Toast
+          state={copySuccessToast}
+          close={closeCopySuccessToast}
+          BgColor="#4ba155"
+          messageColor="#ffffff"
+          textMessage="인트라 ID가 정상적으로 복사되었습니다!"
+        />
       </div>
     );
   }
