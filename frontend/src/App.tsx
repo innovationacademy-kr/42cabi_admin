@@ -7,8 +7,8 @@ import Search from "./Pages/Search";
 import PageNotFound from "./Pages/PageNotFound";
 import Layout from "./Components/Layout";
 import SearchDashboard from "./Pages/SearchDashboard";
-import NoResult from "./Pages/NoResult";
 import Footer from "./Components/Footer";
+import InvalidSearchResult from "./Pages/InvalidSearchResult";
 
 const App = () => {
   return (
@@ -20,7 +20,10 @@ const App = () => {
           <Route path="status" element={<Status />} />
           <Route path="search" element={<Search />}>
             <Route path="searchDashboard" element={<SearchDashboard />} />
-            <Route path="noResult" element={<NoResult />} />
+            <Route
+              path="invalidSearchResult"
+              element={<InvalidSearchResult />}
+            />
           </Route>
         </Route>
         <Route path="*" element={<PageNotFound />} />

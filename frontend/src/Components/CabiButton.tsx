@@ -2,9 +2,9 @@ import styled from "styled-components";
 
 const CabiButton = styled.button<{
   Color: string;
-  isActive: boolean;
+  disabled: boolean;
 }>`
-  width: 40%;
+  width: 60%;
   height: 4rem;
   margin: 1rem;
   min-width: 15rem;
@@ -13,9 +13,13 @@ const CabiButton = styled.button<{
   border-radius: ${(props) => props.theme.borderRadius};
   /* pointer-events: none; */
   transition-duration: 0.4s;
-  :hover {
+  :hover:enabled {
     background-color: #d8d4d4;
     cursor: pointer;
+  }
+  &:disabled {
+    cursor: default;
+    opacity: 0.5;
   }
 `;
 

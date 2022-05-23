@@ -1,63 +1,81 @@
 import { useMemo } from "react";
 import { prevCabinetTableStruct } from "./prevCabinetTableStruct";
-import { usePagination, useTable } from "react-table";
-import "./table.css";
-import { useSelector } from "react-redux";
+import { useTable, useSortBy } from "react-table";
+import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
+import { TableHead, TableSheet, Td, Th, Tr } from "./tableStyleComponent";
+import { useNavigate, createSearchParams } from "react-router-dom";
+import { SearchResponseFromLentLog } from "../DataTypes";
 
 export const PrevCabinetTable = () => {
-  const SearchUserRedux = useSelector(
-    (state: RootState) => state.SearchCabinet
+  const SearchResponseRedux = useSelector(
+    (state: RootState) => state.SearchResponse,
+    shallowEqual
   );
 
   const columns = useMemo(() => prevCabinetTableStruct, []);
-  // const columns = cabinetMiniDataStruct;
   const data = useMemo(
-    () => SearchUserRedux.data?.resultFromLentLog || [],
-    [SearchUserRedux.data?.resultFromLentLog]
+    () => SearchResponseRedux.resultFromLentLog || [],
+    [SearchResponseRedux.resultFromLentLog]
   );
-  // const data = SearchUserRedux;
 
-  const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } =
+  const navigate = useNavigate();
+  const GoToUserPage = (data: SearchResponseFromLentLog) => {
+    navigate({
+      pathname: "/saerom/search/searchDashboard",
+      search: createSearchParams({
+        intraId: data.intra_id || "",
+      }).toString(),
+    });
+  };
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable(
       {
         // @ts-ignore
         columns,
         data,
-        initialState: { pageSize: 3 },
+        initialState: { pageSize: 10 },
       },
-      usePagination
+      useSortBy
     );
-
   return (
-    <div className="table">
-      <p>이전 사용자 기록</p>
-      <table {...getTableProps()}>
-        <thead>
+    <div>
+      <h2>이전 사용자 기록</h2>
+      <TableSheet {...getTableProps()}>
+        <TableHead>
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+            <Tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column?: any) => (
+                <Th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render("Header")}
+                  <span>
+                    {column.isSorted ? (column.isSortedDesc ? "▼" : "▲") : ""}
+                  </span>
+                </Th>
               ))}
-            </tr>
+            </Tr>
           ))}
-        </thead>
+        </TableHead>
 
         <tbody {...getTableBodyProps()}>
-          {page.map((row: any) => {
+          {rows.map((row: any) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
+              <Tr
+                {...row.getRowProps()}
+                onClick={() => GoToUserPage(row.original)}
+              >
                 {row.cells.map((cell: any) => {
                   return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
                   );
                 })}
-              </tr>
+              </Tr>
             );
           })}
         </tbody>
-      </table>
+      </TableSheet>
     </div>
   );
 };

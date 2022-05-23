@@ -1,0 +1,16 @@
+import styled from "styled-components";
+
+const NoPrevLog = () => {
+  return <PrevLogBox>이전 사용 기록이 없습니다.</PrevLogBox>;
+};
+
+const PrevLogBox = styled.div`
+  display: flex;
+  // border: 0.5rem solid gray;
+  padding: 16.5rem 2rem 16.5rem 2rem;
+  font-size: 2rem;
+  justify-content: center;
+  margin: 1rem;
+`;
+
+export default NoPrevLog;

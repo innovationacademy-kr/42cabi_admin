@@ -1,14 +1,14 @@
 import { combineReducers } from "redux";
-import SearchCabinet from "./SearchCabinet";
-import SearchUser from "./SearchUser";
 import SearchType from "./SearchType";
-import SearchText from "./SearchText";
+import SearchResponse from "./SearchResponse";
+import StatusExpired from "./StatusExpired";
+import StatusDisabled from "./StatusDisabled";
 
 const rootReducer = combineReducers({
-  SearchCabinet,
-  SearchUser,
   SearchType,
-  SearchText,
+  SearchResponse,
+  StatusExpired,
+  StatusDisabled,
 });
 export type RootState = ReturnType<typeof rootReducer>;
 
