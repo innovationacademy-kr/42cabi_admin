@@ -1,5 +1,5 @@
 import { useSelector, shallowEqual } from "react-redux";
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect } from "react";
 import { RootState } from "../ReduxModules/rootReducer";
 import moment from "moment";
 import { useSearchParams, useNavigate } from "react-router-dom";
@@ -15,18 +15,16 @@ const UserDetail = () => {
     () => SearchResponseRedux.resultFromLent,
     [SearchResponseRedux.resultFromLent]
   );
-  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
+
   useEffect(() => {
     if (data?.length === 0) {
       navigate("/saerom/search/invalidSearchResult", {
         state: { errorType: "User" },
       });
-    } else if (isLoading !== false) {
-      setIsLoading(false);
     }
-  }, [data, navigate, isLoading]);
+  });
 
   const [searchParams] = useSearchParams();
   const UserInfo = searchParams.get("intraId")?.toLowerCase();
@@ -48,7 +46,7 @@ const UserDetail = () => {
         moment(data[0].expire_time?.toString()).format("YYYY.MM.DD")
       : "없음";
 
-  if (isLoading) {
+  if (data === undefined || data.length === 0) {
     return <></>;
   } else {
     return (

@@ -102,17 +102,17 @@ const ActivationModal = (props: any) => {
         console.log(e);
       })
       .finally(() => {
-        close();
+        close(true);
       });
   };
 
   return state ? (
     <Container>
-      <Overlay onClick={(event) => close(event)} />
+      <Overlay onClick={() => close(false)} />
       <Contents>
         <Title>
           사물함 상태 관리
-          <Close onClick={(event) => close(event)}>X</Close>
+          <Close onClick={() => close(false)}>✖︎</Close>
         </Title>
         <Body>
           <p>{CabinetInfo}</p>
@@ -125,7 +125,7 @@ const ActivationModal = (props: any) => {
           </ToggleBox>
           <DisabledReason />
           <p>
-            <CancleButton onClick={(event) => close(event)}>취소</CancleButton>
+            <CancleButton onClick={() => close(false)}>취소</CancleButton>
             <ConfirmButton
               onClick={() => ActivationAPI(isActivate)}
               disabled={activation === isActivate}

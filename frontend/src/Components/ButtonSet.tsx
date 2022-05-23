@@ -1,7 +1,7 @@
 import CabiButton from "./CabiButton";
 import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ReturnModal from "../Modals/ReturnModal";
 import ActivationModal from "../Modals/ActivationModal";
 import Toast from "./Toast";
@@ -11,7 +11,6 @@ const ButtonSet = () => {
     (state: RootState) => state.SearchResponse,
     shallowEqual
   );
-  const [isLoading, setIsLoading] = useState(true);
 
   const isLent: boolean =
     SearchResponseRedux.resultFromLent !== undefined &&
@@ -30,14 +29,16 @@ const ButtonSet = () => {
   const openReturnModal = () => {
     setShowReturnModal(true);
   };
-  const closeReturnModal = () => {
+  const closeReturnModal = (isChanged: boolean) => {
+    console.log(isChanged);
     setShowReturnModal(false);
   };
   const [showActivationModal, setShowActivationModal] = useState(false);
   const openActivationModal = () => {
     setShowActivationModal(true);
   };
-  const closeActivationModal = () => {
+  const closeActivationModal = (isChanged: boolean) => {
+    console.log(isChanged);
     setShowActivationModal(false);
   };
 
@@ -70,13 +71,11 @@ const ButtonSet = () => {
     }
   };
 
-  useEffect(() => {
-    if (SearchResponseRedux.resultFromLent?.length !== 0) {
-      setIsLoading(false);
-    }
-  }, [SearchResponseRedux.resultFromLent]);
-
-  if (isLoading) {
+  if (
+    SearchResponseRedux.resultFromLent === undefined ||
+    (SearchResponseRedux.resultFromLent !== undefined &&
+      SearchResponseRedux.resultFromLent.length === 0)
+  ) {
     return <></>;
   } else {
     return (

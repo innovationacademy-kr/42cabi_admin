@@ -53,21 +53,21 @@ const ReturnModal = (props: any) => {
       .catch((e) => {
         console.log(e);
       })
-      .finally(() => close());
+      .finally(() => close(true));
   };
 
   return state ? (
     <Container>
-      <Overlay onClick={(event) => close(event)} />
+      <Overlay onClick={() => close(false)} />
       <Contents>
         <Title>
           사물함 반납 처리
-          <Close onClick={(event) => close(event)}>X</Close>
+          <Close onClick={() => close(false)}>✖︎</Close>
         </Title>
         <Body>
           <p>{CabinetInfo}</p>
           <p>해당 사물함을 정말 반납하시겠습니까?</p>
-          <CancleButton onClick={(event) => close(event)}>취소</CancleButton>
+          <CancleButton onClick={() => close(false)}>취소</CancleButton>
           <ConfirmButton onClick={ReturnAPI}>반납</ConfirmButton>
         </Body>
       </Contents>

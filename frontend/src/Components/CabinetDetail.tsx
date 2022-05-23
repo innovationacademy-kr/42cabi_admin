@@ -1,5 +1,5 @@
 import { useSelector, shallowEqual } from "react-redux";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { RootState } from "../ReduxModules/rootReducer";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +15,6 @@ const CabinetDetail = () => {
     () => SearchResponseRedux.resultFromLent,
     [SearchResponseRedux.resultFromLent]
   );
-  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -23,10 +22,8 @@ const CabinetDetail = () => {
       navigate("/saerom/search/invalidSearchResult", {
         state: { errorType: "Cabinet" },
       });
-    } else if (isLoading !== false) {
-      setIsLoading(false);
     }
-  }, [data, navigate, isLoading]);
+  }, [data, navigate]);
 
   const CabinetInfo =
     data !== undefined && data[0] !== undefined
@@ -50,7 +47,7 @@ const CabinetDetail = () => {
       ? data[0].intra_id
       : "없음";
 
-  if (isLoading) {
+  if (data === undefined || data.length === 0) {
     return <></>;
   } else {
     return (
