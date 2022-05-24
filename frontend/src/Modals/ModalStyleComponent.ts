@@ -22,6 +22,8 @@ export const Overlay = styled.div`
 `;
 
 export const Contents = styled.div`
+  display: flex;
+  flex-direction: column;
   position: relative;
   top: 0px;
   padding: 0 auto;
@@ -29,8 +31,9 @@ export const Contents = styled.div`
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.19),
     0 0.6rem 0.6rem rgba(0, 0, 0, 0.23);
   background-color: white;
-  text-align: center;
-  width: 50%;
+  align-items: center;
+  width: 40rem;
+  min-width: 30rem;
 `;
 
 export const Title = styled.div`
@@ -38,11 +41,13 @@ export const Title = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 1.5em;
+  font-weight: bold;
   padding-top: 0.7rem;
   padding-bottom: 0.7rem;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
-  background-color: rgba(66, 87, 179, 0.52);
+  color: #ffffff;
+  background-color: rgba(66, 87, 179, 0.65);
   width: 100%;
   overflow: auto;
   height: 10%;
@@ -61,6 +66,7 @@ export const Close = styled.div`
 
 export const Body = styled.div`
   margin: 2rem;
+  margin-top: 0;
 `;
 
 export const ConfirmButton = styled.button`
@@ -70,15 +76,11 @@ export const ConfirmButton = styled.button`
   margin-left: 1rem;
   margin-right: 1rem;
   border: none;
-  background-color: rgba(66, 87, 179, 0.7);
+  background-color: rgba(66, 87, 179, 0.9);
   color: #eeeeee;
   :hover:enabled {
     background-color: #6667ab;
     cursor: pointer;
-  &:disabled {
-    cursor: default;
-    opacity: 0.5;
-  }
 `;
 
 export const CancleButton = styled.button`
@@ -120,7 +122,7 @@ export const Circle = styled.div<{
   border-radius: 5rem;
   position: absolute;
   left: 2%;
-  top: 3%;
+  top: 4%;
   transition: all 0.5s ease-in-out;
   ${(props) =>
     props.toggle &&
