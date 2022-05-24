@@ -52,7 +52,7 @@ const UserDetail = () => {
     return (
       <DetailBox>
         <BigFontSize>{UserInfo}</BigFontSize>
-        <p>대여 중인 사물함 : {UserCabinetInfo}</p>
+        <p>현재 사물함 : {UserCabinetInfo}</p>
         <p>대여기간 : {UserLentInfo}</p>
         <ExpiredInfo />
       </DetailBox>

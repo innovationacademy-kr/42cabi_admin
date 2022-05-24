@@ -44,18 +44,9 @@ const ActivationModal = (props: any) => {
     }
   }, [SearchResponseRedux.resultFromLent]);
 
-  const DisabledReason = () => {
-    return isActivate ? (
-      <div></div>
-    ) : (
-      <DisabledReasonBox
-        type="text"
-        placeholder="비활성화 이유를 입력해주세요"
-        show={1}
-        ref={reasonText}
-      />
-    );
-  };
+  // const DisabledReason = () => {
+  //   return isActivate ? <div></div> : <DisabledReasonBox />;
+  // };
 
   const CabinetInfo =
     data !== undefined
@@ -72,38 +63,50 @@ const ActivationModal = (props: any) => {
   };
 
   const reasonText = useRef<HTMLInputElement>(null);
-  const ActivationAPI = (activation: number) => {
+  const ActivationAPI = (activation: number, noChange: boolean) => {
     const urlActivation = "http://localhost:8080/api/activation";
     const urlUpdate = "http://localhost:8080/api/search";
     const cabinet_id = data !== undefined ? data.cabinet_id : "";
-    axios
-      .post(urlActivation, {
-        cabinetIdx: cabinet_id,
-        activation: activation,
-        reason: reasonText.current?.value,
-      })
-      .then((res) => {
-        console.log(res);
-        const params = {
-          floor: searchParams.get("floor"),
-          cabinetNum: searchParams.get("cabinetNum"),
-        };
-        axios
-          .get(urlUpdate, { params })
-          .then((res) => {
-            // console.log(res);
-            dispatch(GetTargetResponse(res.data));
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      })
-      .catch((e) => {
-        console.log(e);
-      })
-      .finally(() => {
-        close(true);
-      });
+    if (noChange) {
+      close(false);
+    } else {
+      axios
+        .post(urlActivation, {
+          cabinetIdx: cabinet_id,
+          activation: activation,
+          reason: reasonText.current?.value,
+        })
+        .then((res) => {
+          console.log(res);
+          let params = {};
+          if (searchParams.get("floor") !== null) {
+            params = {
+              floor: searchParams.get("floor"),
+              cabinetNum: searchParams.get("cabinetNum"),
+            };
+          } else {
+            params = {
+              intraId: searchParams.get("intraId"),
+            };
+          }
+          // console.log(params);
+          axios
+            .get(urlUpdate, { params })
+            .then((res) => {
+              // console.log(res);
+              dispatch(GetTargetResponse(res.data));
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        })
+        .catch((e) => {
+          console.log(e);
+        })
+        .finally(() => {
+          close(true);
+        });
+    }
   };
 
   return state ? (
@@ -116,23 +119,25 @@ const ActivationModal = (props: any) => {
         </Title>
         <Body>
           <p>{CabinetInfo}</p>
-          <p>현재 상태 : {activation ? "활성화됨" : "비활성화됨"}</p>
+          <p>현재 상태 : {activation ? "사용 가능" : "사용 불가"}</p>
           <ToggleBox>
             상태 변경 :
             <ToggleBtn onClick={ClickedToggle} toggle={isActivate}>
               <Circle toggle={isActivate} />
             </ToggleBtn>
           </ToggleBox>
-          <DisabledReason />
-          <p>
-            <CancleButton onClick={() => close(false)}>취소</CancleButton>
-            <ConfirmButton
-              onClick={() => ActivationAPI(isActivate)}
-              disabled={activation === isActivate}
-            >
-              저장
-            </ConfirmButton>
-          </p>
+          <DisabledReasonBox
+            isActivate={isActivate}
+            type="text"
+            placeholder="사용하지 못하는 이유를 적어주세요!"
+            ref={reasonText}
+          />
+          <CancleButton onClick={() => close(false)}>취소</CancleButton>
+          <ConfirmButton
+            onClick={() => ActivationAPI(isActivate, activation === isActivate)}
+          >
+            저장
+          </ConfirmButton>
         </Body>
       </Contents>
     </Container>
@@ -144,14 +149,20 @@ const ActivationModal = (props: any) => {
 const ToggleBox = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
 `;
 
 const DisabledReasonBox = styled.input<{
-  show: number;
+  isActivate: number;
 }>`
+  display: block;
+  visibility: ${(props) => (props.isActivate === 0 ? "visible" : "hidden")};
   width: 25rem;
-  height: 3rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  height: ${(props) => (props.isActivate === 0 ? "3rem" : 0)};
+  transition: height 0.4s linear;
+  transform-origin: top center;
 `;
 
 export default ActivationModal;

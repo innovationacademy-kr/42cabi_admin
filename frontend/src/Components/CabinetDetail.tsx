@@ -47,6 +47,16 @@ const CabinetDetail = () => {
       ? data[0].intra_id
       : "없음";
 
+  const CabinetActivationInfo =
+    data !== undefined && data[0] !== undefined && data[0].activation === 1
+      ? "사용 가능"
+      : "사용 불가";
+
+  const CabinetDisabledReason =
+    data !== undefined && data[0] !== undefined && data[0].activation === 0
+      ? "(추후 받아올 비활성화 사유)"
+      : "";
+
   if (data === undefined || data.length === 0) {
     return <></>;
   } else {
@@ -55,7 +65,8 @@ const CabinetDetail = () => {
         <BigFontSize>{CabinetInfo}</BigFontSize>
         <p>현재 대여자 : {CabinetUserInfo}</p>
         <p>대여 기간 : {CabinetLentInfo}</p>
-        <p>고장 정보 : (상세 사유)</p>
+        <p>현재 상태 : {CabinetActivationInfo}</p>
+        {CabinetDisabledReason}
         <ExpiredInfo />
       </DetailBox>
     );
