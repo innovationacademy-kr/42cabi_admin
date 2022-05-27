@@ -9,7 +9,7 @@ export const prevCabinetTableStruct = [
     Header: "대여일",
     accessor: "lent_time",
     Cell: (props: any) => {
-      const date: string = props;
+      const date = props;
       return moment(date).format("YY-MM-DD");
     },
   },
@@ -17,7 +17,7 @@ export const prevCabinetTableStruct = [
     Header: "반납일",
     accessor: "expire_time",
     Cell: (props: any) => {
-      const date: string = props;
+      const date = props;
       return moment(date).format("YY-MM-DD");
     },
   },
