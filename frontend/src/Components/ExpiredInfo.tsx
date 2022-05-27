@@ -22,9 +22,11 @@ const ExpiredInfo = () => {
     const todayString = moment();
     if (todayString.isAfter(expire_time)) {
       const overDays = todayString.diff(expire_time, "days");
-      return <ExpiredMessage>{overDays}일 째 연체 중입니다!</ExpiredMessage>;
+      return (
+        <ExpiredMessage>연체 상황 : {overDays}일 째 연체 중!</ExpiredMessage>
+      );
     } else {
-      return <Message>연체 중이 아닙니다.</Message>;
+      return <Message>연체 상황 : 해당 없음</Message>;
     }
   }
 };
