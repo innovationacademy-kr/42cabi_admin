@@ -18,7 +18,7 @@ export const prevUserTableStruct = [
     accessor: "lent_time",
     Cell: (props: any) => {
       const date = props;
-      return moment(date).format("YY-MM-DD");
+      return moment(date.value).format("YY-MM-DD");
     },
   },
   {
@@ -26,7 +26,7 @@ export const prevUserTableStruct = [
     accessor: "expire_time",
     Cell: (props: any) => {
       const date = props;
-      return moment(date).format("YY-MM-DD");
+      return moment(date.value).format("YY-MM-DD");
     },
   },
 ];
