@@ -1,3 +1,4 @@
+import { getValue } from "@testing-library/user-event/dist/utils";
 import moment from "moment";
 
 export const prevCabinetTableStruct = [
@@ -10,7 +11,7 @@ export const prevCabinetTableStruct = [
     accessor: "lent_time",
     Cell: (props: any) => {
       const date = props;
-      return moment(date).format("YY-MM-DD");
+      return moment(date.value).format("YY-MM-DD");
     },
   },
   {
@@ -18,7 +19,7 @@ export const prevCabinetTableStruct = [
     accessor: "expire_time",
     Cell: (props: any) => {
       const date = props;
-      return moment(date).format("YY-MM-DD");
+      return moment(date.value).format("YY-MM-DD");
     },
   },
 ];
