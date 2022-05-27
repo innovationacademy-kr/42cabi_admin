@@ -1,14 +1,14 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import PageNotFound from "./PageNotFound";
-import Login from "./Login";
+import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import Status from "./Pages/Status";
 import Search from "./Pages/Search";
-import Map from "./Pages/Map";
+import PageNotFound from "./Pages/PageNotFound";
 import Layout from "./Components/Layout";
 import SearchDashboard from "./Pages/SearchDashboard";
-import NoResult from "./Pages/NoResult";
+import Footer from "./Components/Footer";
+import InvalidSearchResult from "./Pages/InvalidSearchResult";
 
 const App = () => {
   return (
@@ -20,12 +20,15 @@ const App = () => {
           <Route path="status" element={<Status />} />
           <Route path="search" element={<Search />}>
             <Route path="searchDashboard" element={<SearchDashboard />} />
-            <Route path="noResult" element={<NoResult />} />
+            <Route
+              path="invalidSearchResult"
+              element={<InvalidSearchResult />}
+            />
           </Route>
-          <Route path="map" element={<Map />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 };

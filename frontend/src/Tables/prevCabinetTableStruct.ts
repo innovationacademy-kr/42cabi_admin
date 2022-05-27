@@ -2,23 +2,23 @@ import moment from "moment";
 
 export const prevCabinetTableStruct = [
   {
-    Header: "인트라 아이디",
+    Header: "인트라 ID",
     accessor: "intra_id",
   },
   {
-    Header: "대여 시간",
+    Header: "대여일",
     accessor: "lent_time",
     Cell: (props: any) => {
-      const date: string = props.value.toString().split("T")[0];
-      return moment(date).format("YYYY년 MM월 DD일");
+      const date: string = props;
+      return moment(date).format("YY-MM-DD");
     },
   },
   {
-    Header: "반납 시간",
-    accessor: "return_time",
+    Header: "반납일",
+    accessor: "expire_time",
     Cell: (props: any) => {
-      const date: string = props.value.toString().split("T")[0];
-      return moment(date).format("YYYY년 MM월 DD일");
+      const date: string = props;
+      return moment(date).format("YY-MM-DD");
     },
   },
 ];

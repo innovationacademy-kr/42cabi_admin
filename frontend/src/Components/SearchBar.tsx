@@ -7,8 +7,7 @@ import {
   DropDownListContainer,
   DropDownList,
   ListItem,
-} from "./Dropdown";
-import { useDispatch } from "react-redux";
+} from "./DropdownStyleComponent";
 import { useNavigate, createSearchParams } from "react-router-dom";
 
 const options = ["ID", "2F", "4F", "5F"];
@@ -21,16 +20,15 @@ const SearchBar = () => {
   const onOptionClicked = (value: string) => () => {
     setSelectedOption(value);
     setIsOpen(false);
-    console.log(selectedOption);
   };
 
   const searchType = useRef<HTMLInputElement>(null);
   const searchText = useRef<HTMLInputElement>(null);
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const goToResultPage = () => {
+    setIsOpen(false);
     if (selectedOption === "ID") {
       navigate({
         pathname: "/saerom/search/searchDashboard",
@@ -49,34 +47,37 @@ const SearchBar = () => {
     }
   };
 
+  const handleEnterKey = (event: any) => {
+    if (event.key === "Enter") {
+      goToResultPage();
+    }
+  };
   return (
-    <div className="SearchBar">
-      <SearchBarContainer>
-        <DropDownContainer>
-          <DropDownHeader onClick={toggling}>
-            {selectedOption}
-            <DropDownHeaderSymbol>▼</DropDownHeaderSymbol>
-          </DropDownHeader>
-          {isOpen && (
-            <DropDownListContainer>
-              <DropDownList>
-                {options.map((option) => (
-                  <ListItem
-                    onClick={onOptionClicked(option)}
-                    key={Math.random()}
-                    ref={searchType}
-                  >
-                    {option}
-                  </ListItem>
-                ))}
-              </DropDownList>
-            </DropDownListContainer>
-          )}
-        </DropDownContainer>
-        <SearchInput ref={searchText} />
-        <SearchButton onClick={goToResultPage}>검색</SearchButton>
-      </SearchBarContainer>
-    </div>
+    <SearchBarContainer>
+      <DropDownContainer>
+        <DropDownHeader onClick={toggling}>
+          {selectedOption}
+          <DropDownHeaderSymbol>▼</DropDownHeaderSymbol>
+        </DropDownHeader>
+        {isOpen && (
+          <DropDownListContainer>
+            <DropDownList>
+              {options.map((option) => (
+                <ListItem
+                  onClick={onOptionClicked(option)}
+                  key={Math.random()}
+                  ref={searchType}
+                >
+                  {option}
+                </ListItem>
+              ))}
+            </DropDownList>
+          </DropDownListContainer>
+        )}
+      </DropDownContainer>
+      <SearchInput ref={searchText} onKeyDown={handleEnterKey} />
+      <SearchButton onClick={goToResultPage}>검색</SearchButton>
+    </SearchBarContainer>
   );
 };
 
@@ -96,15 +97,17 @@ const SearchInput = styled.input`
   padding-right: 1rem;
   text-align: right;
   width: 23rem;
+  min-width: 7rem;
   height: 3rem;
   justifycontent: flex-center;
 `;
 
 const SearchButton = styled.button`
   margin-top: 1rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
+  margin-left: 1%;
+  margin-right: 5%;
   width: 8rem;
+  min-width: 5rem;
   height: 3.5rem;
 `;
 

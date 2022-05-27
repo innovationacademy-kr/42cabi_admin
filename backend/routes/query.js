@@ -44,7 +44,6 @@ const getInfoByIntraId = async (intraId) => {
     };
     return result;
   } catch (err) {
-    console.log(err);
     throw err;
   } finally {
     connection.release();
@@ -83,7 +82,6 @@ const getInfoByCabinetNum = async (cabinetNum, floor) => {
     };
     return result;
   } catch (err) {
-    console.log(err);
     throw err;
   } finally {
     connection.release();
@@ -120,7 +118,6 @@ const modifyCabinetActivation = async (cabinetIdx, activation) => {
     `;
     await connection.query(content);
   } catch (err) {
-    console.log(err);
     throw err;
   } finally {
     connection.release();
@@ -138,7 +135,6 @@ const getUserLent = async (cabinetIdx) => {
       `);
     return result;
   } catch (err) {
-    console.log(err);
     throw err;
   } finally {
     connection.release();
@@ -158,7 +154,6 @@ const getCabinet = async (cabinetIdx) => {
         `);
     return result;
   } catch (err) {
-    console.log(err);
     throw err;
   } finally {
     connection.release();
@@ -189,7 +184,6 @@ const getLentUserInfo = async () => {
     }
     return { lentInfo: lentInfo };
   } catch (err) {
-    console.log(err);
     throw err;
   } finally {
     connection.release();
@@ -205,7 +199,6 @@ const addLentLog = async (userLentInfo) => {
       VALUES (${userLentInfo.lent_cabinet_id}, ${userLentInfo.lent_user_id}, '${userLentInfo.lent_time}', now())
       `);
   } catch (err) {
-    console.log(err);
     throw err;
   } finally {
     connection.release();
@@ -222,13 +215,33 @@ const deleteLent = async (userLentInfo) => {
       WHERE lent_cabinet_id=${userLentInfo.lent_cabinet_id}
     `);
   } catch (err) {
-    console.log(err);
     throw err;
   } finally {
     connection.release();
   }
 };
 
+exports.getLentOverdue = async () => {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    const content = `
+		SELECT u.intra_id, c.floor, c.cabinet_num, l.lent_time,l.expire_time from lent l
+	  JOIN cabinet c
+		ON c.cabinet_id = l.lent_cabinet_id
+		JOIN user u
+		ON u.user_id = l.lent_user_id
+		where l.expire_time < DATE_FORMAT(NOW(), '%Y-%m-%d')
+		ORDER BY l.expire_time;
+		`;
+    const result = await connection.query(content);
+    return result;
+  } catch (err) {
+    throw err;
+  } finally {
+    connection.release();
+  }
+};
 // 현황탭 층별 사물함 정보(sum)
 const getCabinetInfoByFloor = async () => {
   const connection = await pool.getConnection();
@@ -250,7 +263,6 @@ const getCabinetInfoByFloor = async () => {
     console.log(result);
     return result;
   } catch (err) {
-    console.log(err);
     throw err;
   } finally {
     connection.release();
