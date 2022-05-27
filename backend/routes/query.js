@@ -12,11 +12,9 @@ const pool = mariadb.createPool({
 });
 
 // 검색 by intraId
-exports.getInfoByIntraId = async (intraId) => {
-  let connection;
+const getInfoByIntraId = async (intraId) => {
+  const connection = await pool.getConnection();
   try {
-    // TODO l.expire_time => expire_time?
-    connection = await pool.getConnection();
     const getInfoFromLentQuery = `
       SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_id, l.lent_time, l.expire_time
       FROM user u
@@ -54,10 +52,9 @@ exports.getInfoByIntraId = async (intraId) => {
 };
 
 // 검색 by 사물함 번호
-exports.getInfoByCabinetNum = async (cabinetNum, floor) => {
-  let connection;
+const getInfoByCabinetNum = async (cabinetNum, floor) => {
+  const connection = await pool.getConnection();
   try {
-    connection = await pool.getConnection();
     const getInfoByCabinetNumFromLentQuery = `
       SELECT (select intra_id from user u where u.user_id=l.lent_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_id, l.lent_time, l.expire_time
       FROM cabinet c
@@ -94,10 +91,9 @@ exports.getInfoByCabinetNum = async (cabinetNum, floor) => {
 };
 
 // 사물함 activation 상태 변경
-exports.modifyCabinetActivation = async (cabinetIdx, activation) => {
-  let connection;
+const modifyCabinetActivation = async (cabinetIdx, activation) => {
+  const connection = await pool.getConnection();
   try {
-    connection = await pool.getConnection();
     const content = `
       UPDATE cabinet c
       SET activation=${activation}
@@ -113,10 +109,9 @@ exports.modifyCabinetActivation = async (cabinetIdx, activation) => {
 };
 
 // 반납할 사물함의 lent 정보 가져옴
-exports.getUserLent = async (cabinetIdx) => {
-  let connection;
+const getUserLent = async (cabinetIdx) => {
+  const connection = await pool.getConnection();
   try {
-    connection = await pool.getConnection();
     const [result] = await connection.query(`
       SELECT lent_cabinet_id, lent_user_id, DATE_FORMAT(lent_time, '%Y-%m-%d %H:%i:%s') AS lent_time
       FROM lent
@@ -132,10 +127,9 @@ exports.getUserLent = async (cabinetIdx) => {
 };
 
 // 특정 사물함 + (user + lent) 정보 가져옴
-exports.getCabinet = async (cabinetIdx) => {
-  let connection;
+const getCabinet = async (cabinetIdx) => {
+  const connection = await pool.getConnection();
   try {
-    connection = await pool.getConnection();
     const [result] = await connection.query(`
         SELECT *
         FROM cabinet c
@@ -153,15 +147,14 @@ exports.getCabinet = async (cabinetIdx) => {
 };
 
 // 대여 사물함(user + cabinet) 정보 가져옴
-exports.getLentUserInfo = async () => {
-  let connection;
+const getLentUserInfo = async () => {
+  const connection = await pool.getConnection();
   try {
     let lentInfo = [];
 
     const content =
       "SELECT u.intra_id, l.* FROM user u RIGHT JOIN lent l ON l.lent_user_id=u.user_id";
 
-    connection = await pool.getConnection();
     const lockerRentalUser = await connection.query(content);
 
     for (let i = 0; i < lockerRentalUser.length; i++) {
@@ -185,10 +178,9 @@ exports.getLentUserInfo = async () => {
 };
 
 // lent_log에 반납되는 사물함 정보 추가
-exports.addLentLog = async (userLentInfo) => {
-  let connection;
+const addLentLog = async (userLentInfo) => {
+  const connection = await pool.getConnection();
   try {
-    connection = await pool.getConnection();
     await connection.query(`
       INSERT INTO lent_log(log_cabinet_id, log_user_id, lent_time, return_time) 
       VALUES (${userLentInfo.lent_cabinet_id}, ${userLentInfo.lent_user_id}, '${userLentInfo.lent_time}', now())
@@ -202,10 +194,9 @@ exports.addLentLog = async (userLentInfo) => {
 };
 
 // lent 테이블에서 사물함 정보 삭제
-exports.deleteLent = async (userLentInfo) => {
-  let connection;
+const deleteLent = async (userLentInfo) => {
+  const connection = await pool.getConnection();
   try {
-    connection = await pool.getConnection();
     await connection.query(`
       DELETE 
       FROM lent 
@@ -220,10 +211,9 @@ exports.deleteLent = async (userLentInfo) => {
 };
 
 // 현황탭 층별 사물함 정보(sum)
-exports.getCabinetInfoByFloor = async () => {
-  let connection;
+const getCabinetInfoByFloor = async () => {
+  const connection = await pool.getConnection();
   try {
-    connection = await pool.getConnection();
     const content = `
       SELECT c.floor,
       COUNT(*) as total,
@@ -247,3 +237,15 @@ exports.getCabinetInfoByFloor = async () => {
     connection.release();
   }
 };
+
+module.exports = {
+  getInfoByIntraId,
+  getInfoByCabinetNum,
+  modifyCabinetActivation,
+  getUserLent,
+  getCabinet,
+  getLentUserInfo,
+  addLentLog,
+  deleteLent,
+  getCabinetInfoByFloor
+}
