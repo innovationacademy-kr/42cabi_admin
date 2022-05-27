@@ -12,7 +12,7 @@ const Status = () => {
 
   useEffect(() => {
     const urlExpired = "http://localhost:8080/api/lent/overdue";
-    const urlDisabled = "http://localhost:8080/api/lent/overdue";
+    const urlDisabled = "http://localhost:8080/api/activation";
 
     const requestExpired = axios.get(urlExpired);
     const requestDisabled = axios.get(urlDisabled);

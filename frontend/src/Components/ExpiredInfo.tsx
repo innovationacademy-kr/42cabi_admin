@@ -16,17 +16,12 @@ const ExpiredInfo = () => {
   ) {
     return <></>;
   } else {
-    const expire_time = new Date(
-      moment(SearchResponseRedux.resultFromLent[0].expire_time).format(
-        "YYYY-MM-DD"
-      )
+    const expire_time = moment(
+      SearchResponseRedux.resultFromLent[0].expire_time
     );
-    const todayString = new Date(moment().format("YYYY-MM-DD"));
-    if (moment(todayString).isAfter(expire_time)) {
-      const overDays = moment
-        .duration(moment(todayString).diff(expire_time))
-        .asDays()
-        .toLocaleString();
+    const todayString = moment();
+    if (todayString.isAfter(expire_time)) {
+      const overDays = todayString.diff(expire_time, "days");
       return <ExpiredMessage>{overDays}일 째 연체 중입니다!</ExpiredMessage>;
     } else {
       return <Message>연체 중이 아닙니다.</Message>;
