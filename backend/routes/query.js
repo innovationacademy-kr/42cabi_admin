@@ -221,7 +221,7 @@ const deleteLent = async (userLentInfo) => {
   }
 };
 
-exports.getLentOverdue = async () => {
+const getLentOverdue = async () => {
   let connection;
   try {
     connection = await pool.getConnection();
@@ -242,6 +242,7 @@ exports.getLentOverdue = async () => {
     connection.release();
   }
 };
+
 // 현황탭 층별 사물함 정보(sum)
 const getCabinetInfoByFloor = async () => {
   const connection = await pool.getConnection();
@@ -279,5 +280,6 @@ module.exports = {
   getLentUserInfo,
   addLentLog,
   deleteLent,
+  getLentOverdue,
   getCabinetInfoByFloor,
 };
