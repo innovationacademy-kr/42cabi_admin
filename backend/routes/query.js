@@ -90,6 +90,25 @@ const getInfoByCabinetNum = async (cabinetNum, floor) => {
   }
 };
 
+// 고장 사물함 리스트 조회
+const getInactivatedCabinetList = async () => {
+  const connection = await pool.getConnection();
+  try {
+    const getInactivatedCabinetQuery = `
+      SELECT floor, cabinet_num
+      FROM cabinet c
+      WHERE c.activation=0;
+      `;
+    const result = await connection.query(getInactivatedCabinetQuery);
+    return result;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } finally {
+    connection.release();
+  }
+};
+
 // 사물함 activation 상태 변경
 const modifyCabinetActivation = async (cabinetIdx, activation) => {
   const connection = await pool.getConnection();
@@ -242,10 +261,11 @@ module.exports = {
   getInfoByIntraId,
   getInfoByCabinetNum,
   modifyCabinetActivation,
+  getInactivatedCabinetList,
   getUserLent,
   getCabinet,
   getLentUserInfo,
   addLentLog,
   deleteLent,
-  getCabinetInfoByFloor
-}
+  getCabinetInfoByFloor,
+};
