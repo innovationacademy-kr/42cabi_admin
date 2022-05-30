@@ -9,7 +9,7 @@ const NavBar = () => {
           <img src="/assets/cabinet.ico" alt="logo" />
         </Link>
         <Link to="status" className="menu">
-          현황
+          연체/고장
         </Link>
         <Link to="search" className="menu">
           검색
