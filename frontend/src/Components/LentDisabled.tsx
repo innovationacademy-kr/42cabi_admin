@@ -10,6 +10,7 @@ const LentDisabledInfo = () => {
   if (
     SearchResponseRedux.resultFromLent !== undefined &&
     SearchResponseRedux.resultFromLent.length !== 0 &&
+    SearchResponseRedux.resultFromLent[0].lent_id !== null &&
     SearchResponseRedux.resultFromLent[0].activation === 0
   ) {
     return <AlertMessage>비활성화 된 사물함을 대여 중입니다!</AlertMessage>;
