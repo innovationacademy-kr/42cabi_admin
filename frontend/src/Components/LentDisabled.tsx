@@ -19,12 +19,12 @@ const LentDisabledInfo = () => {
 };
 
 const AlertMessage = styled.div`
-  font-size: 2rem;
+  font-size: 1.9rem;
   font-weight: bold;
   color: #6667ab;
   margin-top: 1rem;
   @media screen and (max-width: 380px) {
-    font-size: 4.9vw;
+    font-size: 5vw;
   }
 `;
 

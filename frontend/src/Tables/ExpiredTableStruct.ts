@@ -18,7 +18,7 @@ export const ExpiredTableStruct = [
     accessor: "expire_time",
     Cell: (props: any) => {
       const date = props;
-      return moment(date.value).format("YYYY년 MM월 DD일");
+      return moment(date.value).format("YY-MM-DD");
     },
   },
   {

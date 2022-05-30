@@ -9,6 +9,9 @@ export const DetailBox = styled.div`
   border-radius: 1.5rem;
   margin: 1rem;
   padding: 1rem;
+  @media screen and (max-width: 370px) {
+    padding: 0rem;
+  }
 `;
 
 export const BigFontSize = styled.p`
