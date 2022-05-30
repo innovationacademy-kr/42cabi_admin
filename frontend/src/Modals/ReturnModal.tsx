@@ -30,7 +30,7 @@ const ReturnModal = (props: any) => {
       : "";
 
   const ReturnAPI = () => {
-    const params = data! !== undefined ? data.cabinet_id : "";
+    const params = data !== undefined ? data.cabinet_id : "";
     const urlReturn = "http://localhost:8080/api/return?cabinetIdx=" + params;
     const urlUpdate = "http://localhost:8080/api/search";
     axios

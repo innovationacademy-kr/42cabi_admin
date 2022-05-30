@@ -109,6 +109,10 @@ const SearchButton = styled.button`
   width: 8rem;
   min-width: 5rem;
   height: 3.5rem;
+  :active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+  }
 `;
 
 export default SearchBar;

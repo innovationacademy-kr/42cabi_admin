@@ -3,7 +3,15 @@ import { prevCabinetTableStruct } from "./prevCabinetTableStruct";
 import { useTable, useSortBy } from "react-table";
 import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
-import { TableHead, TableSheet, Td, Th, Tr } from "./tableStyleComponent";
+import {
+  TableHead,
+  TableSheet,
+  Td,
+  Th,
+  Tr,
+  BigBlackText,
+  SmallGrayText,
+} from "./tableStyleComponent";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { SearchResponseFromLentLog } from "../DataTypes";
 
@@ -41,7 +49,8 @@ export const PrevCabinetTable = () => {
     );
   return (
     <div>
-      <h2>이전 사용자 기록</h2>
+      <BigBlackText>이전 대여 사물함 기록</BigBlackText>
+      <SmallGrayText>최근 10건까지 표시됩니다.</SmallGrayText>
       <TableSheet {...getTableProps()}>
         <TableHead>
           {headerGroups.map((headerGroup) => (

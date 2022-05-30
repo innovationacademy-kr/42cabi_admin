@@ -21,6 +21,10 @@ const CabiButton = styled.button<{
     cursor: default;
     opacity: 0.5;
   }
+  :active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+  }
 `;
 
 export default CabiButton;
