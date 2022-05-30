@@ -1,5 +1,4 @@
 import { useSelector, shallowEqual } from "react-redux";
-import moment from "moment";
 import { RootState } from "../ReduxModules/rootReducer";
 import styled from "styled-components";
 
@@ -9,14 +8,11 @@ const LentDisabledInfo = () => {
     shallowEqual
   );
   if (
-    SearchResponseRedux.resultFromLent === undefined ||
-    SearchResponseRedux.resultFromLent.length === 0 ||
-    (SearchResponseRedux.resultFromLent !== undefined &&
-      SearchResponseRedux.resultFromLent.length !== 0 &&
-      SearchResponseRedux.resultFromLent[0].activation === 0 &&
-      SearchResponseRedux.resultFromLent[0].lent_id !== null)
+    SearchResponseRedux.resultFromLent !== undefined &&
+    SearchResponseRedux.resultFromLent.length !== 0 &&
+    SearchResponseRedux.resultFromLent[0].activation === 0
   ) {
-    return <AlertMessage>비활성화 된 사물함이 대여 중입니다!</AlertMessage>;
+    return <AlertMessage>비활성화 된 사물함을 대여 중입니다!</AlertMessage>;
   } else {
     return <></>;
   }
@@ -27,6 +23,9 @@ const AlertMessage = styled.div`
   font-weight: bold;
   color: #6667ab;
   margin-top: 1rem;
+  @media screen and (max-width: 380px) {
+    font-size: 4.9vw;
+  }
 `;
 
 export default LentDisabledInfo;
