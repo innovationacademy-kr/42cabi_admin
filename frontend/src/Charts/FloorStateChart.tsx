@@ -10,53 +10,34 @@ import {
   Tooltip,
 } from "recharts";
 import { FloorStateData } from "../type";
+import styled from "styled-components";
 
 const FloorStateChart = () => {
   const [floorStateData, setFloorStateData] = useState<FloorStateData[]>([]);
+  const [isError, setIsError] = useState<boolean>(false);
+
   useEffect(() => {
     const fetchState = async () => {
-      // const res = await axios.get(
-      //   "http://localhost:8080/api/cabinet/count/floor"
-      // );
-
-      // 임시 데이터
-      const res = {
-        data: [
-          {
-            floor: "2",
-            total: 148,
-            used: 73,
-            overdue: 36,
-            unused: 39,
-            disabled: 0,
-          },
-          {
-            floor: "4",
-            total: 100,
-            used: 50,
-            overdue: 21,
-            unused: 28,
-            disabled: 1,
-          },
-          {
-            floor: "5",
-            total: 96,
-            used: 40,
-            overdue: 22,
-            unused: 34,
-            disabled: 0,
-          },
-        ],
-      };
-
-      res.data.forEach((element: FloorStateData) => {
-        element.floor += "F";
-      });
-      setFloorStateData(res.data);
+      try {
+        const res = await axios.get(
+          "http://localhost:8080/api/cabinet/count/floor"
+        );
+        res.data.forEach((element: FloorStateData) => {
+          element.floor += "F";
+        });
+        setFloorStateData(res.data);
+      } catch (e) {
+        console.log("error");
+        setIsError(true);
+      }
     };
     fetchState();
   }, []);
 
+  if (isError)
+    return (
+      <DataLoadErrorStyles>데이터를 불러올 수 없습니다 :(</DataLoadErrorStyles>
+    );
   return (
     <BarChart
       width={500}
@@ -79,5 +60,13 @@ const FloorStateChart = () => {
     </BarChart>
   );
 };
+
+const DataLoadErrorStyles = styled.div`
+  width: 500px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 export default FloorStateChart;
