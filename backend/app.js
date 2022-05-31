@@ -12,8 +12,8 @@ app.use(cors());
 app.use(morgan("dev"));
 
 const { apiRouter } = require("./routes/apiRoute");
-
-app.use("/api", apiRouter);
+const { authMiddleware } = require("./middleware/authmiddleware");
+app.use("/api", authMiddleware, apiRouter);
 
 app.use((err, _req, res, _next) => {
   console.log(err);
