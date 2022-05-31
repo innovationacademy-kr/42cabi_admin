@@ -1,4 +1,4 @@
-import { SearchResponseData } from "../DataTypes";
+import { SearchResponseData } from "../type";
 
 const GET_TARGET_RESPONSE = "SearchResponse/GET_TARGET_RESPONSE";
 const INITIALIZE = "SearchResponse/INITIALIZE";

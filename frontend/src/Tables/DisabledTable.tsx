@@ -5,7 +5,7 @@ import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
 import { TableHead, TableSheet, Td, Th, Tr } from "./tableStyleComponent";
 import { useNavigate, createSearchParams } from "react-router-dom";
-import { StatusResponseDisabled } from "../DataTypes";
+import { StatusResponseDisabled } from "../type";
 
 export const DisabledTable = () => {
   const StatusExpiredRedux = useSelector(

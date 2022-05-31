@@ -13,7 +13,7 @@ import {
   BigBlackText,
 } from "./tableStyleComponent";
 import { useNavigate, createSearchParams } from "react-router-dom";
-import { SearchResponseFromLentLog } from "../DataTypes";
+import { SearchResponseFromLentLog } from "../type";
 
 export const PrevUserTable = () => {
   const SearchResponseRedux = useSelector(
