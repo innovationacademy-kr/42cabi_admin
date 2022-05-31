@@ -6,6 +6,9 @@ const authMiddleware = (req, res, next) => {
   if (isLogin(req.originalUrl)) {
     return next();
   }
+  if (!req.headers.authorization) {
+    return sendResponse(res, "Unauthorized", 401);
+  }
   const token = req.headers.authorization.split(" ")[1];
 
   jwt.verify(token, getJwtSecret(), (err, _verifiedToken) => {
