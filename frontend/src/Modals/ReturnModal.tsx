@@ -33,6 +33,7 @@ const ReturnModal = (props: any) => {
     const params = data !== undefined ? data.cabinet_id : "";
     const urlReturn = "http://localhost:8080/api/return?cabinetIdx=" + params;
     const urlUpdate = "http://localhost:8080/api/search";
+    const token = localStorage.getItem("accessToken");
     axios
       .patch(urlReturn, { params })
       .then((res) => {
@@ -41,7 +42,10 @@ const ReturnModal = (props: any) => {
           intraId: searchParams.get("intraId"),
         };
         axios
-          .get(urlUpdate, { params })
+          .get(urlUpdate, {
+            params,
+            headers: { Authorization: `Bearer ${token}` },
+          })
           .then((res) => {
             // console.log(res);
             dispatch(GetTargetResponse(res.data));
