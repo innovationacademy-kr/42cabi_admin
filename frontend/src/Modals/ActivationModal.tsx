@@ -70,7 +70,6 @@ const ActivationModal = (props: any) => {
     const token = localStorage.getItem("accessToken") || "";
     const navigate = useNavigate();
     const cabinet_id = data !== undefined ? data.cabinet_id : "";
-    const token = localStorage.getItem("accessToken");
     if (noChange) {
       close(false);
     } else {
