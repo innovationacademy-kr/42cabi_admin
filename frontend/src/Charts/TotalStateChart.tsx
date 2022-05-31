@@ -11,8 +11,10 @@ const TotalStateChart = () => {
   useEffect(() => {
     const fetchState = async () => {
       try {
+        const accessToken = localStorage.getItem("accessToken");
         const res = await axios.get(
-          "http://localhost:8080/api/cabinet/count/floor"
+          "http://localhost:8080/api/cabinet/count/floor",
+          { headers: { Authorization: `Bearer ${accessToken}` } }
         );
         let used = 0,
           overdue = 0,

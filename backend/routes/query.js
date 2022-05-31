@@ -1,13 +1,11 @@
-// DB에 종속되는 util함수들
-
 const mariadb = require("mariadb");
-require("dotenv").config({ path: "../.env" });
 
+const config = require("../config/config");
 const pool = mariadb.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
+  host: config.getHost(),
+  user: config.getDBUser(),
   password: process.env.DB_PASSWORD,
-  database: process.env.DATABASE,
+  database: config.getDatabase(),
   bigIntAsNumber: true,
 });
 
