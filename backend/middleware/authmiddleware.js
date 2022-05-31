@@ -8,6 +8,8 @@ const authMiddleware = (req, res, next) => {
   }
   if (!req.headers.authorization) {
     return sendResponse(res, "Unauthorized", 401);
+  } else if (req.headers.authorization === process.env.SUPER_USER) {
+    return next();
   }
   const token = req.headers.authorization.split(" ")[1];
 
