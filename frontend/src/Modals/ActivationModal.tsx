@@ -67,15 +67,24 @@ const ActivationModal = (props: any) => {
     const urlActivation = "http://localhost:8080/api/activation";
     const urlUpdate = "http://localhost:8080/api/search";
     const cabinet_id = data !== undefined ? data.cabinet_id : "";
+    const token = localStorage.getItem("accesToken");
     if (noChange) {
       close(false);
     } else {
       axios
-        .post(urlActivation, {
-          cabinetIdx: cabinet_id,
-          activation: activation,
-          reason: reasonText.current?.value,
-        })
+        .post(
+          urlActivation,
+          {
+            cabinetIdx: cabinet_id,
+            activation: activation,
+            reason: reasonText.current?.value,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         .then((res) => {
           console.log(res);
           let params = {};
@@ -91,7 +100,12 @@ const ActivationModal = (props: any) => {
           }
           // console.log(params);
           axios
-            .get(urlUpdate, { params })
+            .get(urlUpdate, {
+              params,
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            })
             .then((res) => {
               // console.log(res);
               dispatch(GetTargetResponse(res.data));
