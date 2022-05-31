@@ -46,3 +46,16 @@ export const SmallGrayText = styled.div`
   margin-top: 0rem;
   margin-bottom: 2rem;
 `;
+
+export const TablePageControlBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem;
+`;
+
+export const TableIndexBox = styled.strong`
+  display: block;
+  width: 10rem;
+  text-align: center;
+`;
