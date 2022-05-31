@@ -31,7 +31,7 @@ const CabinetDetail = () => {
       ? data[0].floor?.toString() +
         "F " +
         data[0].section?.toString() +
-        " " +
+        " \n" +
         data[0].cabinet_num?.toString() +
         "번"
       : "";

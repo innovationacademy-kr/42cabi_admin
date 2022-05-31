@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { DisabledTableStruct } from "./DisabledTableStruct";
-import { usePagination, useTable } from "react-table";
+import { usePagination, useSortBy, useTable } from "react-table";
 import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
 import {
@@ -57,9 +57,11 @@ export const DisabledTable = () => {
       data,
       initialState: { pageSize: 15 },
     },
+    useSortBy,
     usePagination
   );
   const { pageIndex } = state;
+  const totalDataCount = StatusDisabledRedux.length;
 
   if (StatusDisabledRedux.length !== 0) {
     return (
@@ -69,9 +71,12 @@ export const DisabledTable = () => {
           <TableHead>
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <Th {...column.getHeaderProps()}>
+                {headerGroup.headers.map((column?: any) => (
+                  <Th {...column.getHeaderProps(column.getSortByToggleProps())}>
                     {column.render("Header")}
+                    <span>
+                      {column.isSorted ? (column.isSortedDesc ? "▼" : "▲") : ""}
+                    </span>
                   </Th>
                 ))}
               </Tr>
@@ -107,6 +112,7 @@ export const DisabledTable = () => {
             <TableIndexBox>
               {pageIndex + 1} / {pageOptions.length}
             </TableIndexBox>
+            총 {totalDataCount}건
           </span>
           <button onClick={() => nextPage()} disabled={!canNextPage}>
             {">"}

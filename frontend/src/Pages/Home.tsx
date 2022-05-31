@@ -23,6 +23,7 @@ const ChartContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 1rem;
+  margin-bottom: 5rem;
 
   .title {
     font-size: 1.9rem;
@@ -34,5 +35,8 @@ const HomeContainer = styled.div`
   justify-content: space-around;
   align-items: center;
   margin-top: 1rem;
+  @media screen and (max-width: 940px) {
+    flex-direction: column;
+  }
 `;
 export default Home;

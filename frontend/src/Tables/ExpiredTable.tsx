@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { ExpiredTableStruct } from "./ExpiredTableStruct";
-import { usePagination, useTable } from "react-table";
+import { usePagination, useSortBy, useTable } from "react-table";
 import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
 import {
@@ -56,9 +56,11 @@ export const ExpiredTable = () => {
       data,
       initialState: { pageSize: 15 },
     },
+    useSortBy,
     usePagination
   );
   const { pageIndex } = state;
+  const totalDataCount = StatusExpiredRedux.length;
 
   if (StatusExpiredRedux.length !== 0) {
     return (
@@ -68,9 +70,12 @@ export const ExpiredTable = () => {
           <TableHead>
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <Th {...column.getHeaderProps()}>
+                {headerGroup.headers.map((column?: any) => (
+                  <Th {...column.getHeaderProps(column.getSortByToggleProps())}>
                     {column.render("Header")}
+                    <span>
+                      {column.isSorted ? (column.isSortedDesc ? "▼" : "▲") : ""}
+                    </span>
                   </Th>
                 ))}
               </Tr>
@@ -95,7 +100,6 @@ export const ExpiredTable = () => {
             })}
           </tbody>
         </TableSheet>
-
         <TablePageControlBox>
           <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
             {"<<"}
@@ -107,6 +111,7 @@ export const ExpiredTable = () => {
             <TableIndexBox>
               {pageIndex + 1} / {pageOptions.length}
             </TableIndexBox>
+            총 {totalDataCount}건
           </span>
           <button onClick={() => nextPage()} disabled={!canNextPage}>
             {">"}

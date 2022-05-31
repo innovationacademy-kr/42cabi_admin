@@ -51,7 +51,7 @@ const FloorStateChart = () => {
       <CartesianGrid strokeDasharray="3" />
       <XAxis dataKey="floor" />
       <YAxis />
-      <Legend />
+      <Legend wrapperStyle={{ left: 30 }} />
       <Tooltip cursor={false} contentStyle={{ backgroundColor: "#ffffffcc" }} />
       <Bar name="사용 중" dataKey="used" stackId="a" fill="#05a55a" />
       <Bar name="연체" dataKey="overdue" stackId="a" fill="#f39c13" />

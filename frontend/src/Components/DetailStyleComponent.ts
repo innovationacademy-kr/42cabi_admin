@@ -9,6 +9,7 @@ export const DetailBox = styled.div`
   border-radius: 1.5rem;
   margin: 1rem;
   padding: 1rem;
+  white-space: pre-line;
   @media screen and (max-width: 370px) {
     padding: 0rem;
   }
