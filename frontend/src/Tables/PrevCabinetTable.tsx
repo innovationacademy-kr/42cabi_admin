@@ -13,7 +13,7 @@ import {
   SmallGrayText,
 } from "./tableStyleComponent";
 import { useNavigate, createSearchParams } from "react-router-dom";
-import { SearchResponseFromLentLog } from "../DataTypes";
+import { SearchResponseFromLentLog } from "../type";
 
 export const PrevCabinetTable = () => {
   const SearchResponseRedux = useSelector(

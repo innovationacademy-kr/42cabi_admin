@@ -1,4 +1,4 @@
-import { StatusResponseExpiredData } from "../DataTypes";
+import { StatusResponseExpiredData } from "../type";
 
 const GET_TARGET_RESPONSE = "StatusExpired/GET_TARGET_RESPONSE";
 const INITIALIZE = "StatusExpired/INITIALIZE";
