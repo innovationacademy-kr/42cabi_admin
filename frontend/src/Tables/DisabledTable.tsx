@@ -13,7 +13,7 @@ import {
   TableIndexBox,
 } from "./tableStyleComponent";
 import { useNavigate, createSearchParams } from "react-router-dom";
-import { StatusResponseDisabled } from "../DataTypes";
+import { StatusResponseDisabled } from "../type";
 import { PrevLogBox } from "../Components/DashboardStyleComponent";
 
 export const DisabledTable = () => {

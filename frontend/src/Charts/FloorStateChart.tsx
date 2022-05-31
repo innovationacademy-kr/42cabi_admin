@@ -19,8 +19,14 @@ const FloorStateChart = () => {
   useEffect(() => {
     const fetchState = async () => {
       try {
+        const token = localStorage.getItem("accessToken");
         const res = await axios.get(
-          "http://localhost:8080/api/cabinet/count/floor"
+          "http://localhost:8080/api/cabinet/count/floor",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         res.data.forEach((element: FloorStateData) => {
           element.floor += "F";

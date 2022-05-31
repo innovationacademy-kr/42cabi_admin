@@ -1,5 +1,5 @@
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Login = () => {
@@ -14,16 +14,44 @@ const Login = () => {
     setInputPassword(e.target.value);
   };
 
+  const handleEnterKey = (event: any) => {
+    if (event.key === "Enter") {
+      handleLogin();
+    }
+  };
+
+  const handleLogin = async () => {
+    if (!inputId || !inputPassword) {
+      alert("아이디 또는 비밀번호를 확인해주세요!");
+      return;
+    }
+    try {
+      console.log(inputId, inputPassword);
+      const res = await axios.post("http://localhost:8080/api/auth/login", {
+        id: inputId,
+        password: inputPassword,
+      });
+      localStorage.setItem("accessToken", res.data.accessToken);
+      console.log(res.data);
+      window.location.href = "/saerom";
+    } catch (e) {
+      alert("잘못된 계정입니다!");
+    }
+  };
+
   return (
     <LoginStyles>
-      <img src="/assets/logo_purple.png" alt="logo" style={{}} />
+      <div className="LoginBackground" />
+      <img src="/assets/logo.png" alt="logo" />
       <FormStyles>
         <input
           type="text"
           name="input_id"
           value={inputId}
           onChange={handleInputId}
-          placeholder="Login"
+          placeholder="ID"
+          autoComplete="off"
+          onKeyDown={handleEnterKey}
         />
         <input
           type="password"
@@ -31,11 +59,10 @@ const Login = () => {
           value={inputPassword}
           onChange={handleInputPassword}
           placeholder="Password"
+          onKeyDown={handleEnterKey}
         />
       </FormStyles>
-      <Link to="/saerom">
-        <LoginButtonStyles>LOGIN</LoginButtonStyles>
-      </Link>
+      <LoginButtonStyles onClick={handleLogin}>LOGIN</LoginButtonStyles>
     </LoginStyles>
   );
 };
@@ -52,9 +79,14 @@ const FormStyles = styled.form`
     margin-top: 1rem;
     padding-left: 1.5rem;
 
-    border: 0.1rem solid #512d83;
+    border: 0.1rem solid #ffffff;
     border-radius: 0.5rem;
-    background-color: #00000011;
+    background-color: #ffffff22;
+    color: #ffffff;
+
+    ::placeholder {
+      color: #aaa;
+    }
   }
 `;
 
@@ -63,8 +95,8 @@ const LoginButtonStyles = styled.button`
   height: 4.5rem;
   margin-top: 1.5rem;
 
-  color: #512d83;
-  border: 0.25rem solid #512d83;
+  color: #ffffff;
+  border: 0.25rem solid #ffffff;
   border-radius: 0.5rem;
   background-color: #00000000;
   letter-spacing: 0.5rem;
@@ -72,7 +104,7 @@ const LoginButtonStyles = styled.button`
   /* pointer-events: none; */
 
   :hover {
-    background-color: #00000011;
+    background-color: #ffffff22;
     transition: background-color 0.4s;
     cursor: pointer;
   }
@@ -89,6 +121,16 @@ const LoginStyles = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 5%;
+
+  .LoginBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #512d83;
+    z-index: -1;
+  }
 
   & > img {
     width: 60rem;

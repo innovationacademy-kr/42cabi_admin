@@ -50,8 +50,9 @@ const SearchDashboard = () => {
     }
 
     const url = `http://localhost:8080/api/search/`;
+    const token = localStorage.getItem("accessToken");
     axios
-      .get(url, { params })
+      .get(url, { params, headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
         dispatch(GetTargetResponse(res.data));
         setisLoading(false);

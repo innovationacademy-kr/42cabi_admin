@@ -13,7 +13,7 @@ import {
   Tr,
 } from "./tableStyleComponent";
 import { useNavigate, createSearchParams } from "react-router-dom";
-import { StatusResponseExpired } from "../DataTypes";
+import { StatusResponseExpired } from "../type";
 import { PrevLogBox } from "../Components/DashboardStyleComponent";
 
 export const ExpiredTable = () => {

@@ -1,4 +1,4 @@
-import { StatusResponseDisabledData } from "../DataTypes";
+import { StatusResponseDisabledData } from "../type";
 
 const GET_TARGET_RESPONSE = "StatusDisabled/GET_TARGET_RESPONSE";
 const INITIALIZE = "StatusDisabled/INITIALIZE";

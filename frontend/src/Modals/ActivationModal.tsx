@@ -70,6 +70,7 @@ const ActivationModal = (props: any) => {
     const token = localStorage.getItem("accessToken") || "";
     const navigate = useNavigate();
     const cabinet_id = data !== undefined ? data.cabinet_id : "";
+    const token = localStorage.getItem("accessToken");
     if (noChange) {
       close(false);
     } else {
@@ -83,7 +84,7 @@ const ActivationModal = (props: any) => {
           },
           {
             headers: {
-              Authorization: token,
+              Authorization: `Bearer ${token}`,
             },
           }
         )
@@ -105,7 +106,7 @@ const ActivationModal = (props: any) => {
             .get(urlUpdate, {
               params,
               headers: {
-                Authorization: token,
+                Authorization: `Bearer ${token}`,
               },
             })
             .then((res) => {

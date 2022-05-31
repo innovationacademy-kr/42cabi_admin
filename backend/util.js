@@ -21,11 +21,19 @@ const isNumeric = (num) => {
   return !isNaN(num);
 };
 
-function sendResponse(res, data, status) {
+const isLogin = (path) => {
+  const regExp = /login$/;
+  console.log(regExp.test(path));
+  return regExp.test(path);
+};
+
+const sendResponse = (res, data, status) => {
   res.status(status).json(data);
-}
+};
+
 module.exports = {
   wrap,
   sendResponse,
   isNumeric,
+  isLogin,
 };
