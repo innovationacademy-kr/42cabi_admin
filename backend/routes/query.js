@@ -1,6 +1,7 @@
 const mariadb = require("mariadb");
 
 const config = require("../config/config");
+
 const pool = mariadb.createPool({
   host: config.getHost(),
   user: config.getDBUser(),

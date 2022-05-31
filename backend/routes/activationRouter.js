@@ -9,7 +9,7 @@ const getInactivatedCabinet = async (_req, res) => {
   return sendResponse(res, cabinetList, 200);
 };
 
-const postActivation = async (req, res) => {
+const patchActivation = async (req, res) => {
   const { cabinetIdx, activation } = req.body;
   if (
     !cabinetIdx &&
@@ -24,6 +24,6 @@ const postActivation = async (req, res) => {
 };
 
 activationRouter.get("/", getInactivatedCabinet);
-activationRouter.post("/", postActivation);
+activationRouter.patch("/", patchActivation);
 
 module.exports = { activationRouter };
