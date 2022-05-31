@@ -8,7 +8,7 @@ const { getJwtSecret } = require("../config/config");
 authRouter.post("/login", (req, res) => {
   const { id, password } = req.body;
   if (!id || !password) {
-    return sendResponse(res, {}, 401, "Input error");
+    return sendResponse(res, {}, 400, "Input error");
   }
   if (id !== process.env.ADMIN_ID || password !== process.env.ADMIN_PASSWORD) {
     return sendResponse(res, {}, 403, "Authentication fail");

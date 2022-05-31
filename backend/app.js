@@ -12,10 +12,10 @@ app.use(cors());
 app.use(morgan("dev"));
 
 const { apiRouter } = require("./routes/apiRoute");
+
 app.use("/api", apiRouter);
 
 app.use((err, _req, res, _next) => {
-  console.log("디비 에러");
   console.log(err);
   return sendResponse(res, 500, {});
 });
