@@ -67,7 +67,7 @@ const ActivationModal = (props: any) => {
     const urlActivation = "http://localhost:8080/api/activation";
     const urlUpdate = "http://localhost:8080/api/search";
     const cabinet_id = data !== undefined ? data.cabinet_id : "";
-    const token = localStorage.getItem("accesToken");
+    const token = localStorage.getItem("accessToken");
     if (noChange) {
       close(false);
     } else {
