@@ -81,6 +81,11 @@ export const ConfirmButton = styled.button`
   :hover:enabled {
     background-color: #6667ab;
     cursor: pointer;
+  }
+  :active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+  }
 `;
 
 export const CancleButton = styled.button`
@@ -94,6 +99,11 @@ export const CancleButton = styled.button`
   :hover:enabled {
     background-color: #999999;
     cursor: pointer;
+  }
+  :active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+  }
 `;
 
 export const ToggleBtn = styled.button<{
