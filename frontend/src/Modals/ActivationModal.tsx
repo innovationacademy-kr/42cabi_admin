@@ -114,9 +114,6 @@ const ActivationModal = (props: any) => {
             })
             .catch((e) => {
               console.log(e);
-              if (e.status === 401) {
-                navigate("/");
-              }
             });
         })
         .catch((e) => {
