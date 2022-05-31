@@ -7,7 +7,6 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 app.use(express.json());
-express.extend({});
 app.set("port", process.env.PORT || 8080);
 app.use(cors());
 app.use(morgan("dev"));
