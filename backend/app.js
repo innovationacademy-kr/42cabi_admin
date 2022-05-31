@@ -7,6 +7,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 app.use(express.json());
+express.extend({});
 app.set("port", process.env.PORT || 8080);
 app.use(cors());
 app.use(morgan("dev"));
@@ -22,5 +23,5 @@ app.use((err, _req, res, _next) => {
 });
 
 app.listen(app.get("port"), () => {
-  console.log(`Example app listening on port ${app.get("port")}!`);
+  console.log(`listening on port ${app.get("port")}!`);
 });
