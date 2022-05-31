@@ -11,5 +11,6 @@ apiRouter.use("/cabinet", cabinetRouter);
 apiRouter.use("/return", returnRouter);
 apiRouter.use("/activation", activationRouter);
 apiRouter.use("/search", searchRouter);
+apiRouter.use("/auth", authRouter);
 
 module.exports = { apiRouter };
