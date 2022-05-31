@@ -35,3 +35,14 @@ export const Th = styled.th`
   background-color: #123456;
   color: white;
 `;
+
+export const BigBlackText = styled.h2`
+  margin-bottom: 0.3rem;
+`;
+
+export const SmallGrayText = styled.div`
+  font-size: 1.5rem;
+  color: gray;
+  margin-top: 0rem;
+  margin-bottom: 2rem;
+`;

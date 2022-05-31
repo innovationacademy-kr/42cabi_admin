@@ -17,16 +17,16 @@ export const prevUserTableStruct = [
     Header: "대여일",
     accessor: "lent_time",
     Cell: (props: any) => {
-      const date: string = props;
-      return moment(date).format("YY-MM-DD");
+      const date = props;
+      return moment(date.value).format("YY-MM-DD");
     },
   },
   {
     Header: "반납일",
     accessor: "expire_time",
     Cell: (props: any) => {
-      const date: string = props;
-      return moment(date).format("YY-MM-DD");
+      const date = props;
+      return moment(date.value).format("YY-MM-DD");
     },
   },
 ];

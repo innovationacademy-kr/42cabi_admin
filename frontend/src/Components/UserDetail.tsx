@@ -5,6 +5,7 @@ import moment from "moment";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import ExpiredInfo from "./ExpiredInfo";
 import { DetailBox, BigFontSize } from "./DetailStyleComponent";
+import LentDisabledInfo from "./LentDisabled";
 
 const UserDetail = () => {
   const SearchResponseRedux = useSelector(
@@ -51,6 +52,7 @@ const UserDetail = () => {
   } else {
     return (
       <DetailBox>
+        <LentDisabledInfo />
         <BigFontSize>{UserInfo}</BigFontSize>
         <p>현재 사물함 : {UserCabinetInfo}</p>
         <p>대여기간 : {UserLentInfo}</p>
