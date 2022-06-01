@@ -17,9 +17,10 @@ const authMiddleware = (req, res, next) => {
     if (err) {
       return sendResponse(res, err.message, 401);
     } //   req.verifiedToken = verifiedToken;
+    console.log('_________ pass _________');
     return next();
   });
-  return next();
+  return undefined;
 };
 
 module.exports = {
