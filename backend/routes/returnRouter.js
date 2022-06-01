@@ -1,6 +1,6 @@
-const express = require("express");
-const query = require("./query");
-const { sendResponse, isNumeric } = require("../util");
+const express = require('express');
+const query = require('./query');
+const { sendResponse, isNumeric } = require('../util');
 
 const returnRouter = express.Router();
 
@@ -35,10 +35,10 @@ const patchReturn = async (req, res) => {
     query.deleteLent(userLentInfo),
     query.addLentLog(userLentInfo),
   ]);
-  return sendResponse(res, "ok", 200);
+  return sendResponse(res, 'ok', 200);
 };
 
-returnRouter.get("/", getReturn);
-returnRouter.patch("/", patchReturn);
+returnRouter.get('/', getReturn);
+returnRouter.patch('/', patchReturn);
 
 module.exports = { returnRouter };

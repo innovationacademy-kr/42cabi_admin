@@ -1,6 +1,6 @@
-const express = require("express");
-const { sendResponse } = require("../util");
-const { getCabinetInfoByFloor } = require("./query");
+const express = require('express');
+const { sendResponse } = require('../util');
+const { getCabinetInfoByFloor } = require('./query');
 
 const cabinetRouter = express.Router();
 
@@ -10,6 +10,6 @@ const getCabinetCountFloor = async (_req, res) => {
   return sendResponse(res, cabientInfoByFloor, 200);
 };
 
-cabinetRouter.get("/count/floor", getCabinetCountFloor);
+cabinetRouter.get('/count/floor', getCabinetCountFloor);
 
 module.exports = { cabinetRouter };

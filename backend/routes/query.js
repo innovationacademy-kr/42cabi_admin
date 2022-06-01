@@ -1,6 +1,6 @@
-const mariadb = require("mariadb");
+const mariadb = require('mariadb');
 
-const config = require("../config/config");
+const config = require('../config/config');
 
 const pool = mariadb.createPool({
   host: config.getHost(),
@@ -155,7 +155,7 @@ const getLentUserInfo = async () => {
     const lentInfo = [];
 
     const content =
-      "SELECT u.intra_id, l.* FROM user u RIGHT JOIN lent l ON l.lent_user_id=u.user_id";
+      'SELECT u.intra_id, l.* FROM user u RIGHT JOIN lent l ON l.lent_user_id=u.user_id';
 
     const lockerRentalUser = await connection.query(content);
 

@@ -1,5 +1,5 @@
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Login = () => {
@@ -14,10 +14,35 @@ const Login = () => {
     setInputPassword(e.target.value);
   };
 
+  const handleEnterKey = (event: any) => {
+    if (event.key === "Enter") {
+      handleLogin();
+    }
+  };
+
+  const handleLogin = async () => {
+    if (!inputId || !inputPassword) {
+      alert("아이디 또는 비밀번호를 확인해주세요!");
+      return;
+    }
+    try {
+      console.log(inputId, inputPassword);
+      const res = await axios.post("http://localhost:8080/api/auth/login", {
+        id: inputId,
+        password: inputPassword,
+      });
+      localStorage.setItem("accessToken", res.data.accessToken);
+      console.log(res.data);
+      window.location.href = "/saerom";
+    } catch (e) {
+      alert("잘못된 계정입니다!");
+    }
+  };
+
   return (
     <LoginStyles>
       <div className="LoginBackground" />
-      <img src="/assets/logo.png" alt="logo" style={{}} />
+      <img src="/assets/logo.png" alt="logo" />
       <FormStyles>
         <input
           type="text"
@@ -32,11 +57,10 @@ const Login = () => {
           value={inputPassword}
           onChange={handleInputPassword}
           placeholder="Password"
+          onKeyDown={handleEnterKey}
         />
       </FormStyles>
-      <Link to="/saerom">
-        <LoginButtonStyles>LOGIN</LoginButtonStyles>
-      </Link>
+      <LoginButtonStyles onClick={handleLogin}>LOGIN</LoginButtonStyles>
     </LoginStyles>
   );
 };

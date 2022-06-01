@@ -1,6 +1,6 @@
-const express = require("express");
-const query = require("./query");
-const { isNumeric, sendResponse } = require("../util");
+const express = require('express');
+const query = require('./query');
+const { isNumeric, sendResponse } = require('../util');
 
 const searchRouter = express.Router();
 
@@ -19,6 +19,6 @@ const getSearch = async (req, res) => {
   return sendResponse(res, result, 200);
 };
 
-searchRouter.get("/", getSearch);
+searchRouter.get('/', getSearch);
 
 module.exports = { searchRouter };

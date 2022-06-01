@@ -19,8 +19,14 @@ const FloorStateChart = () => {
   useEffect(() => {
     const fetchState = async () => {
       try {
+        const token = localStorage.getItem("accessToken");
         const res = await axios.get(
-          "http://localhost:8080/api/cabinet/count/floor"
+          "http://localhost:8080/api/cabinet/count/floor",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         res.data.forEach((element: FloorStateData) => {
           element.floor += "F";
@@ -51,7 +57,7 @@ const FloorStateChart = () => {
       <CartesianGrid strokeDasharray="3" />
       <XAxis dataKey="floor" />
       <YAxis />
-      <Legend />
+      <Legend wrapperStyle={{ left: 30 }} />
       <Tooltip cursor={false} contentStyle={{ backgroundColor: "#ffffffcc" }} />
       <Bar name="사용 중" dataKey="used" stackId="a" fill="#05a55a" />
       <Bar name="연체" dataKey="overdue" stackId="a" fill="#f39c13" />

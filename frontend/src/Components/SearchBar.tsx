@@ -99,7 +99,7 @@ const SearchInput = styled.input`
   width: 23rem;
   min-width: 7rem;
   height: 3rem;
-  justifycontent: flex-center;
+  /* justify-content: flex-center; */
 `;
 
 const SearchButton = styled.button`

@@ -14,6 +14,13 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ButtonSet from "../Components/ButtonSet";
 import Toast from "../Components/Toast";
+import {
+  DashboardBox,
+  LeftBox,
+  RightBox,
+  GrayBgBox,
+  ButtonBox,
+} from "../Components/DashboardStyleComponent";
 
 const SearchDashboard = () => {
   const [isLoading, setisLoading] = useState(true);
@@ -43,8 +50,9 @@ const SearchDashboard = () => {
     }
 
     const url = `http://localhost:8080/api/search/`;
+    const token = localStorage.getItem("accessToken");
     axios
-      .get(url, { params })
+      .get(url, { params, headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
         dispatch(GetTargetResponse(res.data));
         setisLoading(false);
@@ -101,83 +109,21 @@ const SearchDashboard = () => {
   return (
     <DashboardBox>
       <LeftBox>
-        <DetailBox>
+        <GrayBgBox>
           <DetailType />
-        </DetailBox>
+        </GrayBgBox>
         <ButtonBox>
           <ButtonSet />
         </ButtonBox>
       </LeftBox>
       <RightBox>
-        <TableBox>
+        <GrayBgBox>
           <TableType />
-        </TableBox>
+        </GrayBgBox>
         <Toast />
       </RightBox>
     </DashboardBox>
   );
 };
-
-const DashboardBox = styled.div`
-  display: flex;
-  width: 99%;
-  height: 90%;
-  justify-content: center;
-  // border: 0.5rem solid #6667ab;
-  @media screen and (max-width: 724px) {
-    flex-direction: column;
-    align-items: center;
-  }
-  padding-bottom: 5rem;
-`;
-
-const LeftBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  width: 50%;
-  margin: 0.3rem;
-  // border: 0.2rem solid red;
-  @media screen and (max-width: 724px) {
-    width: 95%;
-  }
-`;
-
-const RightBox = styled.div`
-  display: block;
-  align-items: center;
-  text-align: center;
-  width: 50%;
-  margin: 0.3rem;
-  // border: 0.2rem solid blue;
-  @media (max-width: 724px) {
-    width: 95%;
-  }
-`;
-
-const DetailBox = styled.div`
-  display: flex;
-  width: 100%;
-  margin: 0.2rem;
-  margin-top: 0;
-  flex-direction: column;
-  // justify-content: center;
-`;
-
-const ButtonBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const TableBox = styled.div`
-  margin: 0.2rem;
-  margin-top: 1rem;
-  padding: 1rem;
-  border-radius: 1.5rem;
-  // border: 0.2rem solid green;
-  background-color: #dddddd;
-`;
 
 export default SearchDashboard;

@@ -1,16 +1,16 @@
-require("dotenv").config({ path: "../.env" });
+require('dotenv').config({ path: '../.env' });
 
 const getHost = () => {
   const host = process.env.HOST;
   if (!host) {
-    throw new Error("HOST not defined");
+    throw new Error('HOST not defined');
   }
   return host;
 };
 const getDBUser = () => {
   const dbUser = process.env.DB_USER;
   if (!dbUser) {
-    throw new Error("DB_USER not defined");
+    throw new Error('DB_USER not defined');
   }
   return dbUser;
 };
@@ -18,7 +18,7 @@ const getDBUser = () => {
 const getDBPassword = () => {
   const dbPassword = process.env.DB_PASSWORD;
   if (!dbPassword) {
-    throw new Error("DB_PASSWORD not defined");
+    throw new Error('DB_PASSWORD not defined');
   }
   return dbPassword;
 };
@@ -26,13 +26,13 @@ const getDBPassword = () => {
 const getDatabase = () => {
   const database = process.env.DATABASE;
   if (!database) {
-    throw new Error("DB_NAME not defined");
+    throw new Error('DB_NAME not defined');
   }
   return database;
 };
 
 const getJwtSecret = () =>
-  process.env.JWT_SECRET ?? "jiwchoijaesjeonyubchoiyoyoo";
+  process.env.JWT_SECRET ?? 'jiwchoijaesjeonyubchoiyoyoo';
 
 module.exports = {
   getHost,
