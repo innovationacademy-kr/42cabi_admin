@@ -1,6 +1,7 @@
 const express = require("express");
 const { sendResponse } = require("../util");
 const { getCabinetInfoByFloor } = require("./query");
+
 const cabinetRouter = express.Router();
 
 // 층별 사물함 현황(sum)

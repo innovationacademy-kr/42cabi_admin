@@ -31,9 +31,8 @@ const getDatabase = () => {
   return database;
 };
 
-const getJwtSecret = () => {
-  return process.env.JWT_SECRET ?? "jiwchoijaesjeonyubchoiyoyoo";
-};
+const getJwtSecret = () =>
+  process.env.JWT_SECRET ?? "jiwchoijaesjeonyubchoiyoyoo";
 
 module.exports = {
   getHost,

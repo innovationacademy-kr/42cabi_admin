@@ -1,6 +1,7 @@
 const mariadb = require("mariadb");
 
 const config = require("../config/config");
+
 const pool = mariadb.createPool({
   host: config.getHost(),
   user: config.getDBUser(),
@@ -35,14 +36,11 @@ const getInfoByIntraId = async (intraId) => {
       `;
     const resultFromLent = await connection.query(getInfoFromLentQuery);
     const resultFromLentLog = await connection.query(getInfoFromLentLogQuery);
-    // console.log("=====searchIntraId=====");
     const result = {
-      resultFromLent: resultFromLent,
-      resultFromLentLog: resultFromLentLog,
+      resultFromLent,
+      resultFromLentLog,
     };
     return result;
-  } catch (err) {
-    throw err;
   } finally {
     connection.release();
   }
@@ -75,12 +73,10 @@ const getInfoByCabinetNum = async (cabinetNum, floor) => {
       getInfoByCabinetNumFromLentLogQuery
     );
     const result = {
-      resultFromLent: resultFromLent,
-      resultFromLentLog: resultFromLentLog,
+      resultFromLent,
+      resultFromLentLog,
     };
     return result;
-  } catch (err) {
-    throw err;
   } finally {
     connection.release();
   }
@@ -115,8 +111,6 @@ const modifyCabinetActivation = async (cabinetIdx, activation) => {
       WHERE cabinet_id=${cabinetIdx}
     `;
     await connection.query(content);
-  } catch (err) {
-    throw err;
   } finally {
     connection.release();
   }
@@ -132,8 +126,6 @@ const getUserLent = async (cabinetIdx) => {
       WHERE lent_cabinet_id = ${cabinetIdx}
       `);
     return result;
-  } catch (err) {
-    throw err;
   } finally {
     connection.release();
   }
@@ -151,8 +143,6 @@ const getCabinet = async (cabinetIdx) => {
         WHERE c.cabinet_id=${cabinetIdx}
         `);
     return result;
-  } catch (err) {
-    throw err;
   } finally {
     connection.release();
   }
@@ -162,14 +152,14 @@ const getCabinet = async (cabinetIdx) => {
 const getLentUserInfo = async () => {
   const connection = await pool.getConnection();
   try {
-    let lentInfo = [];
+    const lentInfo = [];
 
     const content =
       "SELECT u.intra_id, l.* FROM user u RIGHT JOIN lent l ON l.lent_user_id=u.user_id";
 
     const lockerRentalUser = await connection.query(content);
 
-    for (let i = 0; i < lockerRentalUser.length; i++) {
+    for (let i = 0; i < lockerRentalUser.length; i += 1) {
       lentInfo.push({
         lent_id: lockerRentalUser[i].lent_id,
         lent_cabinet_id: lockerRentalUser[i].lent_cabinet_id,
@@ -180,9 +170,7 @@ const getLentUserInfo = async () => {
         intra_id: lockerRentalUser[i].intra_id,
       });
     }
-    return { lentInfo: lentInfo };
-  } catch (err) {
-    throw err;
+    return { lentInfo };
   } finally {
     connection.release();
   }
@@ -196,8 +184,6 @@ const addLentLog = async (userLentInfo) => {
       INSERT INTO lent_log(log_cabinet_id, log_user_id, lent_time, return_time) 
       VALUES (${userLentInfo.lent_cabinet_id}, ${userLentInfo.lent_user_id}, '${userLentInfo.lent_time}', now())
       `);
-  } catch (err) {
-    throw err;
   } finally {
     connection.release();
   }
@@ -212,8 +198,6 @@ const deleteLent = async (userLentInfo) => {
       FROM lent 
       WHERE lent_cabinet_id=${userLentInfo.lent_cabinet_id}
     `);
-  } catch (err) {
-    throw err;
   } finally {
     connection.release();
   }
@@ -234,9 +218,10 @@ const getLentOverdue = async () => {
 		`;
     const result = await connection.query(content);
     return result;
-  } catch (err) {
-    throw err;
   } finally {
+    // catch (err) {
+    //    throw err;
+    //  }
     connection.release();
   }
 };
@@ -258,12 +243,11 @@ const getCabinetInfoByFloor = async () => {
       group by floor;
     `;
     const result = await connection.query(content);
-    console.log("------getCabinetInfoByFloor------");
-    console.log(result);
     return result;
-  } catch (err) {
-    throw err;
   } finally {
+    // catch (err) {
+    //    throw err;
+    //  }
     connection.release();
   }
 };

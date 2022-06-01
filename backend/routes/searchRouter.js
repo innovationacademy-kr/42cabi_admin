@@ -1,6 +1,7 @@
 const express = require("express");
 const query = require("./query");
 const { isNumeric, sendResponse } = require("../util");
+
 const searchRouter = express.Router();
 
 // // intra_id, cabinetNum 검색 기능

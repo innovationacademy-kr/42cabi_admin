@@ -1,5 +1,5 @@
-const { getJwtSecret } = require("../config/config");
 const jwt = require("jsonwebtoken");
+const { getJwtSecret } = require("../config/config");
 const { sendResponse, isLogin } = require("../util");
 
 const authMiddleware = (req, res, next) => {
@@ -17,8 +17,9 @@ const authMiddleware = (req, res, next) => {
     if (err) {
       return sendResponse(res, err.message, 401);
     } //   req.verifiedToken = verifiedToken;
-    next();
+    return next();
   });
+  return next();
 };
 
 module.exports = {
