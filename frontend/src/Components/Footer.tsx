@@ -7,10 +7,34 @@ const Footer = () => {
         <a
           className="textLink"
           target="_blank"
-          href="https://github.com/innovationacademy-kr/42cabi_admin/issues/new?assignees=&labels=&template=bug_report.md&title="
+          href="https://42born2code.slack.com/app_redirect?channel=U02LZQFGS1E"
           rel="noreferrer"
         >
-          Report&nbsp;|
+          jaesjeon&nbsp;|
+        </a>
+        <a
+          className="textLink"
+          target="_blank"
+          href="https://42born2code.slack.com/app_redirect?channel=U02L3CFRYPQ"
+          rel="noreferrer"
+        >
+          &nbsp;yubchoi&nbsp;|
+        </a>
+        <a
+          className="textLink"
+          target="_blank"
+          href="https://42born2code.slack.com/app_redirect?channel=U020PTXTWCU"
+          rel="noreferrer"
+        >
+          &nbsp;yoyoo&nbsp;|
+        </a>
+        <a
+          className="textLink"
+          target="_blank"
+          href="https://42born2code.slack.com/app_redirect?channel=U01H7F1RP0A"
+          rel="noreferrer"
+        >
+          &nbsp;jiwchoi&nbsp;|
         </a>
         <a
           className="textLink"
@@ -19,14 +43,6 @@ const Footer = () => {
           rel="noreferrer"
         >
           &nbsp;Github&nbsp;
-        </a>
-        <a
-          className="textLink"
-          target="_blank"
-          href="https://www.notion.so/hyunja/42cabi-5fc66d1a6b0a4c48862b2e66e7cf1397"
-          rel="noreferrer"
-        >
-          |&nbsp;Notion
         </a>
         <div>© 2022 42Cabi</div>
       </div>
