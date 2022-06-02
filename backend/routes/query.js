@@ -1,6 +1,6 @@
 const pool = require('../config/database');
 
-// 검색 by intraId
+// 검색 BY intraId FROM lent
 const getLentByIntraId = async (connection, intraId) => {
   const getLentInfoQuery = `
     SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_id, l.lent_time, l.expire_time
@@ -15,6 +15,7 @@ const getLentByIntraId = async (connection, intraId) => {
   return result;
 };
 
+// 검색 BY intraId FROM lent_log
 const getLentLogByIntraId = async (connection, intraId) => {
   const getLentLogInfoQuery = `
     SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.log_id, ll.lent_time, ll.return_time
@@ -31,7 +32,7 @@ const getLentLogByIntraId = async (connection, intraId) => {
   return result;
 };
 
-// 검색 by 사물함 번호
+// 검색 BY 사물함 번호 FROM lent
 const getLentByCabinetNum = async (connection, params) => {
   const content = `
     SELECT (select intra_id from user u where u.user_id=l.lent_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_id, l.lent_time, l.expire_time
@@ -44,6 +45,7 @@ const getLentByCabinetNum = async (connection, params) => {
   return resultFromLent;
 };
 
+// 검색 BY 사물함 번호 FROM lent_log
 const getLentLogByCabinetNum = async (connection, params) => {
   const content = `
     SELECT (select intra_id from user u where u.user_id=ll.log_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.log_id, ll.lent_time, ll.return_time
