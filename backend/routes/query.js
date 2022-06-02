@@ -1,6 +1,5 @@
-const mariadb = require('mariadb');
+const pool = require('../config/database');
 
-const config = require('../config/config');
 // 검색 by intraId
 const getInfoByIntraId = async (intraId) => {
   const connection = await pool.getConnection();
@@ -108,18 +107,14 @@ const modifyCabinetActivation = async (cabinetIdx, activation) => {
 };
 
 // 반납할 사물함의 lent 정보 가져옴
-const getUserLent = async (cabinetIdx) => {
-  const connection = await pool.getConnection();
-  try {
-    const [result] = await connection.query(`
-      SELECT lent_cabinet_id, lent_user_id, DATE_FORMAT(lent_time, '%Y-%m-%d %H:%i:%s') AS lent_time
-      FROM lent
-      WHERE lent_cabinet_id = ${cabinetIdx}
-      `);
-    return result;
-  } finally {
-    connection.release();
-  }
+const getUserLent = async (connection, cabinetIdx) => {
+  const getUserLentQuery = `
+    SELECT lent_cabinet_id, lent_user_id, DATE_FORMAT(lent_time, '%Y-%m-%d %H:%i:%s') AS lent_time
+    FROM lent
+    WHERE lent_cabinet_id = ${cabinetIdx}
+  `;
+  const [result] = await connection.query(getUserLentQuery);
+  return result;
 };
 
 // 특정 사물함 + (user + lent) 정보 가져옴
@@ -168,30 +163,22 @@ const getLentUserInfo = async () => {
 };
 
 // lent_log에 반납되는 사물함 정보 추가
-const addLentLog = async (userLentInfo) => {
-  const connection = await pool.getConnection();
-  try {
-    await connection.query(`
-      INSERT INTO lent_log(log_cabinet_id, log_user_id, lent_time, return_time) 
-      VALUES (${userLentInfo.lent_cabinet_id}, ${userLentInfo.lent_user_id}, '${userLentInfo.lent_time}', now())
-      `);
-  } finally {
-    connection.release();
-  }
+const addLentLog = async (connection, userLentInfo) => {
+  const addLentLogQuery = `
+    INSERT INTO lent_log(log_cabinet_id, log_user_id, lent_time, return_time) 
+    VALUES (${userLentInfo.lent_cabinet_id}, ${userLentInfo.lent_user_id}, '${userLentInfo.lent_time}', now())
+    `;
+  await connection.query(addLentLogQuery);
 };
 
 // lent 테이블에서 사물함 정보 삭제
-const deleteLent = async (userLentInfo) => {
-  const connection = await pool.getConnection();
-  try {
-    await connection.query(`
-      DELETE 
-      FROM lent 
-      WHERE lent_cabinet_id=${userLentInfo.lent_cabinet_id}
-    `);
-  } finally {
-    connection.release();
-  }
+const deleteLent = async (connection, userLentInfo) => {
+  const deleteLentQuery = `
+    DELETE 
+    FROM lent 
+    WHERE lent_cabinet_id=${userLentInfo.lent_cabinet_id}
+    `;
+  await connection.query(deleteLentQuery);
 };
 
 const getLentOverdue = async () => {
