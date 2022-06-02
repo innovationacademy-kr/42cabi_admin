@@ -50,8 +50,6 @@ const Login = () => {
           value={inputId}
           onChange={handleInputId}
           placeholder="ID"
-          autoComplete="off"
-          onKeyDown={handleEnterKey}
         />
         <input
           type="password"

@@ -7,23 +7,17 @@
  */
 
 // middleware wrapper
-const wrap = (asyncFn) => {
-  return async (req, res, next) => {
-    try {
-      return await asyncFn(req, res, next);
-    } catch (error) {
-      return next(error);
-    }
-  };
+const wrap = (asyncFn) => async (req, res, next) => {
+  try {
+    return await asyncFn(req, res, next);
+  } catch (error) {
+    return next(error);
+  }
 };
-
-const isNumeric = (num) => {
-  return !isNaN(num);
-};
+const isNumeric = (num) => !Number.isNaN(num);
 
 const isLogin = (path) => {
   const regExp = /login$/;
-  console.log(regExp.test(path));
   return regExp.test(path);
 };
 
