@@ -1,6 +1,7 @@
-const express = require("express");
-const query = require("./query");
-const { sendResponse, isNumeric } = require("../util");
+const express = require('express');
+const query = require('./query');
+const { sendResponse, isNumeric } = require('../util');
+
 const returnRouter = express.Router();
 
 // 특정 사물함의 정보 ( 대여중이라면: + 유저 + 렌트 정보) 가져옴
@@ -34,10 +35,10 @@ const patchReturn = async (req, res) => {
     query.deleteLent(userLentInfo),
     query.addLentLog(userLentInfo),
   ]);
-  return sendResponse(res, "ok", 200);
+  return sendResponse(res, 'ok', 200);
 };
 
-returnRouter.get("/", getReturn);
-returnRouter.patch("/", patchReturn);
+returnRouter.get('/', getReturn);
+returnRouter.patch('/', patchReturn);
 
 module.exports = { returnRouter };

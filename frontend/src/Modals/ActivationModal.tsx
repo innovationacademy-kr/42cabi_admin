@@ -18,6 +18,7 @@ import styled from "styled-components";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { GetTargetResponse } from "../ReduxModules/SearchResponse";
+import { useNavigate } from "react-router-dom";
 
 const ActivationModal = (props: any) => {
   const SearchResponseRedux = useSelector(
@@ -66,8 +67,9 @@ const ActivationModal = (props: any) => {
   const ActivationAPI = (activation: number, noChange: boolean) => {
     const urlActivation = "http://localhost:8080/api/activation";
     const urlUpdate = "http://localhost:8080/api/search";
+    const token = localStorage.getItem("accessToken") || "";
+    const navigate = useNavigate();
     const cabinet_id = data !== undefined ? data.cabinet_id : "";
-    const token = localStorage.getItem("accesToken");
     if (noChange) {
       close(false);
     } else {
@@ -112,6 +114,9 @@ const ActivationModal = (props: any) => {
             })
             .catch((e) => {
               console.log(e);
+              if (e.status === 401) {
+                navigate("/");
+              }
             });
         })
         .catch((e) => {
