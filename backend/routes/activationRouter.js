@@ -1,6 +1,7 @@
-const express = require("express");
-const query = require("./query");
-const { sendResponse, isNumeric } = require("../util");
+const express = require('express');
+const query = require('./query');
+const { sendResponse, isNumeric } = require('../util');
+
 const activationRouter = express.Router();
 
 // 고장 사물함 리스트 조회
@@ -20,10 +21,10 @@ const postActivation = async (req, res) => {
     return sendResponse(res, {}, 400);
   }
   await query.modifyCabinetActivation(cabinetIdx, activation);
-  return sendResponse(res, "ok", 200);
+  return sendResponse(res, 'ok', 200);
 };
 
-activationRouter.get("/", getInactivatedCabinet);
-activationRouter.post("/", postActivation);
+activationRouter.get('/', getInactivatedCabinet);
+activationRouter.post('/', postActivation);
 
 module.exports = { activationRouter };

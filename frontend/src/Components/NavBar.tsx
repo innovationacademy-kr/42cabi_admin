@@ -29,6 +29,10 @@ const NavBarStyles = styled.div`
   justify-content: space-between;
   background: #7d57c9;
   color: white;
+  font-size: 3.5vw;
+  @media screen and (min-width: 477px) {
+    font-size: 1.6rem;
+  }
 
   .left {
     display: flex;
@@ -38,8 +42,13 @@ const NavBarStyles = styled.div`
 
     img {
       margin: 1rem;
-      height: 4.5rem;
+      height: 7vw;
+      max-height: 4.5rem;
       vertical-align: middle;
+      @media screen and (max-width: 400px) {
+        margin-left: 0.1rem;
+        margin-right: 0.1rem;
+      }
     }
   }
 

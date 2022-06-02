@@ -26,7 +26,7 @@ const ExpiredInfo = () => {
         <ExpiredMessage>연체 상황 : {overDays}일 째 연체 중!</ExpiredMessage>
       );
     } else {
-      return <Message>연체 상황 : 해당 없음</Message>;
+      return <div>연체 상황 : 해당 없음</div>;
     }
   }
 };
@@ -35,10 +35,6 @@ const ExpiredMessage = styled.div`
   font-size: 2rem;
   font-weight: bold;
   color: #bc0000;
-  margin-bottom: 1rem;
-`;
-
-const Message = styled.div`
   margin-bottom: 1rem;
 `;
 

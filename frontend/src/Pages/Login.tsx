@@ -21,15 +21,15 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    // if (!inputId || !inputPassword) {
-    //   alert("아이디 또는 비밀번호를 확인해주세요!");
-    //   return;
-    // }
+    if (!inputId || !inputPassword) {
+      alert("아이디 또는 비밀번호를 확인해주세요!");
+      return;
+    }
     try {
       console.log(inputId, inputPassword);
       const res = await axios.post("http://localhost:8080/api/auth/login", {
-        id: "admin",
-        password: "WeL0ve42Cabi!",
+        id: inputId,
+        password: inputPassword,
       });
       localStorage.setItem("accessToken", res.data.accessToken);
       console.log(res.data);
