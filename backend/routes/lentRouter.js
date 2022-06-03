@@ -1,7 +1,7 @@
 const express = require('express');
 
 const lentRouter = express.Router();
-const { getLentUserInfo, getLentOverdue } = require('./query');
+const { getLentUserInfo, getLentOverdue } = require('../db/query');
 const { sendResponse } = require('../util');
 const pool = require('../config/database');
 

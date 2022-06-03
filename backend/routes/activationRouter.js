@@ -1,5 +1,5 @@
 const express = require('express');
-const query = require('./query');
+const query = require('../db/query');
 const { sendResponse, isNumeric } = require('../util');
 const pool = require('../config/database');
 

@@ -1,5 +1,3 @@
-// const pool = require('../config/database');
-
 // 검색 BY intraId FROM lent
 const getLentByIntraId = async (connection, intraId) => {
   const getLentInfoQuery = `
@@ -63,10 +61,10 @@ const getLentLogByCabinetNum = async (connection, cabinetNum, floor) => {
 // 고장 사물함 리스트 조회
 const getInactivatedCabinetList = async (connection) => {
   const getInactivatedCabinetQuery = `
-      SELECT floor, cabinet_num
-      FROM cabinet c
-      WHERE c.activation=0;
-      `;
+    SELECT floor, cabinet_num
+    FROM cabinet c
+    WHERE c.activation=0;
+    `;
   const result = await connection.query(getInactivatedCabinetQuery);
   return result;
 };
@@ -74,9 +72,9 @@ const getInactivatedCabinetList = async (connection) => {
 // 사물함 activation 상태 변경
 const modifyCabinetActivation = async (connection, cabinetIdx, activation) => {
   const content = `
-      UPDATE cabinet c
-      SET activation=${activation}
-      WHERE cabinet_id=${cabinetIdx}
+    UPDATE cabinet c
+    SET activation=${activation}
+    WHERE cabinet_id=${cabinetIdx}
     `;
   await connection.query(content);
 };
@@ -87,22 +85,21 @@ const getUserLent = async (connection, cabinetIdx) => {
     SELECT lent_cabinet_id, lent_user_id, DATE_FORMAT(lent_time, '%Y-%m-%d %H:%i:%s') AS lent_time
     FROM lent
     WHERE lent_cabinet_id = ${cabinetIdx}
-  `;
+    `;
   const [result] = await connection.query(getUserLentQuery);
   return result;
 };
 
 // 특정 사물함 + (user + lent) 정보 가져옴
 const getCabinet = async (connection, cabinetIdx) => {
-  const [result] = await connection.query(
-    `
-        SELECT *
-        FROM cabinet c
-        LEFT JOIN lent l ON c.cabinet_id=l.lent_cabinet_id
-        LEFT JOIN user u ON l.lent_user_id=u.user_id 
-        WHERE c.cabinet_id = ${cabinetIdx}
-        `
-  );
+  const getCabinetQuery = `
+    SELECT *
+    FROM cabinet c
+    LEFT JOIN lent l ON c.cabinet_id=l.lent_cabinet_id
+    LEFT JOIN user u ON l.lent_user_id=u.user_id 
+    WHERE c.cabinet_id = ${cabinetIdx};
+    `;
+  const [result] = await connection.query(getCabinetQuery);
   return result;
 };
 
@@ -110,8 +107,11 @@ const getCabinet = async (connection, cabinetIdx) => {
 const getLentUserInfo = async (connection) => {
   const lentInfo = [];
 
-  const content =
-    'SELECT u.intra_id, l.* FROM user u RIGHT JOIN lent l ON l.lent_user_id=u.user_id';
+  const content = `SELECT u.intra_id, l.*
+    FROM user u
+    RIGHT JOIN lent l
+    ON l.lent_user_id=u.user_id
+    `;
 
   const lockerRentalUser = await connection.query(content);
 
@@ -165,16 +165,16 @@ const getLentOverdue = async (connection) => {
 // 현황탭 층별 사물함 정보(sum)
 const getCabinetInfoByFloor = async (connection) => {
   const content = `
-      SELECT c.floor,
-      COUNT(*) as total,
-      COUNT(case when c.cabinet_id=l.lent_cabinet_id and l.expire_time>now() then 1 end) as used,
-      COUNT(case when l.expire_time<now() then 1 end) as overdue,
-      COUNT(case when l.lent_cabinet_id is null and c.activation=1 then 1 end) as unused,
-      COUNT(case when c.activation=0 then 1 end) as disabled
-      FROM cabinet c
-      LEFT JOIN lent l
-      ON c.cabinet_id=l.lent_cabinet_id
-      group by floor;
+    SELECT c.floor,
+    COUNT(*) as total,
+    COUNT(case when c.cabinet_id=l.lent_cabinet_id and l.expire_time>now() then 1 end) as used,
+    COUNT(case when l.expire_time<now() then 1 end) as overdue,
+    COUNT(case when l.lent_cabinet_id is null and c.activation=1 then 1 end) as unused,
+    COUNT(case when c.activation=0 then 1 end) as disabled
+    FROM cabinet c
+    LEFT JOIN lent l
+    ON c.cabinet_id=l.lent_cabinet_id
+    group by floor;
     `;
   const result = await connection.query(content);
   return result;

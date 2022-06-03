@@ -1,6 +1,6 @@
 const express = require('express');
 const { sendResponse } = require('../util');
-const { getCabinetInfoByFloor } = require('./query');
+const { getCabinetInfoByFloor } = require('../db/query');
 const pool = require('../config/database');
 
 const cabinetRouter = express.Router();
