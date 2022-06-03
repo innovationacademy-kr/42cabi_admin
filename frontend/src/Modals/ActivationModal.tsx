@@ -72,7 +72,7 @@ const ActivationModal = (props: any) => {
       close(false);
     } else {
       axios
-        .post(
+        .patch(
           urlActivation,
           {
             cabinetIdx: cabinet_id,
