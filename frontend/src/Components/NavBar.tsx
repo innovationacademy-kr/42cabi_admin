@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Logout from "./Logout";
 
 const NavBar = () => {
   return (
@@ -16,9 +17,9 @@ const NavBar = () => {
         </Link>
       </div>
       <div className="right">
-        <Link to="/" className="menu">
-          로그아웃
-        </Link>
+        <div className="menu">
+          <Logout />
+        </div>
       </div>
     </NavBarStyles>
   );

@@ -35,7 +35,13 @@ const ReturnModal = (props: any) => {
     const urlUpdate = "http://localhost:8080/api/search";
     const token = localStorage.getItem("accessToken");
     axios
-      .patch(urlReturn, { params })
+      .patch(
+        urlReturn,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((res) => {
         console.log(res);
         const params = {
