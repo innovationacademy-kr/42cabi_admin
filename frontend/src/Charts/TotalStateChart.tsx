@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
 import { FloorStateData, PieData } from "../type";
 import styled from "styled-components";
+import * as API from "../Networks/APIType";
 
 const TotalStateChart = () => {
   const [totalState, setTotalState] = useState<PieData[]>([]);
@@ -12,13 +12,12 @@ const TotalStateChart = () => {
     const fetchState = async () => {
       try {
         const token = localStorage.getItem("accessToken");
-        const res = await axios.get(
-          "http://localhost:8080/api/cabinet/count/floor",
+        const res = await API.axiosFormat(
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+            method: "GET",
+            url: API.url("/api/cabinet/count/floor"),
+          },
+          token
         );
         let used = 0,
           overdue = 0,
