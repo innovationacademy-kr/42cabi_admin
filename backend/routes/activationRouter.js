@@ -1,13 +1,22 @@
 const express = require('express');
 const query = require('./query');
 const { sendResponse, isNumeric } = require('../util');
+const pool = require('../config/database');
 
 const activationRouter = express.Router();
 
 // 고장 사물함 리스트 조회
 const getInactivatedCabinet = async (_req, res) => {
-  const cabinetList = await query.getInactivatedCabinetList();
-  return sendResponse(res, cabinetList, 200);
+  const connection = await pool.getConnection();
+  try {
+    const cabinetList = await query.getInactivatedCabinetList(connection);
+    return sendResponse(res, cabinetList, 200);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } finally {
+    connection.release();
+  }
 };
 
 const patchActivation = async (req, res) => {
@@ -20,8 +29,17 @@ const patchActivation = async (req, res) => {
   ) {
     return sendResponse(res, {}, 400);
   }
-  await query.modifyCabinetActivation(cabinetIdx, activation);
-  return sendResponse(res, 'ok', 200);
+
+  const connection = await pool.getConnection();
+  try {
+    await query.modifyCabinetActivation(connection, cabinetIdx, activation);
+    return sendResponse(res, 'ok', 200);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } finally {
+    connection.release();
+  }
 };
 
 activationRouter.get('/', getInactivatedCabinet);

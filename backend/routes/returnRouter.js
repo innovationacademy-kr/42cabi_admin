@@ -13,11 +13,19 @@ const getReturn = async (req, res) => {
     return sendResponse(res, {}, 400);
   }
 
-  const cabinetInfo = await query.getCabinet(cabinetIdx);
-  if (!cabinetInfo) {
-    return sendResponse(res, {}, 400);
+  const connection = await pool.getConnection();
+  try {
+    const cabinetInfo = await query.getCabinet(connection, cabinetIdx);
+    if (!cabinetInfo) {
+      return sendResponse(res, {}, 400);
+    }
+    return sendResponse(res, cabinetInfo, 200);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } finally {
+    connection.release();
   }
-  return sendResponse(res, cabinetInfo, 200);
 };
 
 // 특정 사물함 반납 처리
