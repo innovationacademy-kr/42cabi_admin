@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import CabinetDetail from "../Components/CabinetDetail";
 import UserDetail from "../Components/UserDetail";
 import PrevCabinetTable from "../Tables/PrevCabinetTable";
