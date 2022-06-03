@@ -28,12 +28,16 @@ const getSearch = async (req, res) => {
       isNumeric(cabinetNum) &&
       isNumeric(floor)
     ) {
-      const params = [cabinetNum, floor];
       await Promise.all([
-        (resultFromLent = await query.getLentByCabinetNum(connection, params)),
+        (resultFromLent = await query.getLentByCabinetNum(
+          connection,
+          cabinetNum,
+          floor
+        )),
         (resultFromLentLog = await query.getLentLogByCabinetNum(
           connection,
-          params
+          cabinetNum,
+          floor
         )),
       ]);
     } else {

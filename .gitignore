@@ -115,4 +115,3 @@ backend/views/index.html
 
 backend/.gitignore
 backend/test.js
-backend/config/database.js

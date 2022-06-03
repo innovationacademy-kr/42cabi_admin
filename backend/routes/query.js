@@ -9,9 +9,9 @@ const getLentByIntraId = async (connection, intraId) => {
     ON u.user_id=l.lent_user_id
     LEFT JOIN cabinet c
     ON l.lent_cabinet_id=c.cabinet_id
-    WHERE u.intra_id = ?;
+    WHERE u.intra_id = '${intraId}';
     `;
-  const result = await connection.query(getLentInfoQuery, intraId);
+  const result = await connection.query(getLentInfoQuery);
   return result;
 };
 
@@ -24,39 +24,39 @@ const getLentLogByIntraId = async (connection, intraId) => {
     ON u.user_id=ll.log_user_id
     LEFT JOIN cabinet c
     ON ll.log_cabinet_id=c.cabinet_id
-    WHERE u.intra_id = ?
+    WHERE u.intra_id = '${intraId}'
     ORDER BY lent_time DESC
     LIMIT 10;
     `;
-  const result = await connection.query(getLentLogInfoQuery, intraId);
+  const result = await connection.query(getLentLogInfoQuery);
   return result;
 };
 
 // 검색 BY 사물함 번호 FROM lent
-const getLentByCabinetNum = async (connection, params) => {
+const getLentByCabinetNum = async (connection, cabinetNum, floor) => {
   const content = `
     SELECT (select intra_id from user u where u.user_id=l.lent_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_id, l.lent_time, l.expire_time
     FROM cabinet c
     LEFT JOIN lent l
     ON c.cabinet_id=l.lent_cabinet_id
-    WHERE c.cabinet_num = ? AND c.floor = ?;
+    WHERE c.cabinet_num = ${cabinetNum} AND c.floor = ${floor};
     `;
-  const resultFromLent = await connection.query(content, params);
+  const resultFromLent = await connection.query(content);
   return resultFromLent;
 };
 
 // 검색 BY 사물함 번호 FROM lent_log
-const getLentLogByCabinetNum = async (connection, params) => {
+const getLentLogByCabinetNum = async (connection, cabinetNum, floor) => {
   const content = `
     SELECT (select intra_id from user u where u.user_id=ll.log_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.log_id, ll.lent_time, ll.return_time
     FROM cabinet c
     LEFT JOIN lent_log ll
     ON c.cabinet_id=ll.log_cabinet_id
-    WHERE c.cabinet_num = ? AND c.floor = ?
+    WHERE c.cabinet_num = ${cabinetNum} AND c.floor = ${floor}
     ORDER BY lent_time DESC
     LIMIT 10;
     `;
-  const resultFromLentLog = await connection.query(content, params);
+  const resultFromLentLog = await connection.query(content);
   return resultFromLentLog;
 };
 
@@ -109,13 +109,15 @@ const getUserLent = async (connection, cabinetIdx) => {
 const getCabinet = async (cabinetIdx) => {
   const connection = await pool.getConnection();
   try {
-    const [result] = await connection.query(`
+    const [result] = await connection.query(
+      `
         SELECT *
         FROM cabinet c
         LEFT JOIN lent l ON c.cabinet_id=l.lent_cabinet_id
         LEFT JOIN user u ON l.lent_user_id=u.user_id 
-        WHERE c.cabinet_id=${cabinetIdx}
-        `);
+        WHERE c.cabinet_id = ${cabinetIdx}
+        `
+    );
     return result;
   } finally {
     connection.release();
