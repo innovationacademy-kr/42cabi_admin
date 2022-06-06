@@ -42,6 +42,7 @@ const FloorStateChart = () => {
       }
     };
     fetchState();
+    //eslint-disable-next-line
   }, []);
 
   if (isError)

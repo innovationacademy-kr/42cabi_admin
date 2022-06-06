@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
 import { FloorStateData, PieData } from "../type";
 import styled from "styled-components";
@@ -46,6 +46,7 @@ const TotalStateChart = () => {
       }
     };
     fetchState();
+    //eslint-disable-next-line
   }, []);
 
   const colors = ["#05a55a", "#f39c13", "#f56a54", "#bbbbbb"];

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export function url(path: string) {
-  return `http://localhost:8080${path}`;
+  return `${process.env.REACT_APP_API_SERVER}${path}`;
 }
 
 export function axiosFormat(option: Object, authorization: string | null) {
