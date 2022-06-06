@@ -1,6 +1,6 @@
 import moment from "moment";
 
-export const ExpiredTableStruct = [
+export const expiredTableStruct = [
   {
     Header: "인트라 ID",
     accessor: "intra_id",

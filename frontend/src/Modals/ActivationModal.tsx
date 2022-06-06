@@ -10,12 +10,12 @@ import {
   ToggleBtn,
   Circle,
 } from "./ModalStyleComponent";
-import axios from "axios";
+import * as API from "../Networks/APIType";
 import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
 import styled from "styled-components";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { GetTargetResponse } from "../ReduxModules/SearchResponse";
 
@@ -24,6 +24,7 @@ const ActivationModal = (props: any) => {
     (state: RootState) => state.SearchResponse
   );
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const { data, state, close } = props;
@@ -63,63 +64,53 @@ const ActivationModal = (props: any) => {
   };
 
   const reasonText = useRef<HTMLInputElement>(null);
-  const ActivationAPI = (activation: number, noChange: boolean) => {
-    const urlActivation = "http://localhost:8080/api/activation";
-    const urlUpdate = "http://localhost:8080/api/search";
-    const token = localStorage.getItem("accessToken") || "";
-    const cabinet_id = data !== undefined ? data.cabinet_id : "";
-    if (noChange) {
-      close(false);
-    } else {
-      axios
-        .patch(
-          urlActivation,
+  const ActivationAPI = async (activation: number, noChange: boolean) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const cabinet_id = data !== undefined ? data.cabinet_id : "";
+      if (noChange) {
+        close(false);
+      } else {
+        await API.axiosFormat(
           {
-            cabinetIdx: cabinet_id,
-            activation: activation,
-            reason: reasonText.current?.value,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
+            method: "PATCH",
+            url: API.url("/api/activation"),
+            data: {
+              cabinetIdx: cabinet_id,
+              activation: activation,
+              reason: reasonText.current?.value,
             },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          let params = {};
-          if (searchParams.get("floor") !== null) {
-            params = {
-              floor: searchParams.get("floor"),
-              cabinetNum: searchParams.get("cabinetNum"),
-            };
-          } else {
-            params = {
-              intraId: searchParams.get("intraId"),
-            };
-          }
-          // console.log(params);
-          axios
-            .get(urlUpdate, {
-              params,
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            })
-            .then((res) => {
-              // console.log(res);
-              dispatch(GetTargetResponse(res.data));
-            })
-            .catch((e) => {
-              console.log(e);
-            });
-        })
-        .catch((e) => {
-          console.log(e);
-        })
-        .finally(() => {
-          close(true);
-        });
+          },
+          token
+        );
+        let params = {};
+        if (searchParams.get("floor") !== null) {
+          params = {
+            floor: searchParams.get("floor"),
+            cabinetNum: searchParams.get("cabinetNum"),
+          };
+        } else {
+          params = {
+            intraId: searchParams.get("intraId"),
+          };
+        }
+        const res = await API.axiosFormat(
+          {
+            method: "GET",
+            url: API.url("/api/search"),
+            params,
+          },
+          token
+        );
+        dispatch(GetTargetResponse(res.data));
+      }
+    } catch (e: any) {
+      console.log(e);
+      if (e.response.status === 401) {
+        navigate("/");
+      }
+    } finally {
+      close(true);
     }
   };
 

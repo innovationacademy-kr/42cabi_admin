@@ -8,13 +8,14 @@ import {
   ConfirmButton,
   CancleButton,
 } from "./ModalStyleComponent";
-import axios from "axios";
-import { useSearchParams } from "react-router-dom";
+import * as API from "../Networks/APIType";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { GetTargetResponse } from "../ReduxModules/SearchResponse";
 
 const ReturnModal = (props: any) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const { data, state, close } = props;
@@ -29,41 +30,38 @@ const ReturnModal = (props: any) => {
         "번"
       : "";
 
-  const ReturnAPI = () => {
-    const params = data !== undefined ? data.cabinet_id : "";
-    const urlReturn = "http://localhost:8080/api/return?cabinetIdx=" + params;
-    const urlUpdate = "http://localhost:8080/api/search";
-    const token = localStorage.getItem("accessToken");
-    axios
-      .patch(
-        urlReturn,
-        {},
+  const ReturnAPI = async () => {
+    try {
+      const cabinetIdx = data !== undefined ? data.cabinet_id : "";
+      const urlReturn = "/api/return?cabinetIdx=" + cabinetIdx;
+      const token = localStorage.getItem("accessToken");
+      await API.axiosFormat(
         {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        const params = {
-          intraId: searchParams.get("intraId"),
-        };
-        axios
-          .get(urlUpdate, {
-            params,
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then((res) => {
-            // console.log(res);
-            dispatch(GetTargetResponse(res.data));
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      })
-      .catch((e) => {
-        console.log(e);
-      })
-      .finally(() => close(true));
+          method: "PATCH",
+          url: API.url(urlReturn),
+        },
+        token
+      );
+      const params = {
+        intraId: searchParams.get("intraId"),
+      };
+      const res = await API.axiosFormat(
+        {
+          method: "GET",
+          url: API.url("/api/search"),
+          params,
+        },
+        token
+      );
+      dispatch(GetTargetResponse(res.data));
+    } catch (e: any) {
+      console.log(e);
+      if (e.response.status === 401) {
+        navigate("/");
+      }
+    } finally {
+      close(true);
+    }
   };
 
   return state ? (

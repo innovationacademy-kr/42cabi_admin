@@ -1,4 +1,3 @@
-import { getValue } from "@testing-library/user-event/dist/utils";
 import moment from "moment";
 
 export const prevCabinetTableStruct = [

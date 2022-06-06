@@ -1,6 +1,6 @@
 import moment from "moment";
 
-export const DisabledTableStruct = [
+export const disabledTableStruct = [
   {
     Header: "층",
     accessor: "floor",
