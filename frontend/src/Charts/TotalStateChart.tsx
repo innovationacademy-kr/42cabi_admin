@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
 import { FloorStateData, PieData } from "../type";
 import styled from "styled-components";
@@ -7,6 +8,7 @@ import * as API from "../Networks/APIType";
 const TotalStateChart = () => {
   const [totalState, setTotalState] = useState<PieData[]>([]);
   const [isError, setIsError] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchState = async () => {
@@ -35,8 +37,11 @@ const TotalStateChart = () => {
           { name: "사용 불가", value: disabled },
           { name: "미사용", value: unused },
         ]);
-      } catch (e) {
-        console.log("error");
+      } catch (e: any) {
+        console.log(e);
+        if (e.response.status === 401) {
+          navigate("/");
+        }
         setIsError(true);
       }
     };

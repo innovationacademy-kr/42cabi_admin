@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import * as API from "../Networks/APIType";
 import {
   BarChart,
@@ -15,6 +16,7 @@ import styled from "styled-components";
 const FloorStateChart = () => {
   const [floorStateData, setFloorStateData] = useState<FloorStateData[]>([]);
   const [isError, setIsError] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchState = async () => {
@@ -31,8 +33,11 @@ const FloorStateChart = () => {
           element.floor += "F";
         });
         setFloorStateData(res.data);
-      } catch (e) {
-        console.log("error");
+      } catch (e: any) {
+        console.log(e);
+        if (e.response.status === 401) {
+          navigate("/");
+        }
         setIsError(true);
       }
     };

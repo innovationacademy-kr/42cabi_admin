@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import CabinetDetail from "../Components/CabinetDetail";
 import UserDetail from "../Components/UserDetail";
 import PrevCabinetTable from "../Tables/PrevCabinetTable";
@@ -9,7 +8,7 @@ import { GetTargetResponse } from "../ReduxModules/SearchResponse";
 import { RootState } from "../ReduxModules/rootReducer";
 import NoPrevLog from "../Components/NoPrevLog";
 import { useSearchParams } from "react-router-dom";
-import axios from "axios";
+import * as API from "../Networks/APIType";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ButtonSet from "../Components/ButtonSet";
@@ -34,37 +33,49 @@ const SearchDashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    let params = {};
-    if (searchParams.get("intraId") !== null) {
-      dispatch(GetTargetType("User"));
-      params = {
-        intraId: searchParams.get("intraId"),
-      };
-    } else {
-      dispatch(GetTargetType("Cabinet"));
-      params = {
-        floor: searchParams.get("floor"),
-        cabinetNum: searchParams.get("cabinetNum"),
-      };
-    }
+  const getSearchData = async () => {
+    try {
+      let params = {};
+      if (searchParams.get("intraId") !== null) {
+        dispatch(GetTargetType("User"));
+        params = {
+          intraId: searchParams.get("intraId"),
+        };
+      } else {
+        dispatch(GetTargetType("Cabinet"));
+        params = {
+          floor: searchParams.get("floor"),
+          cabinetNum: searchParams.get("cabinetNum"),
+        };
+      }
 
-    const url = `http://localhost:8080/api/search/`;
-    const token = localStorage.getItem("accessToken");
-    axios
-      .get(url, { params, headers: { Authorization: `Bearer ${token}` } })
-      .then((res) => {
-        dispatch(GetTargetResponse(res.data));
-        setisLoading(false);
-        // console.log(res);
-      })
-      .catch((e) => {
+      const token = localStorage.getItem("accessToken");
+      const res = await API.axiosFormat(
+        {
+          method: "GET",
+          url: API.url("/api/search"),
+          params,
+        },
+        token
+      );
+      dispatch(GetTargetResponse(res.data));
+      setisLoading(false);
+      // console.log(res);
+    } catch (e: any) {
+      console.log(e);
+      if (e.response.status === 401) {
+        navigate("/");
+      } else {
         navigate("/saerom/search/invalidSearchResult", {
           state: { errorType: "Input" },
         });
-        console.log(e);
-      });
-  }, [dispatch, navigate, searchParams]);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getSearchData();
+  });
 
   const DetailType = () => {
     if (SearchTypeRedux === "User") {
