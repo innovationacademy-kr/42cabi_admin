@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { ExpiredTableStruct } from "./ExpiredTableStruct";
+import { expiredTableStruct } from "./expiredTableStruct";
 import { usePagination, useSortBy, useTable } from "react-table";
 import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
@@ -22,7 +22,7 @@ export const ExpiredTable = () => {
     shallowEqual
   );
 
-  const columns = useMemo(() => ExpiredTableStruct, []);
+  const columns = useMemo(() => expiredTableStruct, []);
   const data = useMemo(() => StatusExpiredRedux || [], [StatusExpiredRedux]);
 
   const navigate = useNavigate();

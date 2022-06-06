@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { DisabledTableStruct } from "./DisabledTableStruct";
+import { disabledTableStruct } from "./disabledTableStruct";
 import { usePagination, useSortBy, useTable } from "react-table";
 import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
@@ -22,7 +22,7 @@ export const DisabledTable = () => {
     shallowEqual
   );
 
-  const columns = useMemo(() => DisabledTableStruct, []);
+  const columns = useMemo(() => disabledTableStruct, []);
   const data = useMemo(() => StatusDisabledRedux || [], [StatusDisabledRedux]);
 
   const navigate = useNavigate();
