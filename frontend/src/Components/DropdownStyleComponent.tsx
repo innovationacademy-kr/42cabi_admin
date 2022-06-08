@@ -37,7 +37,7 @@ export const DropDownList = styled.ul`
   display: flex;
   flex-direction: column;
   min-width: 6.5rem;
-  padding-left: 1.2rem;
+  /* padding-left: 1.2rem; */
   background: #ffffff;
   border: 0.2rem solid #e5e5e5;
   box-sizing: border-box;
@@ -45,12 +45,17 @@ export const DropDownList = styled.ul`
   font-size: 1.3rem;
   font-weight: 500;
   &:first-child {
-    padding-top: 1rem;
+    /* padding-top: 1rem; */
   }
 `;
 
 export const ListItem = styled.div`
   list-style: none;
   display: flex;
-  margin-bottom: 1rem;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+  padding-left: 1.2rem;
+  &:hover {
+    background-color: #888888;
+  }
 `;
