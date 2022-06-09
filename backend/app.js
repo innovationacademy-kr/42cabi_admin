@@ -8,7 +8,7 @@ const morgan = require('morgan');
 const config = require('dotenv');
 
 config.config();
-const { sendResponse } = require('./util');
+const { sendResponse } = require('./utils/util');
 
 app.use(express.json());
 app.set('port', process.env.PORT || 8080);

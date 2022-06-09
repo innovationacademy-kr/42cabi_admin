@@ -1,4 +1,5 @@
 require('dotenv').config({ path: '../.env' });
+// require('dotenv').config();
 
 const getHost = () => {
   const host = process.env.HOST;

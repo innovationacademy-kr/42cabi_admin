@@ -1,3 +1,6 @@
+const jwt = require('jsonwebtoken');
+const config = require('./config/config');
+
 /**
  * wrap function
  * @params {Object} req
@@ -25,9 +28,19 @@ const sendResponse = (res, data, status) => {
   res.status(status).json(data);
 };
 
+const isVerified = (token) => {
+  try {
+    jwt.verify(token, config.getJwtSecret());
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
+
 module.exports = {
   wrap,
   sendResponse,
   isNumeric,
   isLogin,
+  isVerified,
 };

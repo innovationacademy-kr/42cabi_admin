@@ -1,6 +1,6 @@
 const express = require('express');
 const query = require('../db/query');
-const { isNumeric, sendResponse } = require('../util');
+const { isNumeric, sendResponse } = require('../utils/util');
 const pool = require('../config/database');
 
 const searchRouter = express.Router();
@@ -15,12 +15,9 @@ const getSearch = async (req, res) => {
     let resultFromLentLog;
 
     if (intraId) {
-      await Promise.all([
-        (resultFromLent = await query.getLentByIntraId(connection, intraId)),
-        (resultFromLentLog = await query.getLentLogByIntraId(
-          connection,
-          intraId
-        )),
+      [resultFromLent, resultFromLentLog] = await Promise.all([
+        query.getLentByIntraId(connection, intraId),
+        query.getLentLogByIntraId(connection, intraId),
       ]);
     } else if (
       cabinetNum &&
@@ -28,17 +25,9 @@ const getSearch = async (req, res) => {
       isNumeric(cabinetNum) &&
       isNumeric(floor)
     ) {
-      await Promise.all([
-        (resultFromLent = await query.getLentByCabinetNum(
-          connection,
-          cabinetNum,
-          floor
-        )),
-        (resultFromLentLog = await query.getLentLogByCabinetNum(
-          connection,
-          cabinetNum,
-          floor
-        )),
+      [resultFromLent, resultFromLentLog] = await Promise.all([
+        query.getLentByCabinetNum(connection, cabinetNum, floor),
+        await query.getLentLogByCabinetNum(connection, cabinetNum, floor),
       ]);
     } else {
       return sendResponse(res, {}, 400);
@@ -46,9 +35,6 @@ const getSearch = async (req, res) => {
 
     const result = { resultFromLent, resultFromLentLog };
     return sendResponse(res, result, 200);
-  } catch (err) {
-    console.log(err);
-    return sendResponse(res, {}, 500);
   } finally {
     connection.release();
   }
