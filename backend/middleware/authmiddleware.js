@@ -1,7 +1,4 @@
-const jwt = require('jsonwebtoken');
-
-const { sendResponse, isLogin } = require('../utils/util');
-const { getJwtSecret } = require('../config/config');
+const { sendResponse, isLogin, isVerified } = require('../utils/util');
 
 const authMiddleware = (req, res, next) => {
   if (isLogin(req.originalUrl)) {
@@ -14,17 +11,10 @@ const authMiddleware = (req, res, next) => {
   }
   const token = req.headers.authorization.split(' ')[1];
 
-  jwt.verify(token, getJwtSecret(), (err, _verifiedToken) => {
-    if (err) {
-      return sendResponse(res, err.message, 401);
-    } //   req.verifiedToken = verifiedToken;
-    return next();
-  });
-  return undefined;
-  // if (!isVerified(token)) {
-  //   return sendResponse(res, 'Unauthorized', 401);
-  // }
-  // return undefined;
+  if (!isVerified(token)) {
+    return sendResponse(res, 'Unauthorized', 401);
+  }
+  return next();
 };
 
 module.exports = {

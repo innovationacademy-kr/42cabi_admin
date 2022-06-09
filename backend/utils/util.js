@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const config = require('./config/config');
+const config = require('../config/config');
 
 /**
  * wrap function
@@ -9,7 +9,6 @@ const config = require('./config/config');
  * @returns {middleware}
  */
 
-// middleware wrapper
 const wrap = (asyncFn) => async (req, res, next) => {
   try {
     return await asyncFn(req, res, next);
@@ -17,6 +16,7 @@ const wrap = (asyncFn) => async (req, res, next) => {
     return next(error);
   }
 };
+
 const isNumeric = (num) => !Number.isNaN(num);
 
 const isLogin = (path) => {
