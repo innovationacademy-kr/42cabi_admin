@@ -18,6 +18,7 @@ app.use(morgan('dev'));
 const { apiRouter } = require('./routes/apiRoute');
 const { authMiddleware } = require('./middleware/authmiddleware');
 
+// test for git
 app.use(express.static(path.join(__dirname, '../frontend/build/')));
 app.use('/api', authMiddleware, apiRouter);
 
