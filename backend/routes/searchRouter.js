@@ -27,7 +27,7 @@ const getSearch = async (req, res) => {
     ) {
       [resultFromLent, resultFromLentLog] = await Promise.all([
         query.getLentByCabinetNum(connection, cabinetNum, floor),
-        await query.getLentLogByCabinetNum(connection, cabinetNum, floor),
+        query.getLentLogByCabinetNum(connection, cabinetNum, floor),
       ]);
     } else {
       return sendResponse(res, {}, 400);
