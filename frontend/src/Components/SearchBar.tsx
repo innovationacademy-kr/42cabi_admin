@@ -8,7 +8,11 @@ import {
   DropDownList,
   ListItem,
 } from "./DropdownStyleComponent";
-import { useNavigate, createSearchParams } from "react-router-dom";
+import {
+  useNavigate,
+  createSearchParams,
+  useSearchParams,
+} from "react-router-dom";
 
 const options = ["ID", "2F", "4F", "5F"];
 
@@ -16,6 +20,7 @@ const SearchBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggling = () => setIsOpen(!isOpen);
   const [selectedOption, setSelectedOption] = useState("ID");
+  const [currentParams] = useSearchParams();
 
   const onOptionClicked = (value: string) => () => {
     setSelectedOption(value);
@@ -30,20 +35,37 @@ const SearchBar = () => {
   const goToResultPage = () => {
     setIsOpen(false);
     if (selectedOption === "ID") {
-      navigate({
-        pathname: "/saerom/search/searchDashboard",
-        search: createSearchParams({
-          intraId: searchText.current?.value || "",
-        }).toString(),
-      });
+      const inputId = searchText.current?.value || "";
+      if (currentParams.get("intraId") === inputId) {
+        window.location.reload();
+      } else {
+        navigate({
+          pathname: "/saerom/search/searchDashboard",
+          search: createSearchParams({
+            intraId: inputId,
+          }).toString(),
+        });
+      }
     } else {
-      navigate({
-        pathname: "/saerom/search/searchDashboard",
-        search: createSearchParams({
-          floor: selectedOption.toString().split("F")[0],
-          cabinetNum: searchText.current?.value || "",
-        }).toString(),
-      });
+      const inputFloor = selectedOption.toString().split("F")[0];
+      const inputCabinetNum = searchText.current?.value || "";
+      if (
+        currentParams.get("floor") === inputFloor &&
+        currentParams.get("cabinetNum") === inputCabinetNum
+      ) {
+        window.location.reload();
+      } else {
+        navigate({
+          pathname: "/saerom/search/searchDashboard",
+          search: createSearchParams({
+            floor: inputFloor,
+            cabinetNum: inputCabinetNum,
+          }).toString(),
+        });
+      }
+    }
+    if (searchText.current !== null) {
+      searchText.current.value = "";
     }
   };
 
