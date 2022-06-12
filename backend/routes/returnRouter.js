@@ -1,6 +1,6 @@
 const express = require('express');
 const query = require('../db/query');
-const { sendResponse, isNumeric } = require('../util');
+const { sendResponse, isNumeric } = require('../utils/util');
 const pool = require('../config/database');
 
 const returnRouter = express.Router();
@@ -20,9 +20,6 @@ const getReturn = async (req, res) => {
       return sendResponse(res, {}, 400);
     }
     return sendResponse(res, cabinetInfo, 200);
-  } catch (err) {
-    console.log(err);
-    throw err;
   } finally {
     connection.release();
   }
@@ -54,7 +51,7 @@ const patchReturn = async (req, res) => {
     return sendResponse(res, 'ok', 200);
   } catch (err) {
     await connection.rollback();
-    return sendResponse(res, {}, 500);
+    return undefined;
   } finally {
     connection.release();
   }

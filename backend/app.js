@@ -8,7 +8,7 @@ const morgan = require('morgan');
 const config = require('dotenv');
 
 config.config();
-const { sendResponse } = require('./util');
+const { sendResponse } = require('./utils/util');
 
 app.use(express.json());
 app.set('port', process.env.PORT || 8080);
@@ -18,6 +18,7 @@ app.use(morgan('dev'));
 const { apiRouter } = require('./routes/apiRoute');
 const { authMiddleware } = require('./middleware/authmiddleware');
 
+// test for git
 app.use(express.static(path.join(__dirname, '../frontend/build/')));
 app.use('/api', authMiddleware, apiRouter);
 

@@ -1,5 +1,5 @@
 const express = require('express');
-const { sendResponse } = require('../util');
+const { sendResponse } = require('../utils/util');
 const { getCabinetInfoByFloor } = require('../db/query');
 const pool = require('../config/database');
 
@@ -11,9 +11,6 @@ const getCabinetCountFloor = async (_req, res) => {
   try {
     const cabientInfoByFloor = await getCabinetInfoByFloor(connection);
     return sendResponse(res, cabientInfoByFloor, 200);
-  } catch (err) {
-    console.log(err);
-    throw err;
   } finally {
     connection.release();
   }

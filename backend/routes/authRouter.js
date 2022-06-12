@@ -3,7 +3,7 @@ const express = require('express');
 const authRouter = express.Router();
 require('dotenv').config({ path: '../.env' });
 const jwt = require('jsonwebtoken');
-const { sendResponse } = require('../util');
+const { sendResponse } = require('../utils/util');
 const { getJwtSecret } = require('../config/config');
 
 authRouter.post('/login', (req, res) => {

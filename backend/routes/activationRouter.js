@@ -1,6 +1,6 @@
 const express = require('express');
 const query = require('../db/query');
-const { sendResponse, isNumeric } = require('../util');
+const { sendResponse, isNumeric } = require('../utils/util');
 const pool = require('../config/database');
 
 const activationRouter = express.Router();
@@ -11,9 +11,6 @@ const getInactivatedCabinet = async (_req, res) => {
   try {
     const cabinetList = await query.getInactivatedCabinetList(connection);
     return sendResponse(res, cabinetList, 200);
-  } catch (err) {
-    console.log(err);
-    throw err;
   } finally {
     connection.release();
   }
@@ -34,9 +31,6 @@ const patchActivation = async (req, res) => {
   try {
     await query.modifyCabinetActivation(connection, cabinetIdx, activation);
     return sendResponse(res, 'ok', 200);
-  } catch (err) {
-    console.log(err);
-    throw err;
   } finally {
     connection.release();
   }
