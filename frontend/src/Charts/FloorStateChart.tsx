@@ -33,11 +33,10 @@ const FloorStateChart = () => {
           element.floor += "F";
         });
         setFloorStateData(res.data);
-      } catch (e: any) {
+      } catch (e) {
         console.log(e);
-        if (e.response.status === 401) {
-          navigate("/");
-        }
+        const axiosError = e as API.axiosError;
+        API.HandleError(navigate, axiosError);
         setIsError(true);
       }
     };

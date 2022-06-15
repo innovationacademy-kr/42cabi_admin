@@ -54,11 +54,10 @@ const ReturnModal = (props: any) => {
         token
       );
       dispatch(GetTargetResponse(res.data));
-    } catch (e: any) {
+    } catch (e) {
       console.log(e);
-      if (e.response.status === 401) {
-        navigate("/");
-      }
+      const axiosError = e as API.axiosError;
+      API.HandleError(navigate, axiosError);
     } finally {
       close(true);
     }

@@ -37,7 +37,8 @@ const SearchBar = () => {
     if (selectedOption === "ID") {
       const inputId = searchText.current?.value || "";
       if (currentParams.get("intraId") === inputId) {
-        window.location.reload();
+        // window.location.reload();
+        navigate(0);
       } else {
         navigate({
           pathname: "/saerom/search/searchDashboard",
@@ -53,7 +54,8 @@ const SearchBar = () => {
         currentParams.get("floor") === inputFloor &&
         currentParams.get("cabinetNum") === inputCabinetNum
       ) {
-        window.location.reload();
+        // window.location.reload();
+        navigate(0);
       } else {
         navigate({
           pathname: "/saerom/search/searchDashboard",
