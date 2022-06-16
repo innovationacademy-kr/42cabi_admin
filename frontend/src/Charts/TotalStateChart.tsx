@@ -37,11 +37,10 @@ const TotalStateChart = () => {
           { name: "사용 불가", value: disabled },
           { name: "미사용", value: unused },
         ]);
-      } catch (e: any) {
+      } catch (e) {
         console.log(e);
-        if (e.response.status === 401) {
-          navigate("/");
-        }
+        const axiosError = e as API.axiosError;
+        API.HandleError(navigate, axiosError);
         setIsError(true);
       }
     };

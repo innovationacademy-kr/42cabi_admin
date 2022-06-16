@@ -57,15 +57,10 @@ const SearchDashboard = () => {
       );
       dispatch(GetTargetResponse(res.data));
       setisLoading(false);
-    } catch (e: any) {
+    } catch (e) {
       console.log(e);
-      if (e.response.status === 401) {
-        navigate("/");
-      } else {
-        navigate("/saerom/search/invalidSearchResult", {
-          state: { errorType: "Input" },
-        });
-      }
+      const axiosError = e as API.axiosError;
+      API.HandleError(navigate, axiosError);
     }
   }, [dispatch, navigate, searchParams]);
 
