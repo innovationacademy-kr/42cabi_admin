@@ -23,7 +23,7 @@ const init = async () => {
     ]);
     console.log('  ✅  User Table');
     console.log('  ✅  Cabinet Table');
-    console.log('  ✅  Disabled Log Table');
+    console.log('  ✅  Disable Log Table');
   } catch (error) {
     console.log(`❌ ${error}`);
   } finally {
@@ -32,7 +32,7 @@ const init = async () => {
 };
 
 console.log(
-  '\n  해당 명령어는 한 번만 사용하시면 됩니다.\n\n\x1b[35m `user` `cabinet` `disabled`\x1b[0m 테이블을 만듭니다.\n  테이블이 존재하는 경우엔 만들지 않습니다.\n\n  만드시겠습니까? [y/n] (EOF는 yes 처리됩니다.)'
+  '\n  해당 명령어는 한 번만 사용하시면 됩니다.\n\n\x1b[35m `user` `cabinet` `disable`\x1b[0m 테이블을 만듭니다.\n  테이블이 존재하는 경우엔 만들지 않습니다.\n\n  만드시겠습니까? [y/n] (EOF는 yes 처리됩니다.)'
 );
 
 rl.on('line', (line) => {
