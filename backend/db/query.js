@@ -88,7 +88,7 @@ const addDisablelog = async (connection, cabinetIdx, note) => {
     VALUES (${cabinetIdx}, "${note}");
     `;
   await connection.query(content);
-}
+};
 
 // 고장 사물함 status 0 처리
 const modifyDisablelog = async (connection, cabinetIdx) => {
@@ -98,7 +98,7 @@ const modifyDisablelog = async (connection, cabinetIdx) => {
     WHERE disable_cabinet_id=${cabinetIdx} AND status=1;
   `;
   await connection.query(content);
-}
+};
 
 // 반납할 사물함의 lent 정보 가져옴
 const getUserLent = async (connection, cabinetIdx) => {
