@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `disable`  (
 	`disable_id` INT AUTO_INCREMENT PRIMARY KEY,
-	`cabinet_id` INT NOT NULL,
+	`disable_cabinet_id` INT NOT NULL,
     `disable_time` TIMESTAMP DEFAULT current_timestamp,
     `fix_time` TIMESTAMP,
 	`status` TINYINT DEFAULT 1,
