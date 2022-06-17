@@ -5,9 +5,6 @@ const pool = require('../config/database');
 const getSearch = async (req, res) => {
   const { intraId, cabinetNum, floor } = req.query;
 
-  if (Number.isNaN(cabinetNum)) {
-    return sendResponse(res, 400, '잘못된 요청입니다.');
-  }
   const connection = await pool.getConnection();
   try {
     let resultFromLent;
@@ -24,6 +21,7 @@ const getSearch = async (req, res) => {
       isNumeric(cabinetNum) &&
       isNumeric(floor)
     ) {
+      console.log('++++++++++ pass +++++++pass');
       [resultFromLent, resultFromLentLog] = await Promise.all([
         query.getLentByCabinetNum(connection, cabinetNum, floor),
         query.getLentLogByCabinetNum(connection, cabinetNum, floor),
