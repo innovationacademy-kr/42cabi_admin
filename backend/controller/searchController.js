@@ -10,6 +10,7 @@ const getSearch = async (req, res) => {
     let resultFromLent;
     let resultFromLentLog;
 
+    console.log(isNumeric(cabinetNum));
     if (intraId) {
       [resultFromLent, resultFromLentLog] = await Promise.all([
         query.getLentByIntraId(connection, intraId),
@@ -21,7 +22,6 @@ const getSearch = async (req, res) => {
       isNumeric(cabinetNum) &&
       isNumeric(floor)
     ) {
-      console.log('++++++++++ pass +++++++pass');
       [resultFromLent, resultFromLentLog] = await Promise.all([
         query.getLentByCabinetNum(connection, cabinetNum, floor),
         query.getLentLogByCabinetNum(connection, cabinetNum, floor),
