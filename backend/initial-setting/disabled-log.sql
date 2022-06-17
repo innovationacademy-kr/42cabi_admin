@@ -1,7 +1,8 @@
-CREATE TABLE IF NOT EXISTS `disabled`  (
-	`disabled_id` INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS `disable`  (
+	`disable_id` INT AUTO_INCREMENT PRIMARY KEY,
 	`cabinet_id` INT NOT NULL,
-    `disabled_time` TIMESTAMP DEFAULT current_timestamp,
-    `fixed_time` TIMESTAMP,
+    `disable_time` TIMESTAMP DEFAULT current_timestamp,
+    `fix_time` TIMESTAMP,
+	`status` TINYINT DEFAULT 1,
     `note` TEXT
 ) ENGINE=innoDB DEFAULT CHARSET=utf8mb4;
