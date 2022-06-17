@@ -11,7 +11,6 @@ const CabiButton = styled.button<{
   color: ${(props) => props.Color};
   border: 0.3rem solid ${(props) => props.Color};
   border-radius: ${(props) => props.theme.borderRadius};
-  /* pointer-events: none; */
   transition-duration: 0.4s;
   :hover:enabled {
     background-color: #d8d4d4;
@@ -19,6 +18,7 @@ const CabiButton = styled.button<{
   }
   &:disabled {
     cursor: default;
+    pointer-events: none;
     opacity: 0.5;
   }
   :active {
