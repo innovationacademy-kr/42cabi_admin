@@ -22,7 +22,7 @@ type actionType = {
 const StatusDisabled = (state = initialState, action: actionType) => {
   switch (action.type) {
     case GET_TARGET_RESPONSE:
-      console.log(action.payload);
+      // console.log(action.payload);
       return action.payload;
     case INITIALIZE:
       return initialState;

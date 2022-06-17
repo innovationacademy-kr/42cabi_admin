@@ -1,10 +1,22 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Login = () => {
   const [inputId, setInputId] = useState("");
   const [inputPassword, setInputPassword] = useState("");
+  const [isHaveToken, setIsHaveToken] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (
+      isHaveToken === true ||
+      (isHaveToken === false && localStorage.getItem("accessToken") !== null)
+    ) {
+      navigate("/saerom");
+    }
+  }, [navigate, isHaveToken]);
 
   const handleInputId = (e: any) => {
     setInputId(e.target.value);
@@ -32,8 +44,8 @@ const Login = () => {
         password: inputPassword,
       });
       localStorage.setItem("accessToken", res.data.accessToken);
-      console.log(res.data);
-      window.location.href = "/saerom";
+      setIsHaveToken(true);
+      // console.log(res.data);
     } catch (e) {
       alert("잘못된 계정입니다!");
     }
