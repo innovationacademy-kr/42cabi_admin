@@ -80,12 +80,23 @@ const modifyCabinetActivation = async (connection, cabinetIdx, activation) => {
 };
 
 // 고장 사물함 log 추가
-// const addDisablelog = async (connection, cabinetIdx, activation) => {
-//   const content = `
-//     INSERT INTO disable (disable_cabinet_id, disable_time, disable_activation)
-//     VALUES 
-//     `
-// }
+const addDisablelog = async (connection, cabinetIdx, note) => {
+  const content = `
+    INSERT INTO disable (disable_cabinet_id, note)
+    VALUES (${cabinetIdx}, "${note}");
+    `;
+  await connection.query(content);
+}
+
+// 고장 사물함 status 0 처리
+const modifyDisablelog = async (connection, cabinetIdx) => {
+  const content = `
+    UPDATE disable d
+    SET status=0, fix_time=now()
+    WHERE disable_cabinet_id=${cabinetIdx} AND status=1;
+  `;
+  await connection.query(content);
+}
 
 // 반납할 사물함의 lent 정보 가져옴
 const getUserLent = async (connection, cabinetIdx) => {
@@ -194,6 +205,8 @@ module.exports = {
   getLentByCabinetNum,
   getLentLogByCabinetNum,
   modifyCabinetActivation,
+  addDisablelog,
+  modifyDisablelog,
   getInactivatedCabinetList,
   getUserLent,
   getCabinet,
