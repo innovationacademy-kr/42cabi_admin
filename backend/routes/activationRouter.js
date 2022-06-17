@@ -17,7 +17,7 @@ const getInactivatedCabinet = async (_req, res) => {
 };
 
 const patchActivation = async (req, res) => {
-  const { cabinetIdx, activation } = req.body;
+  const { cabinetIdx, activation, reason } = req.body;
   if (
     !cabinetIdx &&
     !activation &&
@@ -29,9 +29,21 @@ const patchActivation = async (req, res) => {
 
   const connection = await pool.getConnection();
   try {
+    connection.beginTransaction();
+
     await query.modifyCabinetActivation(connection, cabinetIdx, activation);
+    if (activation === 0)
+      await query.addDisablelog(connection, cabinetIdx, reason);
+    else
+      await query.modifyDisablelog(connection, cabinetIdx);
+    connection.commit();
     return sendResponse(res, 'ok', 200);
-  } finally {
+  } catch(err) {
+    connection.rollback();
+    console.log(err);
+    return sendResponse(res, err, 500);
+  }
+    finally {
     connection.release();
   }
 };
