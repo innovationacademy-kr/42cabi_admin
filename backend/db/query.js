@@ -79,6 +79,14 @@ const modifyCabinetActivation = async (connection, cabinetIdx, activation) => {
   await connection.query(content);
 };
 
+// 고장 사물함 log 추가
+// const addDisablelog = async (connection, cabinetIdx, activation) => {
+//   const content = `
+//     INSERT INTO disable (disable_cabinet_id, disable_time, disable_activation)
+//     VALUES 
+//     `
+// }
+
 // 반납할 사물함의 lent 정보 가져옴
 const getUserLent = async (connection, cabinetIdx) => {
   const getUserLentQuery = `

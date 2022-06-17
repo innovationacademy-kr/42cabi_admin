@@ -29,9 +29,20 @@ const patchActivation = async (req, res) => {
 
   const connection = await pool.getConnection();
   try {
+    connection.beginTransaction();
     await query.modifyCabinetActivation(connection, cabinetIdx, activation);
+    if (activation === 0)
+      await query.addDisablelog(connection, cabinetIdx, activation);
+    else
+      await query.modifyDisablelog(connection, cabinetIdx, activation);
+    connection.commit();
+
     return sendResponse(res, 'ok', 200);
-  } finally {
+  } catch(err) {
+    connection.rollback();
+    return sendResponse(res, err, 500);
+  }
+    finally {
     connection.release();
   }
 };
