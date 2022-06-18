@@ -1,23 +1,31 @@
-import { useSelector, shallowEqual } from "react-redux";
-import { useEffect, useMemo } from "react";
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
+import { useEffect, useMemo, useCallback } from "react";
 import { RootState } from "../ReduxModules/rootReducer";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import ExpiredInfo from "./ExpiredInfo";
 import { DetailBox, BigFontSize } from "./DetailStyleComponent";
 import LentDisabledInfo from "./LentDisabled";
+import { GetDisabledResponse } from "../ReduxModules/StatusDisabled";
+import * as API from "../Networks/APIType";
 
 const CabinetDetail = () => {
   const SearchResponseRedux = useSelector(
     (state: RootState) => state.SearchResponse,
     shallowEqual
   );
+  const DisableResponseRedux = useSelector(
+    (state: RootState) => state.StatusDisabled
+  );
+
   const data = useMemo(
     () => SearchResponseRedux.resultFromLent,
     [SearchResponseRedux.resultFromLent]
   );
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (data?.length === 0) {
       navigate("/saerom/search/invalidSearchResult", {
@@ -53,9 +61,46 @@ const CabinetDetail = () => {
       ? "사용 가능"
       : "사용 불가";
 
+  const getDisableData = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const res = await API.axiosFormat(
+        {
+          method: "GET",
+          url: API.url("/api/activation"),
+        },
+        token
+      );
+      dispatch(GetDisabledResponse(res.data));
+    } catch (e) {
+      console.log(e);
+      const axiosError = e as API.axiosError;
+      API.HandleError(navigate, axiosError);
+    }
+  }, [dispatch, navigate]);
+
+  useEffect(() => {
+    if (CabinetActivationInfo === "사용 불가") {
+      getDisableData();
+    }
+  }, [CabinetActivationInfo, getDisableData]);
+
+  const cabinetFloor =
+    data !== undefined && data[0] !== undefined ? data[0].floor : 0;
+
+  const cabinetNum =
+    data !== undefined && data[0] !== undefined ? data[0].cabinet_num : 0;
+
+  const targetCabinetData = DisableResponseRedux.find(
+    (key) => key.floor === cabinetFloor && key.cabinet_num === cabinetNum
+  );
+
   const CabinetDisabledReason =
-    data !== undefined && data[0] !== undefined && data[0].activation === 0
-      ? "(추후 받아올 비활성화 사유)"
+    data !== undefined &&
+    data[0] !== undefined &&
+    data[0].activation === 0 &&
+    targetCabinetData !== undefined
+      ? targetCabinetData.note
       : "";
 
   if (data === undefined || data.length === 0) {
@@ -68,7 +113,7 @@ const CabinetDetail = () => {
         <p>현재 대여자 : {CabinetUserInfo}</p>
         <p>대여 기간 : {CabinetLentInfo}</p>
         <p>현재 상태 : {CabinetActivationInfo}</p>
-        {CabinetDisabledReason}
+        <p>고장 사유 : {CabinetDisabledReason}</p>
         <ExpiredInfo />
       </DetailBox>
     );

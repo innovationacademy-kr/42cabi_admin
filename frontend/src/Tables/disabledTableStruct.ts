@@ -11,10 +11,7 @@ export const disabledTableStruct = [
   },
   {
     Header: "사유",
-    accessor: "reason",
-    Cell: () => {
-      return "몇 글자까지 들어가는게 이쁘게 보일";
-    },
+    accessor: "note",
   },
   {
     Header: "고장 발생일",
