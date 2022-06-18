@@ -61,8 +61,10 @@ const getLentLogByCabinetNum = async (connection, cabinetNum, floor) => {
 // 고장 사물함 리스트 조회
 const getInactivatedCabinetList = async (connection) => {
   const getInactivatedCabinetQuery = `
-    SELECT floor, cabinet_num
+    SELECT c.floor, c.cabinet_num, d.note
     FROM cabinet c
+    JOIN disable d
+    ON d.disable_cabinet_id = c.cabinet_id AND d.status = 1
     WHERE c.activation=0;
     `;
   const result = await connection.query(getInactivatedCabinetQuery);

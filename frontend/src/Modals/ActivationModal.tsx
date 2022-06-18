@@ -63,12 +63,18 @@ const ActivationModal = (props: any) => {
     setIsActivate((prev: number) => Number(!prev));
   };
 
+  const handleEnterKey = (event: any) => {
+    if (event.key === "Enter") {
+      ActivationAPI(isActivate, activation !== isActivate);
+    }
+  };
+
   const reasonText = useRef<HTMLInputElement>(null);
-  const ActivationAPI = async (activation: number, noChange: boolean) => {
+  const ActivationAPI = async (isActivate: number, isChanged: boolean) => {
     try {
       const token = localStorage.getItem("accessToken");
       const cabinet_id = data !== undefined ? data.cabinet_id : "";
-      if (noChange) {
+      if (!isChanged) {
         close(false);
       } else {
         await API.axiosFormat(
@@ -77,7 +83,7 @@ const ActivationModal = (props: any) => {
             url: API.url("/api/activation"),
             data: {
               cabinetIdx: cabinet_id,
-              activation: activation,
+              activation: isActivate,
               reason: reasonText.current?.value,
             },
           },
@@ -103,13 +109,12 @@ const ActivationModal = (props: any) => {
           token
         );
         dispatch(GetTargetResponse(res.data));
+        close(true);
       }
     } catch (e) {
       console.log(e);
       const axiosError = e as API.axiosError;
       API.HandleError(navigate, axiosError);
-    } finally {
-      close(true);
     }
   };
 
@@ -135,10 +140,11 @@ const ActivationModal = (props: any) => {
             type="text"
             placeholder="사용하지 못하는 이유를 적어주세요!"
             ref={reasonText}
+            onKeyPress={handleEnterKey}
           />
           <CancleButton onClick={() => close(false)}>취소</CancleButton>
           <ConfirmButton
-            onClick={() => ActivationAPI(isActivate, activation === isActivate)}
+            onClick={() => ActivationAPI(isActivate, activation !== isActivate)}
           >
             저장
           </ConfirmButton>
