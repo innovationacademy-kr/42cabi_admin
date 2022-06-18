@@ -5,14 +5,12 @@ const pool = require('../config/database');
 const getSearch = async (req, res) => {
   const { intraId, cabinetNum, floor } = req.query;
 
-  if (Number.isNaN(cabinetNum)) {
-    return sendResponse(res, 400, '잘못된 요청입니다.');
-  }
   const connection = await pool.getConnection();
   try {
     let resultFromLent;
     let resultFromLentLog;
 
+    console.log(isNumeric(cabinetNum));
     if (intraId) {
       [resultFromLent, resultFromLentLog] = await Promise.all([
         query.getLentByIntraId(connection, intraId),

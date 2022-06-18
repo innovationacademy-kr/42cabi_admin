@@ -17,8 +17,10 @@ const wrap = (asyncFn) => async (req, res, next) => {
   }
 };
 
-const isNumeric = (num) => Number.isNaN(num);
-
+const isNumeric = (n) => {
+  const regExp = /^\d+$/;
+  return regExp.test(n);
+};
 const isLogin = (path) => {
   const regExp = /login$/;
   return regExp.test(path);
