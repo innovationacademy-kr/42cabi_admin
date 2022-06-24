@@ -43,7 +43,19 @@ const patchActivation = async (req, res) => {
   }
 };
 
+// ban된 사물함 조회
+const getBanCabinet = async (_req, res) => {
+  const connection = await pool.getConnection();
+  try {
+    const banCabinetList = await query.getBanCabinetList(connection);
+    return sendResponse(res, banCabinetList, 200);
+  } finally {
+    connection.release();
+  }
+};
+
 module.exports = {
   getInactivatedCabinet,
   patchActivation,
+  getBanCabinet,
 };
