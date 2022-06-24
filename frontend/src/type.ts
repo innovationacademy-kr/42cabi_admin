@@ -8,10 +8,9 @@ export type StatusResponseExpired = {
 export type StatusResponseExpiredData = StatusResponseDisabled[];
 
 export type StatusResponseDisabled = {
-  intra_id?: string;
   floor?: number;
   cabinet_num?: number;
-  expire_time?: string;
+  note?: string;
 };
 
 export type StatusResponseDisabledData = StatusResponseDisabled[];

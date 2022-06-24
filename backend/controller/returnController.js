@@ -41,7 +41,7 @@ const patchReturn = async (req, res) => {
 
     await Promise.all([
       query.deleteLent(connection, userLentInfo), // lent 테이블에서 해당 사물함의 대여 정보 삭제
-      query.addLentLog(connection, userLentInfo), // lent_log에 반납되는 사물함 정보 추가
+      query.addLentLog(connection, Object.values(userLentInfo)), // lent_log에 반납되는 사물함 정보 추가
     ]);
 
     await connection.commit();

@@ -50,7 +50,13 @@ const SearchBar = () => {
     } else {
       const inputFloor = selectedOption.toString().split("F")[0];
       const inputCabinetNum = searchText.current?.value || "";
-      if (
+      if (isNaN(Number(inputCabinetNum))) {
+        navigate("/saerom/search/invalidSearchResult", {
+          state: {
+            errorType: "Input",
+          },
+        });
+      } else if (
         currentParams.get("floor") === inputFloor &&
         currentParams.get("cabinetNum") === inputCabinetNum
       ) {
