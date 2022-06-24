@@ -113,7 +113,9 @@ const CabinetDetail = () => {
         <p>현재 대여자 : {CabinetUserInfo}</p>
         <p>대여 기간 : {CabinetLentInfo}</p>
         <p>현재 상태 : {CabinetActivationInfo}</p>
-        <p>고장 사유 : {CabinetDisabledReason}</p>
+        {CabinetActivationInfo === "사용 불가" && (
+          <p>비활성화 사유 : {CabinetDisabledReason}</p>
+        )}
         <ExpiredInfo />
       </DetailBox>
     );
