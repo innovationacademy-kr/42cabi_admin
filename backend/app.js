@@ -3,17 +3,17 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const path = require('path');
-const morgan = require('morgan');
+// const morgan = require('morgan');
 
 const config = require('dotenv');
 
 config.config();
 const { sendResponse } = require('./utils/util');
 
+// app.use(morgan('dev'));
 app.use(express.json());
 app.set('port', process.env.PORT || 8080);
 app.use(cors());
-app.use(morgan('dev'));
 
 const { apiRouter } = require('./routes/apiRoute');
 const { authMiddleware } = require('./middleware/authmiddleware');
