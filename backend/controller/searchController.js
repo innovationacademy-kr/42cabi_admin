@@ -1,5 +1,5 @@
 const query = require('../db/query');
-const { isNumeric, sendResponse } = require('../utils/util');
+const { isNumeric, sendResponse, isString } = require('../utils/util');
 const pool = require('../config/database');
 // intra_id, cabinetNum 검색 기능
 const getSearch = async (req, res) => {
@@ -10,8 +10,7 @@ const getSearch = async (req, res) => {
     let resultFromLent;
     let resultFromLentLog;
 
-    console.log(isNumeric(cabinetNum));
-    if (intraId) {
+    if (intraId && isString(intraId)) {
       [resultFromLent, resultFromLentLog] = await Promise.all([
         query.getLentByIntraId(connection, intraId),
         query.getLentLogByIntraId(connection, intraId),

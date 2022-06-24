@@ -30,6 +30,11 @@ const sendResponse = (res, data, status) => {
   res.status(status).json(data);
 };
 
+const isString = (str) => {
+  const regExp = /^[a-zA-Z0-9]+$/;
+  return regExp.test(str);
+};
+
 const isVerified = (token) => {
   try {
     jwt.verify(token, config.getJwtSecret());
@@ -45,4 +50,5 @@ module.exports = {
   isNumeric,
   isLogin,
   isVerified,
+  isString,
 };
