@@ -61,8 +61,10 @@ const getLentLogByCabinetNum = async (connection, cabinetNum, floor) => {
 // 고장 사물함 리스트 조회
 const getInactivatedCabinetList = async (connection) => {
   const getInactivatedCabinetQuery = `
-    SELECT floor, cabinet_num
+    SELECT c.floor, c.cabinet_num, d.note
     FROM cabinet c
+    JOIN disable d
+    ON d.disable_cabinet_id = c.cabinet_id AND d.status = 1
     WHERE c.activation=0;
     `;
   const result = await connection.query(getInactivatedCabinetQuery);
@@ -86,7 +88,7 @@ const addDisablelog = async (connection, cabinetIdx, note) => {
     VALUES (${cabinetIdx}, "${note}");
     `;
   await connection.query(content);
-}
+};
 
 // 고장 사물함 status 0 처리
 const modifyDisablelog = async (connection, cabinetIdx) => {
@@ -96,7 +98,7 @@ const modifyDisablelog = async (connection, cabinetIdx) => {
     WHERE disable_cabinet_id=${cabinetIdx} AND status=1;
   `;
   await connection.query(content);
-}
+};
 
 // 반납할 사물함의 lent 정보 가져옴
 const getUserLent = async (connection, cabinetIdx) => {
