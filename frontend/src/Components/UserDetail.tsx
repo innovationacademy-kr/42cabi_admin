@@ -50,7 +50,7 @@ const UserDetail = () => {
 
   if (data === undefined || data.length === 0) {
     return <></>;
-  } else if (data[0].auth === 2) {
+  } else if (data[0].auth === 1) {
     return (
       <DetailBox>
         <BigFontSize>{UserInfo}</BigFontSize>
