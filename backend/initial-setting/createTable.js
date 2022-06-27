@@ -7,6 +7,7 @@ const rl = readline.createInterface({
 });
 
 const pool = require('../config/database');
+// const pool = require('../config/database');
 const config = require('../config/config');
 
 const disabledLogQuery = fs

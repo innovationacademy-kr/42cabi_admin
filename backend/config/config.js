@@ -34,10 +34,19 @@ const getDatabase = () => {
 const getJwtSecret = () =>
   process.env.JWT_SECRET ?? 'jiwchoijaesjeonyubchoiyoyoo';
 
+const getDevDatabase = () => {
+  const database = process.env.DEV_DATABASE;
+  if (!database) {
+    throw new Error('DEV DB_NAME not defined');
+  }
+  return database;
+};
+
 module.exports = {
   getHost,
   getDBUser,
   getDBPassword,
   getDatabase,
   getJwtSecret,
+  getDevDatabase,
 };

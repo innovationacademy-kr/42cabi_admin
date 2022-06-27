@@ -15,4 +15,6 @@ apiRouter.use('/activation', activationRouter);
 apiRouter.use('/search', searchRouter);
 apiRouter.use('/auth', authRouter);
 
+// apiRouter.use('/ban', banRouter);
+
 module.exports = { apiRouter };
