@@ -216,7 +216,7 @@ const getBanCabinetList = async (connection) => {
 };
 
 const getBanUser = async (connection) => {
-  const content = `SELECT u.intra_id, b.bannedDate FROM user u join ban_user b on b.user_id=u.user_id where u.auth=2;
+  const content = `SELECT u.intra_id, b.bannedDate FROM user u join ban_user b on b.user_id=u.user_id where u.auth=1;
 `;
   const result = await connection.query(content);
   return result;
