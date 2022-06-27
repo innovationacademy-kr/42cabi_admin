@@ -207,7 +207,7 @@ const getCabinetInfoByFloor = async (connection) => {
 // ban 사물함 정보
 const getBanCabinetList = async (connection) => {
   const content = `
-    SELECT c.floor, c.cabinet_num, c.section
+    SELECT c.floor, c.section, c.cabinet_num
     FROM cabinet c
     WHERE c.activation=2;
     `;
