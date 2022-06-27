@@ -57,6 +57,8 @@ export type TaskBanCabinet = {
   floor: number;
   section: string;
   cabinet_num: number;
+  intra_id: string;
+  return_time: string;
 };
 
 export type TaskBanCabinetData = TaskBanCabinet[];

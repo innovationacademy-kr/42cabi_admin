@@ -3,7 +3,7 @@ import { BanCabinetTable } from "../Tables/BanCabinetTable";
 import { useDispatch } from "react-redux";
 import * as API from "../Networks/APIType";
 import { GetBanUserResponse } from "../ReduxModules/TaskBanUser";
-import { GetDisabledResponse } from "../ReduxModules/StatusDisabled";
+import { GetBanCabinetResponse } from "../ReduxModules/TaskBanCabinet";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -12,7 +12,6 @@ import {
   LeftBox,
   RightBox,
 } from "../Components/DashboardStyleComponent";
-import { GetBanCabinetResponse } from "../ReduxModules/TaskBanCabinet";
 
 const Task = () => {
   const dispatch = useDispatch();
