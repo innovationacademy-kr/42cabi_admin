@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
+import Task from "./Pages/Task";
 import Status from "./Pages/Status";
 import Search from "./Pages/Search";
 import PageNotFound from "./Pages/PageNotFound";
@@ -17,6 +18,7 @@ const App = () => {
         <Route index element={<Login />} />
         <Route path="saerom" element={<Layout />}>
           <Route path="" element={<Home />} />
+          <Route path="task" element={<Task />} />
           <Route path="status" element={<Status />} />
           <Route path="search" element={<Search />}>
             <Route path="searchDashboard" element={<SearchDashboard />} />

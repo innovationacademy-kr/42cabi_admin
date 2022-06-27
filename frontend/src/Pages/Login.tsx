@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import * as API from "../Networks/APIType";
 
 const Login = () => {
   const [inputId, setInputId] = useState("");
@@ -39,10 +39,17 @@ const Login = () => {
     }
     try {
       // console.log(inputId, inputPassword);
-      const res = await axios.post("http://localhost:8080/api/auth/login", {
-        id: inputId,
-        password: inputPassword,
-      });
+      const res = await API.axiosFormat(
+        {
+          method: "POST",
+          url: API.url("/api/auth/login"),
+          data: {
+            id: inputId,
+            password: inputPassword,
+          },
+        },
+        null
+      );
       localStorage.setItem("accessToken", res.data.accessToken);
       setIsHaveToken(true);
       // console.log(res.data);
