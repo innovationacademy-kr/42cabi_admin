@@ -6,6 +6,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import ExpiredInfo from "./ExpiredInfo";
 import { DetailBox, BigFontSize } from "./DetailStyleComponent";
 import LentDisabledInfo from "./LentDisabled";
+import styled from "styled-components";
 
 const UserDetail = () => {
   const SearchResponseRedux = useSelector(
@@ -49,6 +50,13 @@ const UserDetail = () => {
 
   if (data === undefined || data.length === 0) {
     return <></>;
+  } else if (data[0].auth === 2) {
+    return (
+      <DetailBox>
+        <BigFontSize>{UserInfo}</BigFontSize>
+        <BigRedMessage>BAN 유저입니다!</BigRedMessage>
+      </DetailBox>
+    );
   } else {
     return (
       <DetailBox>
@@ -61,5 +69,12 @@ const UserDetail = () => {
     );
   }
 };
+
+const BigRedMessage = styled.div`
+  font-size: 2rem;
+  font-weight: bold;
+  color: #bc0000;
+  margin-bottom: 1rem;
+`;
 
 export default UserDetail;

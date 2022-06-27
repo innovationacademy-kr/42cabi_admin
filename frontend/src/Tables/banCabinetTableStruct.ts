@@ -13,14 +13,6 @@ export const banCabinetTableStruct = [
     Header: "번호",
     accessor: "cabinet_num",
   },
-  {
-    Header: "인트라ID",
-    accessor: "intra_id",
-  },
-  {
-    Header: "반납 예정일",
-    accessor: "return_time",
-  },
   // {
   //   Header: "고장 발생일",
   //   accessor: "expire_time",

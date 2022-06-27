@@ -26,6 +26,7 @@ export type SearchResponseFromLent = {
   location?: string;
   section?: string;
   lent_id?: number;
+  auth?: number;
 };
 
 export type SearchResponseFromLentLog = {
@@ -57,8 +58,6 @@ export type TaskBanCabinet = {
   floor: number;
   section: string;
   cabinet_num: number;
-  intra_id: string;
-  return_time: string;
 };
 
 export type TaskBanCabinetData = TaskBanCabinet[];

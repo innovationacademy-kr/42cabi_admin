@@ -17,13 +17,13 @@ import { TaskBanUser } from "../type";
 import { PrevLogBox } from "../Components/DashboardStyleComponent";
 
 export const BanUserTable = () => {
-  const StatusExpiredRedux = useSelector(
+  const TaskBanUserRedux = useSelector(
     (state: RootState) => state.TaskBanUser,
     shallowEqual
   );
 
   const columns = useMemo(() => banUserTableStruct, []);
-  const data = useMemo(() => StatusExpiredRedux || [], [StatusExpiredRedux]);
+  const data = useMemo(() => TaskBanUserRedux || [], [TaskBanUserRedux]);
 
   const navigate = useNavigate();
   const GoToUserPage = (data: TaskBanUser) => {
@@ -60,9 +60,9 @@ export const BanUserTable = () => {
     usePagination
   );
   const { pageIndex } = state;
-  const totalDataCount = StatusExpiredRedux.length;
+  const totalDataCount = TaskBanUserRedux.length;
 
-  if (StatusExpiredRedux.length !== 0) {
+  if (TaskBanUserRedux.length !== 0) {
     return (
       <div>
         <h2>BAN 유저 리스트</h2>
