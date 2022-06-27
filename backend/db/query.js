@@ -204,6 +204,18 @@ const getCabinetInfoByFloor = async (connection) => {
   return result;
 };
 
+// ban 사물함 정보
+const getBanCabinetList = async (connection) => {
+  const content = `
+    SELECT c.floor, c.cabinet_num, (SELECT intra_id FROM user u WHERE u.user_id=ll.log_user_id) as intra_id, ll.return_time
+    FROM cabinet c
+    JOIN lent_log ll
+    ON ll.log_cabinet_id = c.cabinet_id AND c.activation=2;
+    `;
+  const result = await connection.query(content);
+  return result;
+};
+
 module.exports = {
   getLentByIntraId,
   getLentLogByIntraId,
@@ -220,4 +232,5 @@ module.exports = {
   deleteLent,
   getLentOverdue,
   getCabinetInfoByFloor,
+  getBanCabinetList,
 };
