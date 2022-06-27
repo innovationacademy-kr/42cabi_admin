@@ -23,7 +23,7 @@ const postLogin = (req, res) => {
 const getBanUser = async (_req, res) => {
   const connection = await pool.getConnection();
   try {
-    const banUser = query.getBanUser(connection);
+    const banUser = await query.getBanUser(connection);
     return sendResponse(res, banUser, 200);
   } finally {
     connection.release();
