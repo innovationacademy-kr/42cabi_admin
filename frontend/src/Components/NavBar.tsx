@@ -9,6 +9,9 @@ const NavBar = () => {
         <Link to="">
           <img src="/assets/cabinet.ico" alt="logo" />
         </Link>
+        <Link to="task" className="menu">
+          TASK
+        </Link>
         <Link to="status" className="menu">
           연체/고장
         </Link>

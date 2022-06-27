@@ -7,6 +7,7 @@ import ExpiredInfo from "./ExpiredInfo";
 import { DetailBox, BigFontSize } from "./DetailStyleComponent";
 import LentDisabledInfo from "./LentDisabled";
 import { GetDisabledResponse } from "../ReduxModules/StatusDisabled";
+import styled from "styled-components";
 import * as API from "../Networks/APIType";
 
 const CabinetDetail = () => {
@@ -105,6 +106,16 @@ const CabinetDetail = () => {
 
   if (data === undefined || data.length === 0) {
     return <></>;
+  } else if (data[0].activation === 2) {
+    return (
+      <DetailBox>
+        <BigFontSize>{CabinetInfo}</BigFontSize>
+        <BigRedMessage>강제 반납 처리 된 사물함입니다.</BigRedMessage>
+        <BigRedMessage>
+          사물함 확인 후 사용 가능할 때 활성화해주세요!
+        </BigRedMessage>
+      </DetailBox>
+    );
   } else {
     return (
       <DetailBox>
@@ -121,5 +132,12 @@ const CabinetDetail = () => {
     );
   }
 };
+
+const BigRedMessage = styled.div`
+  font-size: 2rem;
+  font-weight: bold;
+  color: #bc0000;
+  margin-bottom: 1rem;
+`;
 
 export default CabinetDetail;

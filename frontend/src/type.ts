@@ -26,6 +26,7 @@ export type SearchResponseFromLent = {
   location?: string;
   section?: string;
   lent_id?: number;
+  auth?: number;
 };
 
 export type SearchResponseFromLentLog = {
@@ -45,6 +46,21 @@ export type SearchResponseData = {
   resultFromLent?: SearchResponseFromLent[];
   resultFromLentLog?: SearchResponseFromLentLog[];
 };
+
+export type TaskBanUser = {
+  intra_id: string;
+  bannedDate: string;
+};
+
+export type TaskBanUserData = TaskBanUser[];
+
+export type TaskBanCabinet = {
+  floor: number;
+  section: string;
+  cabinet_num: number;
+};
+
+export type TaskBanCabinetData = TaskBanCabinet[];
 
 export type FloorStateData = {
   disabled: number;

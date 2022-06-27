@@ -11,7 +11,7 @@ import {
   Circle,
 } from "./ModalStyleComponent";
 import * as API from "../Networks/APIType";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
 import styled from "styled-components";
@@ -31,23 +31,32 @@ const ActivationModal = (props: any) => {
   const [isActivate, setIsActivate] = useState(1);
   const [activation, setActivation] = useState(1);
 
-  useEffect(() => {
+  // const DisabledReason = () => {
+  //   return isActivate ? <div></div> : <DisabledReasonBox />;
+  // };
+
+  const InitializeModalProps = useCallback(() => {
     if (
       SearchResponseRedux.resultFromLent !== undefined &&
       SearchResponseRedux.resultFromLent.length !== 0
     ) {
       setIsActivate(
-        SearchResponseRedux.resultFromLent[0].activation === 0 ? 0 : 1
+        SearchResponseRedux.resultFromLent[0].activation === 1 ? 1 : 0
       );
       setActivation(
-        SearchResponseRedux.resultFromLent[0].activation === 0 ? 0 : 1
+        SearchResponseRedux.resultFromLent[0].activation === 1 ? 1 : 0
       );
     }
   }, [SearchResponseRedux.resultFromLent]);
 
-  // const DisabledReason = () => {
-  //   return isActivate ? <div></div> : <DisabledReasonBox />;
-  // };
+  useEffect(() => {
+    InitializeModalProps();
+  }, [InitializeModalProps]);
+
+  const CloseModalWithNoChange = () => {
+    InitializeModalProps();
+    close(false);
+  };
 
   const CabinetInfo =
     data !== undefined
@@ -120,15 +129,15 @@ const ActivationModal = (props: any) => {
 
   return state ? (
     <Container>
-      <Overlay onClick={() => close(false)} />
+      <Overlay onClick={() => CloseModalWithNoChange()} />
       <Contents>
         <Title>
           사물함 상태 관리
-          <Close onClick={() => close(false)}>✖︎</Close>
+          <Close onClick={() => CloseModalWithNoChange()}>✖︎</Close>
         </Title>
         <Body>
           <p>{CabinetInfo}</p>
-          <p>현재 상태 : {activation ? "사용 가능" : "사용 불가"}</p>
+          <p>현재 상태 : {activation === 1 ? "사용 가능" : "사용 불가"}</p>
           <ToggleBox>
             상태 변경 :
             <ToggleBtn onClick={ClickedToggle} toggle={isActivate}>
@@ -142,7 +151,9 @@ const ActivationModal = (props: any) => {
             ref={reasonText}
             onKeyPress={handleEnterKey}
           />
-          <CancleButton onClick={() => close(false)}>취소</CancleButton>
+          <CancleButton onClick={() => CloseModalWithNoChange()}>
+            취소
+          </CancleButton>
           <ConfirmButton
             onClick={() => ActivationAPI(isActivate, activation !== isActivate)}
           >
