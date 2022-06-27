@@ -11,7 +11,7 @@
   "scripts": {
     "start": "npm run build --prefix ../frontend && nodemon app.js",
     "dev": "nodemon app.js",
-    "table": "cd initial-setting && node createDisabledLogTable.js"
+    "table": "cd initial-setting && node createTable.js"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
