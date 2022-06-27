@@ -1,7 +1,7 @@
 // 검색 BY intraId FROM lent
 const getLentByIntraId = async (connection, intraId) => {
   const getLentInfoQuery = `
-    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_id, l.lent_time, l.expire_time
+    SELECT u.intra_id, u.auth, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_id, l.lent_time, l.expire_time
     FROM user u
     LEFT JOIN lent l
     ON u.user_id=l.lent_user_id
@@ -207,10 +207,9 @@ const getCabinetInfoByFloor = async (connection) => {
 // ban 사물함 정보
 const getBanCabinetList = async (connection) => {
   const content = `
-    SELECT c.floor, c.cabinet_num, c.section, (SELECT intra_id FROM user u WHERE u.user_id=ll.log_user_id) as intra_id, ll.return_time
+    SELECT c.floor, c.section, c.cabinet_num
     FROM cabinet c
-    JOIN lent_log ll
-    ON ll.log_cabinet_id = c.cabinet_id AND c.activation=2;
+    WHERE c.activation=2;
     `;
   const result = await connection.query(content);
   return result;
