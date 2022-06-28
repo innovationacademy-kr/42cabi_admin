@@ -127,7 +127,7 @@ const SearchInput = styled.input`
   padding-right: 1rem;
   text-align: right;
   width: 23rem;
-  min-width: 7rem;
+  min-width: 6rem;
   height: 3rem;
   /* justify-content: flex-center; */
 `;
@@ -136,8 +136,9 @@ const SearchButton = styled.button`
   margin-top: 1rem;
   margin-left: 1%;
   margin-right: 5%;
+  color: black;
   width: 8rem;
-  min-width: 5rem;
+  min-width: 7rem;
   height: 3.5rem;
   :active {
     transform: scale(0.95);

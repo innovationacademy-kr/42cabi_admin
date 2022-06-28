@@ -13,7 +13,7 @@ const NavBar = () => {
           TASK
         </Link>
         <Link to="status" className="menu">
-          연체/고장
+          연체/밴
         </Link>
         <Link to="search" className="menu">
           검색
@@ -33,9 +33,9 @@ const NavBarStyles = styled.div`
   justify-content: space-between;
   background: #7d57c9;
   color: white;
-  font-size: 3.5vw;
-  @media screen and (min-width: 477px) {
-    font-size: 1.6rem;
+  font-size: 1.6rem;
+  @media screen and (max-width: 477px) {
+    font-size: 2.5vw;
   }
 
   .left {

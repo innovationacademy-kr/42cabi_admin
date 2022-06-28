@@ -12,11 +12,10 @@ import {
   Th,
   Tr,
 } from "./tableStyleComponent";
-import { useNavigate, createSearchParams } from "react-router-dom";
 import { StatusResponseExpired } from "../type";
 import { PrevLogBox } from "../Components/DashboardStyleComponent";
 
-export const ExpiredTable = () => {
+export const ExpiredTable = (props: any) => {
   const StatusExpiredRedux = useSelector(
     (state: RootState) => state.StatusExpired,
     shallowEqual
@@ -24,15 +23,10 @@ export const ExpiredTable = () => {
 
   const columns = useMemo(() => expiredTableStruct, []);
   const data = useMemo(() => StatusExpiredRedux || [], [StatusExpiredRedux]);
+  const { setParams } = props;
 
-  const navigate = useNavigate();
-  const GoToUserPage = (data: StatusResponseExpired) => {
-    navigate({
-      pathname: "/saerom/search/searchDashboard",
-      search: createSearchParams({
-        intraId: data.intra_id || "",
-      }).toString(),
-    });
+  const SetUserParams = (data: StatusResponseExpired) => {
+    setParams(data.intra_id);
   };
 
   const {
@@ -88,7 +82,7 @@ export const ExpiredTable = () => {
               return (
                 <Tr
                   {...row.getRowProps()}
-                  onClick={() => GoToUserPage(row.original)}
+                  onClick={() => SetUserParams(row.original)}
                 >
                   {row.cells.map((cell: any) => {
                     return (

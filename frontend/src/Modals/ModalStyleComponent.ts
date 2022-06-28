@@ -94,6 +94,7 @@ export const CancleButton = styled.button`
   padding-right: 2rem;
   margin-left: 1rem;
   margin-right: 1rem;
+  color: white;
   border: none;
   background-color: #aaaaaa;
   :hover:enabled {
