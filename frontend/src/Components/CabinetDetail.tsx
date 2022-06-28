@@ -26,14 +26,15 @@ const CabinetDetail = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const currentPage = window.location.pathname.split("/")[2];
 
   useEffect(() => {
-    if (data?.length === 0) {
+    if (currentPage === "search" && data?.length === 0) {
       navigate("/saerom/search/invalidSearchResult", {
         state: { errorType: "Cabinet" },
       });
     }
-  }, [data, navigate]);
+  }, [currentPage, data, navigate]);
 
   const CabinetInfo =
     data !== undefined && data[0] !== undefined
@@ -81,9 +82,9 @@ const CabinetDetail = () => {
   }, [dispatch, navigate]);
 
   useEffect(() => {
-    if (CabinetActivationInfo === "사용 불가") {
-      getDisableData();
-    }
+    // if (CabinetActivationInfo === "사용 불가") {
+    getDisableData();
+    // }
   }, [CabinetActivationInfo, getDisableData]);
 
   const cabinetFloor =
@@ -105,7 +106,11 @@ const CabinetDetail = () => {
       : "";
 
   if (data === undefined || data.length === 0) {
-    return <></>;
+    return (
+      <DetailBox>
+        <NoneCabinet>왼쪽에서 사물함을 선택해주세요!</NoneCabinet>
+      </DetailBox>
+    );
   } else if (data[0].activation === 2) {
     return (
       <DetailBox>
@@ -123,7 +128,11 @@ const CabinetDetail = () => {
         <BigFontSize>{CabinetInfo}</BigFontSize>
         <p>현재 대여자 : {CabinetUserInfo}</p>
         <p>대여 기간 : {CabinetLentInfo}</p>
-        <p>현재 상태 : {CabinetActivationInfo}</p>
+        <CabinetStatusMessage
+          activation={CabinetActivationInfo !== "사용 불가"}
+        >
+          {CabinetActivationInfo === "사용 불가" ? CabinetActivationInfo : ""}
+        </CabinetStatusMessage>
         {CabinetActivationInfo === "사용 불가" && (
           <p>비활성화 사유 : {CabinetDisabledReason}</p>
         )}
@@ -138,6 +147,22 @@ const BigRedMessage = styled.div`
   font-weight: bold;
   color: #bc0000;
   margin-bottom: 1rem;
+`;
+
+const NoneCabinet = styled.div`
+  font-size: 2rem;
+  color: black;
+  padding-top: 10rem;
+  padding-bottom: 10rem;
+`;
+
+const CabinetStatusMessage = styled.p<{
+  activation: boolean;
+}>`
+  display: ${(props) => (props.activation ? "none" : "")};
+  font-size: ${(props) => (props.activation ? "1.6rem" : "2rem")};
+  font-weight: ${(props) => (props.activation ? "normal" : "bold")};
+  color: ${(props) => (props.activation ? "black" : "#bc0000")};
 `;
 
 export default CabinetDetail;

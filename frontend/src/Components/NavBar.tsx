@@ -13,7 +13,7 @@ const NavBar = () => {
           TASK
         </Link>
         <Link to="status" className="menu">
-          연체/고장
+          연체/밴
         </Link>
         <Link to="search" className="menu">
           검색

@@ -15,9 +15,10 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
 import styled from "styled-components";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { GetTargetResponse } from "../ReduxModules/SearchResponse";
+import { GetBanCabinetResponse } from "../ReduxModules/TaskBanCabinet";
 
 const ActivationModal = (props: any) => {
   const SearchResponseRedux = useSelector(
@@ -25,15 +26,11 @@ const ActivationModal = (props: any) => {
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
   const { data, state, close } = props;
   const [isActivate, setIsActivate] = useState(1);
   const [activation, setActivation] = useState(1);
-
-  // const DisabledReason = () => {
-  //   return isActivate ? <div></div> : <DisabledReasonBox />;
-  // };
+  const [isUpdated, setIsUpdated] = useState(false);
 
   const InitializeModalProps = useCallback(() => {
     if (
@@ -99,14 +96,14 @@ const ActivationModal = (props: any) => {
           token
         );
         let params = {};
-        if (searchParams.get("floor") !== null) {
+        if (data.floor !== undefined) {
           params = {
-            floor: searchParams.get("floor"),
-            cabinetNum: searchParams.get("cabinetNum"),
+            floor: data.floor,
+            cabinetNum: data.cabinet_num,
           };
         } else {
           params = {
-            intraId: searchParams.get("intraId"),
+            intraId: data.intra_id,
           };
         }
         const res = await API.axiosFormat(
@@ -118,6 +115,7 @@ const ActivationModal = (props: any) => {
           token
         );
         dispatch(GetTargetResponse(res.data));
+        setIsUpdated(!isUpdated);
         close(true);
       }
     } catch (e) {
@@ -126,6 +124,24 @@ const ActivationModal = (props: any) => {
       API.HandleError(navigate, axiosError);
     }
   };
+
+  const GetBanCabinetData = useCallback(async () => {
+    const token = localStorage.getItem("accessToken");
+    const banCabinetInfo = await API.axiosFormat(
+      {
+        method: "GET",
+        url: API.url("/api/activation/ban"),
+      },
+      token
+    );
+    dispatch(GetBanCabinetResponse(banCabinetInfo.data));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (window.location.pathname === "/saerom/task") {
+      GetBanCabinetData();
+    }
+  }, [isUpdated, GetBanCabinetData]);
 
   return state ? (
     <Container>

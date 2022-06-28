@@ -12,11 +12,10 @@ import {
   Th,
   Tr,
 } from "./tableStyleComponent";
-import { useNavigate, createSearchParams } from "react-router-dom";
 import { TaskBanUser } from "../type";
 import { PrevLogBox } from "../Components/DashboardStyleComponent";
 
-export const BanUserTable = () => {
+export const BanUserTable = (props: any) => {
   const TaskBanUserRedux = useSelector(
     (state: RootState) => state.TaskBanUser,
     shallowEqual
@@ -24,15 +23,10 @@ export const BanUserTable = () => {
 
   const columns = useMemo(() => banUserTableStruct, []);
   const data = useMemo(() => TaskBanUserRedux || [], [TaskBanUserRedux]);
+  const { setParams } = props;
 
-  const navigate = useNavigate();
-  const GoToUserPage = (data: TaskBanUser) => {
-    navigate({
-      pathname: "/saerom/search/searchDashboard",
-      search: createSearchParams({
-        intraId: data.intra_id || "",
-      }).toString(),
-    });
+  const SetUserParams = (data: TaskBanUser) => {
+    setParams(data.intra_id);
   };
 
   const {
@@ -88,7 +82,7 @@ export const BanUserTable = () => {
               return (
                 <Tr
                   {...row.getRowProps()}
-                  onClick={() => GoToUserPage(row.original)}
+                  onClick={() => SetUserParams(row.original)}
                 >
                   {row.cells.map((cell: any) => {
                     return (

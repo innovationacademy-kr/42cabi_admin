@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { banCabinetTableStruct } from "./banCabinetTableStruct";
 import { usePagination, useSortBy, useTable } from "react-table";
-import { useSelector, shallowEqual } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
 import {
   TableHead,
@@ -12,28 +12,21 @@ import {
   TablePageControlBox,
   TableIndexBox,
 } from "./tableStyleComponent";
-import { useNavigate, createSearchParams } from "react-router-dom";
 import { TaskBanCabinet } from "../type";
 import { PrevLogBox } from "../Components/DashboardStyleComponent";
 
-export const BanCabinetTable = () => {
+export const BanCabinetTable = (props: any) => {
   const TaskBanCabinetRedux = useSelector(
-    (state: RootState) => state.TaskBanCabinet,
-    shallowEqual
+    (state: RootState) => state.TaskBanCabinet
   );
 
   const columns = useMemo(() => banCabinetTableStruct, []);
   const data = useMemo(() => TaskBanCabinetRedux || [], [TaskBanCabinetRedux]);
 
-  const navigate = useNavigate();
-  const GoToCabinetPage = (data: TaskBanCabinet) => {
-    navigate({
-      pathname: "/saerom/search/searchDashboard",
-      search: createSearchParams({
-        floor: data.floor?.toString() || "",
-        cabinetNum: data.cabinet_num?.toString() || "",
-      }).toString(),
-    });
+  const { setParams } = props;
+
+  const SetCabinetParams = (data: TaskBanCabinet) => {
+    setParams({ floor: data.floor, cabinetNum: data.cabinet_num });
   };
 
   const {
@@ -66,7 +59,7 @@ export const BanCabinetTable = () => {
   if (TaskBanCabinetRedux.length !== 0) {
     return (
       <div>
-        <h2>확인해야 할 사물함 리스트</h2>
+        <h2>강제 반납으로 인한 비활성화 사물함</h2>
         <TableSheet {...getTableProps()}>
           <TableHead>
             {headerGroups.map((headerGroup) => (
@@ -89,7 +82,7 @@ export const BanCabinetTable = () => {
               return (
                 <Tr
                   {...row.getRowProps()}
-                  onClick={() => GoToCabinetPage(row.original)}
+                  onClick={() => SetCabinetParams(row.original)}
                 >
                   {row.cells.map((cell: any) => {
                     return (

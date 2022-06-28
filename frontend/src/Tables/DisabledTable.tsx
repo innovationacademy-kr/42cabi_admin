@@ -12,11 +12,10 @@ import {
   TablePageControlBox,
   TableIndexBox,
 } from "./tableStyleComponent";
-import { useNavigate, createSearchParams } from "react-router-dom";
 import { StatusResponseDisabled } from "../type";
 import { PrevLogBox } from "../Components/DashboardStyleComponent";
 
-export const DisabledTable = () => {
+export const DisabledTable = (props: any) => {
   const StatusDisabledRedux = useSelector(
     (state: RootState) => state.StatusDisabled,
     shallowEqual
@@ -24,16 +23,10 @@ export const DisabledTable = () => {
 
   const columns = useMemo(() => disabledTableStruct, []);
   const data = useMemo(() => StatusDisabledRedux || [], [StatusDisabledRedux]);
+  const { setParams } = props;
 
-  const navigate = useNavigate();
-  const GoToCabinetPage = (data: StatusResponseDisabled) => {
-    navigate({
-      pathname: "/saerom/search/searchDashboard",
-      search: createSearchParams({
-        floor: data.floor?.toString() || "",
-        cabinetNum: data.cabinet_num?.toString() || "",
-      }).toString(),
-    });
+  const SetCabinetParams = (data: StatusResponseDisabled) => {
+    setParams({ floor: data.floor, cabinetNum: data.cabinet_num });
   };
 
   const {
@@ -66,7 +59,7 @@ export const DisabledTable = () => {
   if (StatusDisabledRedux.length !== 0) {
     return (
       <div>
-        <h2>비활성화 사물함 리스트</h2>
+        <h2>고장 처리 된 사물함 리스트</h2>
         <TableSheet {...getTableProps()}>
           <TableHead>
             {headerGroups.map((headerGroup) => (
@@ -89,7 +82,7 @@ export const DisabledTable = () => {
               return (
                 <Tr
                   {...row.getRowProps()}
-                  onClick={() => GoToCabinetPage(row.original)}
+                  onClick={() => SetCabinetParams(row.original)}
                 >
                   {row.cells.map((cell: any) => {
                     return (
