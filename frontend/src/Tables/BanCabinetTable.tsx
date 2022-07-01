@@ -59,7 +59,7 @@ export const BanCabinetTable = (props: any) => {
   if (TaskBanCabinetRedux.length !== 0) {
     return (
       <div>
-        <h2>물품이 있는지 확인해야 하는 사물함</h2>
+        <h2>강제 반납 사물함</h2>
         <TableSheet {...getTableProps()}>
           <TableHead>
             {headerGroups.map((headerGroup) => (
