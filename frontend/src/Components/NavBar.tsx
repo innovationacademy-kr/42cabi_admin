@@ -35,7 +35,7 @@ const NavBarStyles = styled.div`
   color: white;
   font-size: 1.6rem;
   @media screen and (max-width: 477px) {
-    font-size: 2.5vw;
+    font-size: 3.5vw;
   }
 
   .left {
@@ -49,9 +49,9 @@ const NavBarStyles = styled.div`
       height: 7vw;
       max-height: 4.5rem;
       vertical-align: middle;
-      @media screen and (max-width: 400px) {
+      @media screen and (max-width: 477px) {
         margin-left: 0.1rem;
-        margin-right: 0.1rem;
+        margin-right: 0.5rem;
       }
     }
   }
@@ -61,6 +61,9 @@ const NavBarStyles = styled.div`
     justify-content: center;
     align-items: center;
     margin-right: 1.5rem;
+    @media screen and (max-width: 477px) {
+      margin: 1rem;
+    }
   }
 
   .menu {
@@ -69,6 +72,9 @@ const NavBarStyles = styled.div`
     letter-spacing: 0.5rem;
     color: white;
     text-decoration: none;
+    @media screen and (max-width: 477px) {
+      margin: 0.5rem;
+    }
   }
 `;
 

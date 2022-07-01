@@ -54,7 +54,7 @@ const UserDetail = () => {
   if (data === undefined || data.length === 0) {
     return (
       <DetailBox>
-        <NoneUser>왼쪽에서 유저를 선택해주세요!</NoneUser>
+        <NoneUser>목록에서 유저를 선택해주세요!</NoneUser>
       </DetailBox>
     );
   } else if (data[0].auth === 1) {

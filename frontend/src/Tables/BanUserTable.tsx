@@ -48,7 +48,7 @@ export const BanUserTable = (props: any) => {
       // @ts-ignore
       columns,
       data,
-      initialState: { pageSize: 15 },
+      initialState: { pageSize: 10 },
     },
     useSortBy,
     usePagination
@@ -59,7 +59,7 @@ export const BanUserTable = (props: any) => {
   if (TaskBanUserRedux.length !== 0) {
     return (
       <div>
-        <h2>BAN 유저 리스트</h2>
+        <h2>영구 정지 사용자</h2>
         <TableSheet {...getTableProps()}>
           <TableHead>
             {headerGroups.map((headerGroup) => (
@@ -120,7 +120,7 @@ export const BanUserTable = (props: any) => {
       </div>
     );
   } else {
-    return <PrevLogBox>Ban처리 된 사용자가 없습니다.</PrevLogBox>;
+    return <PrevLogBox>영구 정지된 사용자가 없습니다.</PrevLogBox>;
   }
 };
 

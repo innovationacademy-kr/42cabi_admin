@@ -48,7 +48,7 @@ export const DisabledTable = (props: any) => {
       // @ts-ignore
       columns,
       data,
-      initialState: { pageSize: 15 },
+      initialState: { pageSize: 10 },
     },
     useSortBy,
     usePagination
@@ -59,7 +59,7 @@ export const DisabledTable = (props: any) => {
   if (StatusDisabledRedux.length !== 0) {
     return (
       <div>
-        <h2>고장 처리 된 사물함 리스트</h2>
+        <h2>사용 불가 사물함</h2>
         <TableSheet {...getTableProps()}>
           <TableHead>
             {headerGroups.map((headerGroup) => (
@@ -120,7 +120,7 @@ export const DisabledTable = (props: any) => {
       </div>
     );
   } else {
-    return <PrevLogBox>비활성화 된 사물함이 없습니다.</PrevLogBox>;
+    return <PrevLogBox>사용 불가 사물함이 없습니다.</PrevLogBox>;
   }
 };
 

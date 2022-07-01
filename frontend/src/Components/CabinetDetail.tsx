@@ -108,14 +108,14 @@ const CabinetDetail = () => {
   if (data === undefined || data.length === 0) {
     return (
       <DetailBox>
-        <NoneCabinet>왼쪽에서 사물함을 선택해주세요!</NoneCabinet>
+        <NoneCabinet>목록에서 사물함을 선택해주세요!</NoneCabinet>
       </DetailBox>
     );
   } else if (data[0].activation === 2) {
     return (
       <DetailBox>
         <BigFontSize>{CabinetInfo}</BigFontSize>
-        <BigRedMessage>강제 반납 처리 된 사물함입니다.</BigRedMessage>
+        <BigRedMessage>강제 반납 처리된 사물함입니다.</BigRedMessage>
         <BigRedMessage>
           사물함 확인 후 사용 가능할 때 활성화해주세요!
         </BigRedMessage>
