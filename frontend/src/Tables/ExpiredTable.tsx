@@ -48,7 +48,7 @@ export const ExpiredTable = (props: any) => {
       // @ts-ignore
       columns,
       data,
-      initialState: { pageSize: 15 },
+      initialState: { pageSize: 10 },
     },
     useSortBy,
     usePagination
@@ -59,7 +59,7 @@ export const ExpiredTable = (props: any) => {
   if (StatusExpiredRedux.length !== 0) {
     return (
       <div>
-        <h2>연체자 리스트</h2>
+        <h2>연체 중인 사용자</h2>
         <TableSheet {...getTableProps()}>
           <TableHead>
             {headerGroups.map((headerGroup) => (

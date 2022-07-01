@@ -107,10 +107,10 @@ const Task = () => {
       <DashboardBox>
         <LeftBox>
           <GrayBgBox>
-            <DisabledTable setParams={setParamCabinet} />
+            <BanCabinetTable setParams={setParamCabinet} />
           </GrayBgBox>
           <GrayBgBox>
-            <BanCabinetTable setParams={setParamCabinet} />
+            <DisabledTable setParams={setParamCabinet} />
           </GrayBgBox>
         </LeftBox>
         <RightBox>

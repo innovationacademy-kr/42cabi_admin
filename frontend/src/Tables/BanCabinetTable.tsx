@@ -48,7 +48,7 @@ export const BanCabinetTable = (props: any) => {
       // @ts-ignore
       columns,
       data,
-      initialState: { pageSize: 15 },
+      initialState: { pageSize: 10 },
     },
     useSortBy,
     usePagination
@@ -59,7 +59,7 @@ export const BanCabinetTable = (props: any) => {
   if (TaskBanCabinetRedux.length !== 0) {
     return (
       <div>
-        <h2>강제 반납으로 인한 비활성화 사물함</h2>
+        <h2>물품이 있는지 확인해야 하는 사물함</h2>
         <TableSheet {...getTableProps()}>
           <TableHead>
             {headerGroups.map((headerGroup) => (
