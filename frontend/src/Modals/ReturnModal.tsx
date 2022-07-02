@@ -9,16 +9,16 @@ import {
   CancleButton,
 } from "./ModalStyleComponent";
 import * as API from "../Networks/APIType";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { GetTargetResponse } from "../ReduxModules/SearchResponse";
+import { GetExpiredResponse } from "../ReduxModules/StatusExpired";
 
 const ReturnModal = (props: any) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
-  const { data, state, close } = props;
+  const { data, state, close, originPage } = props;
 
   const CabinetInfo =
     data !== undefined
@@ -43,9 +43,9 @@ const ReturnModal = (props: any) => {
         token
       );
       const params = {
-        intraId: searchParams.get("intraId"),
+        intraId: data !== undefined ? data.intra_id : "",
       };
-      const res = await API.axiosFormat(
+      const resSearch = await API.axiosFormat(
         {
           method: "GET",
           url: API.url("/api/search"),
@@ -53,7 +53,17 @@ const ReturnModal = (props: any) => {
         },
         token
       );
-      dispatch(GetTargetResponse(res.data));
+      dispatch(GetTargetResponse(resSearch.data));
+      if (originPage === "status") {
+        const resExpired = await API.axiosFormat(
+          {
+            method: "GET",
+            url: API.url("/api/lent/overdue"),
+          },
+          token
+        );
+        dispatch(GetExpiredResponse(resExpired.data));
+      }
     } catch (e) {
       console.log(e);
       const axiosError = e as API.axiosError;

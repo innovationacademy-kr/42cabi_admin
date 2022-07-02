@@ -114,7 +114,7 @@ const Status = () => {
             <UserDetail />
           </GrayBgBox>
           <ButtonBox>
-            <ButtonSet />
+            <ButtonSet originPage="status" />
           </ButtonBox>
         </RightBox>
       </DashboardBox>
