@@ -1,4 +1,4 @@
-import moment from "moment";
+// import moment from "moment";
 
 export const disabledTableStruct = [
   {
@@ -13,12 +13,12 @@ export const disabledTableStruct = [
     Header: "사유",
     accessor: "note",
   },
-  {
-    Header: "고장 발생일",
-    accessor: "expire_time",
-    Cell: (props: any) => {
-      const date = props;
-      return moment(date.value).format("YY-MM-DD");
-    },
-  },
+  // {
+  //   Header: "고장 발생일",
+  //   accessor: "disabled_time",
+  //   Cell: (props: any) => {
+  //     const date = props;
+  //     return moment(date.value).format("YY-MM-DD");
+  //   },
+  // },
 ];

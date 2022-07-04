@@ -61,7 +61,7 @@ const UserDetail = () => {
     return (
       <DetailBox>
         <BigFontSize>{UserInfo}</BigFontSize>
-        <BigRedMessage>BAN 유저입니다!</BigRedMessage>
+        <BigRedMessage>영구 정지된 사용자입니다!</BigRedMessage>
       </DetailBox>
     );
   } else {

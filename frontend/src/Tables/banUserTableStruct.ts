@@ -6,7 +6,7 @@ export const banUserTableStruct = [
     accessor: "intra_id",
   },
   {
-    Header: "처리 일자",
+    Header: "정지일",
     accessor: " bannedDate",
     Cell: (props: any) => {
       const date = props;
