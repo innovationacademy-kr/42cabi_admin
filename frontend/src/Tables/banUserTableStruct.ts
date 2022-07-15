@@ -7,7 +7,7 @@ export const banUserTableStruct = [
   },
   {
     Header: "정지일",
-    accessor: " bannedDate",
+    accessor: "bannedDate",
     Cell: (props: any) => {
       const date = props;
       return moment(date.value).format("YY-MM-DD");
