@@ -172,6 +172,7 @@ const deleteLent = async (connection, userLentInfo) => {
   await connection.query(deleteLentQuery, userLentInfo.lent_cabinet_id);
 };
 
+// 연체 사물함 정보 조회
 const getLentOverdue = async (connection) => {
   const content = `
 		SELECT u.intra_id, c.floor, c.cabinet_num, l.lent_time,l.expire_time from lent l
@@ -191,10 +192,10 @@ const getCabinetInfoByFloor = async (connection) => {
   const content = `
     SELECT c.floor,
     COUNT(*) as total,
-    COUNT(case when c.cabinet_id=l.lent_cabinet_id and l.expire_time>now() then 1 end) as used,
-    COUNT(case when l.expire_time<now() then 1 end) as overdue,
+    COUNT(case when c.cabinet_id=l.lent_cabinet_id and l.expire_time>=DATE_FORMAT(NOW(), '%Y-%m-%d') then 1 end) as used,
+    COUNT(case when l.expire_time<DATE_FORMAT(NOW(), '%Y-%m-%d') then 1 end) as overdue,
     COUNT(case when l.lent_cabinet_id is null and c.activation=1 then 1 end) as unused,
-    COUNT(case when c.activation=0 then 1 end) as disabled
+    COUNT(case when c.activation!=1 then 1 end) as disabled
     FROM cabinet c
     LEFT JOIN lent l
     ON c.cabinet_id=l.lent_cabinet_id
