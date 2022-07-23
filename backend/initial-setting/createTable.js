@@ -10,12 +10,10 @@ const pool = require('../config/database');
 // const pool = require('../config/database');
 const config = require('../config/config');
 
-const disabledLogQuery = fs
-  .readFileSync('./disabled-log.sql')
-  .toString('utf-8');
+const disabledLogQuery = fs.readFileSync('./disable.sql').toString('utf-8');
 const userQuery = fs.readFileSync('./user.sql').toString('utf-8');
 const cabinetQuery = fs.readFileSync('./cabinet.sql').toString('utf-8');
-const banLogQuery = fs.readFileSync('./ban.sql').toString('utf-8');
+const banLogQuery = fs.readFileSync('./ban_user.sql').toString('utf-8');
 
 const init = async () => {
   try {

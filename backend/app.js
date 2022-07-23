@@ -18,11 +18,11 @@ app.set('port', process.env.PORT || 8080);
 const { apiRouter } = require('./routes/apiRoute');
 const { authMiddleware } = require('./middleware/authmiddleware');
 
-app.use(express.static(path.join(__dirname, '../frontend/build/')));
+app.use(express.static(path.join(__dirname, '../', 'frontend/build/')));
 app.use('/api', authMiddleware, apiRouter);
 
 app.use('/', (_req, res) => {
-  res.sendFile(path.join(__dirname, '/../frontend/build/index.html'));
+  res.sendFile(path.join(__dirname, '../', 'frontend/build/index.html'));
 });
 
 app.use((err, _req, res, _next) => {
