@@ -4,5 +4,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `auth` tinyint(4) NOT NULL,
   `email` varchar(128) DEFAULT NULL,
   `phone` varchar(128) DEFAULT NULL,
+  `firstLogin` datetime DEFAULT NULL,
+  `lastLogin` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

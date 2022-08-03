@@ -31,7 +31,7 @@ const sendResponse = (res, data, status) => {
 };
 
 const isString = (str) => {
-  const regExp = /^[a-zA-Z0-9]+$/;
+  const regExp = /^[a-zA-Z0-9-]+$/;
   return regExp.test(str);
 };
 
