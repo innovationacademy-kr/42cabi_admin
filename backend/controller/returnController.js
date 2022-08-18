@@ -17,6 +17,8 @@ const getReturn = async (req, res) => {
       return sendResponse(res, {}, 400);
     }
     return sendResponse(res, cabinetInfo, 200);
+  } catch (err) {
+    return sendResponse(res, {}, 500);
   } finally {
     connection.release();
   }
