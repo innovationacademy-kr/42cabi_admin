@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -12,7 +13,9 @@ async function bootstrap() {
     .build();
   const SwaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('docs', app, SwaggerDocument);
-  await app.listen(3000);
+  const configService = app.get(ConfigService);
+  const port = configService.get<number>('port');
+  await app.listen(port);
 }
 
 bootstrap();
