@@ -113,5 +113,3 @@ dist
 backend/views/assets/*
 backend/views/index.html
 
-backend/.gitignore
-backend/test.js

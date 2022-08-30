@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 import { NavigateFunction } from "react-router-dom";
 
 export function url(path: string) {
-  return `${process.env.REACT_APP_API_SERVER}${path}`;
+  return `${window.location.origin}${path}`;
 }
 
 export function axiosFormat(option: Object, authorization: string | null) {
