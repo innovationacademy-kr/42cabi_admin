@@ -6,7 +6,7 @@ import ReturnModal from "../Modals/ReturnModal";
 import ActivationModal from "../Modals/ActivationModal";
 import Toast from "./Toast";
 
-const ButtonSet = () => {
+const ButtonSet = (props: any) => {
   const SearchResponseRedux = useSelector(
     (state: RootState) => state.SearchResponse,
     shallowEqual
@@ -82,6 +82,8 @@ const ButtonSet = () => {
     setChangeCancledToast(false);
   };
 
+  const { originPage } = props;
+
   const HandleCopy = () => {
     const text =
       SearchResponseRedux.resultFromLent !== undefined &&
@@ -127,6 +129,7 @@ const ButtonSet = () => {
           state={showReturnModal}
           open={openReturnModal}
           close={closeReturnModal}
+          originPage={originPage}
         />
         {/* <CabiButton Color="#6667ab" disabled={isLent}>
         연장처리

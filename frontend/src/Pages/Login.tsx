@@ -1,11 +1,11 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import * as API from "../Networks/APIType";
 
 const Login = () => {
-  const [inputId, setInputId] = useState("");
-  const [inputPassword, setInputPassword] = useState("");
+  const inputIdRef = useRef<HTMLInputElement>(null);
+  const inputPasswordRef = useRef<HTMLInputElement>(null);
   const [isHaveToken, setIsHaveToken] = useState(false);
   const navigate = useNavigate();
 
@@ -18,14 +18,6 @@ const Login = () => {
     }
   }, [navigate, isHaveToken]);
 
-  const handleInputId = (e: any) => {
-    setInputId(e.target.value);
-  };
-
-  const handleInputPassword = (e: any) => {
-    setInputPassword(e.target.value);
-  };
-
   const handleEnterKey = (event: any) => {
     if (event.key === "Enter") {
       handleLogin();
@@ -33,16 +25,23 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    if (!inputId || !inputPassword) {
+    if (!inputIdRef.current?.value || !inputPasswordRef.current?.value) {
       alert("아이디 또는 비밀번호를 확인해주세요!");
       return;
     }
     try {
       // console.log(inputId, inputPassword);
-      const res = await axios.post("/api/auth/login", {
-        id: inputId,
-        password: inputPassword,
-      });
+      const res = await API.axiosFormat(
+        {
+          method: "POST",
+          url: API.url("/api/auth/login"),
+          data: {
+            id: inputIdRef.current.value,
+            password: inputPasswordRef.current.value,
+          },
+        },
+        null
+      );
       localStorage.setItem("accessToken", res.data.accessToken);
       setIsHaveToken(true);
       // console.log(res.data);
@@ -59,18 +58,16 @@ const Login = () => {
         <input
           type="text"
           name="input_id"
-          value={inputId}
-          onChange={handleInputId}
           placeholder="ID"
           autoComplete="off"
+          ref={inputIdRef}
           onKeyDown={handleEnterKey}
         />
         <input
           type="password"
           name="input_pw"
-          value={inputPassword}
-          onChange={handleInputPassword}
           placeholder="Password"
+          ref={inputPasswordRef}
           onKeyDown={handleEnterKey}
         />
       </FormStyles>

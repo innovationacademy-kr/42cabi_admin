@@ -11,13 +11,14 @@ import {
   Circle,
 } from "./ModalStyleComponent";
 import * as API from "../Networks/APIType";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
 import styled from "styled-components";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { GetTargetResponse } from "../ReduxModules/SearchResponse";
+import { GetBanCabinetResponse } from "../ReduxModules/TaskBanCabinet";
 
 const ActivationModal = (props: any) => {
   const SearchResponseRedux = useSelector(
@@ -25,29 +26,34 @@ const ActivationModal = (props: any) => {
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
   const { data, state, close } = props;
   const [isActivate, setIsActivate] = useState(1);
   const [activation, setActivation] = useState(1);
+  const [isUpdated, setIsUpdated] = useState(false);
 
-  useEffect(() => {
+  const InitializeModalProps = useCallback(() => {
     if (
       SearchResponseRedux.resultFromLent !== undefined &&
       SearchResponseRedux.resultFromLent.length !== 0
     ) {
       setIsActivate(
-        SearchResponseRedux.resultFromLent[0].activation === 0 ? 0 : 1
+        SearchResponseRedux.resultFromLent[0].activation === 1 ? 1 : 0
       );
       setActivation(
-        SearchResponseRedux.resultFromLent[0].activation === 0 ? 0 : 1
+        SearchResponseRedux.resultFromLent[0].activation === 1 ? 1 : 0
       );
     }
   }, [SearchResponseRedux.resultFromLent]);
 
-  // const DisabledReason = () => {
-  //   return isActivate ? <div></div> : <DisabledReasonBox />;
-  // };
+  useEffect(() => {
+    InitializeModalProps();
+  }, [InitializeModalProps]);
+
+  const CloseModalWithNoChange = () => {
+    InitializeModalProps();
+    close(false);
+  };
 
   const CabinetInfo =
     data !== undefined
@@ -63,12 +69,18 @@ const ActivationModal = (props: any) => {
     setIsActivate((prev: number) => Number(!prev));
   };
 
+  const handleEnterKey = (event: any) => {
+    if (event.key === "Enter") {
+      ActivationAPI(isActivate, activation !== isActivate);
+    }
+  };
+
   const reasonText = useRef<HTMLInputElement>(null);
-  const ActivationAPI = async (activation: number, noChange: boolean) => {
+  const ActivationAPI = async (isActivate: number, isChanged: boolean) => {
     try {
       const token = localStorage.getItem("accessToken");
       const cabinet_id = data !== undefined ? data.cabinet_id : "";
-      if (noChange) {
+      if (!isChanged) {
         close(false);
       } else {
         await API.axiosFormat(
@@ -77,21 +89,21 @@ const ActivationModal = (props: any) => {
             url: API.url("/api/activation"),
             data: {
               cabinetIdx: cabinet_id,
-              activation: activation,
+              activation: isActivate,
               reason: reasonText.current?.value,
             },
           },
           token
         );
         let params = {};
-        if (searchParams.get("floor") !== null) {
+        if (data.floor !== undefined) {
           params = {
-            floor: searchParams.get("floor"),
-            cabinetNum: searchParams.get("cabinetNum"),
+            floor: data.floor,
+            cabinetNum: data.cabinet_num,
           };
         } else {
           params = {
-            intraId: searchParams.get("intraId"),
+            intraId: data.intra_id,
           };
         }
         const res = await API.axiosFormat(
@@ -103,27 +115,45 @@ const ActivationModal = (props: any) => {
           token
         );
         dispatch(GetTargetResponse(res.data));
+        setIsUpdated(!isUpdated);
+        close(true);
       }
     } catch (e) {
       console.log(e);
       const axiosError = e as API.axiosError;
       API.HandleError(navigate, axiosError);
-    } finally {
-      close(true);
     }
   };
 
+  const GetBanCabinetData = useCallback(async () => {
+    const token = localStorage.getItem("accessToken");
+    const banCabinetInfo = await API.axiosFormat(
+      {
+        method: "GET",
+        url: API.url("/api/activation/ban"),
+      },
+      token
+    );
+    dispatch(GetBanCabinetResponse(banCabinetInfo.data));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (window.location.pathname === "/saerom/task") {
+      GetBanCabinetData();
+    }
+  }, [isUpdated, GetBanCabinetData]);
+
   return state ? (
     <Container>
-      <Overlay onClick={() => close(false)} />
+      <Overlay onClick={() => CloseModalWithNoChange()} />
       <Contents>
         <Title>
           사물함 상태 관리
-          <Close onClick={() => close(false)}>✖︎</Close>
+          <Close onClick={() => CloseModalWithNoChange()}>✖︎</Close>
         </Title>
         <Body>
           <p>{CabinetInfo}</p>
-          <p>현재 상태 : {activation ? "사용 가능" : "사용 불가"}</p>
+          <p>현재 상태 : {activation === 1 ? "사용 가능" : "사용 불가"}</p>
           <ToggleBox>
             상태 변경 :
             <ToggleBtn onClick={ClickedToggle} toggle={isActivate}>
@@ -135,10 +165,13 @@ const ActivationModal = (props: any) => {
             type="text"
             placeholder="사용하지 못하는 이유를 적어주세요!"
             ref={reasonText}
+            onKeyPress={handleEnterKey}
           />
-          <CancleButton onClick={() => close(false)}>취소</CancleButton>
+          <CancleButton onClick={() => CloseModalWithNoChange()}>
+            취소
+          </CancleButton>
           <ConfirmButton
-            onClick={() => ActivationAPI(isActivate, activation === isActivate)}
+            onClick={() => ActivationAPI(isActivate, activation !== isActivate)}
           >
             저장
           </ConfirmButton>

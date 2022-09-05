@@ -1,30 +1,40 @@
-import { useSelector, shallowEqual } from "react-redux";
-import { useEffect, useMemo } from "react";
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
+import { useEffect, useMemo, useCallback } from "react";
 import { RootState } from "../ReduxModules/rootReducer";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import ExpiredInfo from "./ExpiredInfo";
 import { DetailBox, BigFontSize } from "./DetailStyleComponent";
 import LentDisabledInfo from "./LentDisabled";
+import { GetDisabledResponse } from "../ReduxModules/StatusDisabled";
+import styled from "styled-components";
+import * as API from "../Networks/APIType";
 
 const CabinetDetail = () => {
   const SearchResponseRedux = useSelector(
     (state: RootState) => state.SearchResponse,
     shallowEqual
   );
+  const DisableResponseRedux = useSelector(
+    (state: RootState) => state.StatusDisabled
+  );
+
   const data = useMemo(
     () => SearchResponseRedux.resultFromLent,
     [SearchResponseRedux.resultFromLent]
   );
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const currentPage = window.location.pathname.split("/")[2];
+
   useEffect(() => {
-    if (data?.length === 0) {
+    if (currentPage === "search" && data?.length === 0) {
       navigate("/saerom/search/invalidSearchResult", {
         state: { errorType: "Cabinet" },
       });
     }
-  }, [data, navigate]);
+  }, [currentPage, data, navigate]);
 
   const CabinetInfo =
     data !== undefined && data[0] !== undefined
@@ -53,13 +63,64 @@ const CabinetDetail = () => {
       ? "사용 가능"
       : "사용 불가";
 
+  const getDisableData = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const res = await API.axiosFormat(
+        {
+          method: "GET",
+          url: API.url("/api/activation"),
+        },
+        token
+      );
+      dispatch(GetDisabledResponse(res.data));
+    } catch (e) {
+      console.log(e);
+      const axiosError = e as API.axiosError;
+      API.HandleError(navigate, axiosError);
+    }
+  }, [dispatch, navigate]);
+
+  useEffect(() => {
+    // if (CabinetActivationInfo === "사용 불가") {
+    getDisableData();
+    // }
+  }, [CabinetActivationInfo, getDisableData]);
+
+  const cabinetFloor =
+    data !== undefined && data[0] !== undefined ? data[0].floor : 0;
+
+  const cabinetNum =
+    data !== undefined && data[0] !== undefined ? data[0].cabinet_num : 0;
+
+  const targetCabinetData = DisableResponseRedux.find(
+    (key) => key.floor === cabinetFloor && key.cabinet_num === cabinetNum
+  );
+
   const CabinetDisabledReason =
-    data !== undefined && data[0] !== undefined && data[0].activation === 0
-      ? "(추후 받아올 비활성화 사유)"
+    data !== undefined &&
+    data[0] !== undefined &&
+    data[0].activation === 0 &&
+    targetCabinetData !== undefined
+      ? targetCabinetData.note
       : "";
 
   if (data === undefined || data.length === 0) {
-    return <></>;
+    return (
+      <DetailBox>
+        <NoneCabinet>목록에서 사물함을 선택해주세요!</NoneCabinet>
+      </DetailBox>
+    );
+  } else if (data[0].activation === 2) {
+    return (
+      <DetailBox>
+        <BigFontSize>{CabinetInfo}</BigFontSize>
+        <BigRedMessage>강제 반납 처리된 사물함입니다.</BigRedMessage>
+        <BigRedMessage>
+          사물함 확인 후 사용 가능할 때 활성화해주세요!
+        </BigRedMessage>
+      </DetailBox>
+    );
   } else {
     return (
       <DetailBox>
@@ -67,12 +128,41 @@ const CabinetDetail = () => {
         <BigFontSize>{CabinetInfo}</BigFontSize>
         <p>현재 대여자 : {CabinetUserInfo}</p>
         <p>대여 기간 : {CabinetLentInfo}</p>
-        <p>현재 상태 : {CabinetActivationInfo}</p>
-        {CabinetDisabledReason}
+        <CabinetStatusMessage
+          activation={CabinetActivationInfo !== "사용 불가"}
+        >
+          {CabinetActivationInfo === "사용 불가" ? CabinetActivationInfo : ""}
+        </CabinetStatusMessage>
+        {CabinetActivationInfo === "사용 불가" && (
+          <p>비활성화 사유 : {CabinetDisabledReason}</p>
+        )}
         <ExpiredInfo />
       </DetailBox>
     );
   }
 };
+
+const BigRedMessage = styled.div`
+  font-size: 2rem;
+  font-weight: bold;
+  color: #bc0000;
+  margin-bottom: 1rem;
+`;
+
+const NoneCabinet = styled.div`
+  font-size: 2rem;
+  color: black;
+  padding-top: 10rem;
+  padding-bottom: 10rem;
+`;
+
+const CabinetStatusMessage = styled.p<{
+  activation: boolean;
+}>`
+  display: ${(props) => (props.activation ? "none" : "")};
+  font-size: ${(props) => (props.activation ? "1.6rem" : "2rem")};
+  font-weight: ${(props) => (props.activation ? "normal" : "bold")};
+  color: ${(props) => (props.activation ? "black" : "#bc0000")};
+`;
 
 export default CabinetDetail;

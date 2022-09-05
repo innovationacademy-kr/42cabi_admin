@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { expiredTableStruct } from "./expiredTableStruct";
+import { banUserTableStruct } from "./banUserTableStruct";
 import { usePagination, useSortBy, useTable } from "react-table";
 import { useSelector, shallowEqual } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
@@ -12,20 +12,20 @@ import {
   Th,
   Tr,
 } from "./tableStyleComponent";
-import { StatusResponseExpired } from "../type";
+import { TaskBanUser } from "../type";
 import { PrevLogBox } from "../Components/DashboardStyleComponent";
 
-export const ExpiredTable = (props: any) => {
-  const StatusExpiredRedux = useSelector(
-    (state: RootState) => state.StatusExpired,
+export const BanUserTable = (props: any) => {
+  const TaskBanUserRedux = useSelector(
+    (state: RootState) => state.TaskBanUser,
     shallowEqual
   );
 
-  const columns = useMemo(() => expiredTableStruct, []);
-  const data = useMemo(() => StatusExpiredRedux || [], [StatusExpiredRedux]);
+  const columns = useMemo(() => banUserTableStruct, []);
+  const data = useMemo(() => TaskBanUserRedux || [], [TaskBanUserRedux]);
   const { setParams } = props;
 
-  const SetUserParams = (data: StatusResponseExpired) => {
+  const SetUserParams = (data: TaskBanUser) => {
     setParams(data.intra_id);
   };
 
@@ -55,12 +55,12 @@ export const ExpiredTable = (props: any) => {
     usePagination
   );
   const { pageIndex } = state;
-  const totalDataCount = StatusExpiredRedux.length;
+  const totalDataCount = TaskBanUserRedux.length;
 
-  if (StatusExpiredRedux.length !== 0) {
+  if (TaskBanUserRedux.length !== 0) {
     return (
       <div>
-        <h2>연체 중인 사용자</h2>
+        <h2>영구 정지 사용자</h2>
         <TableSheet {...getTableProps()}>
           <TableHead>
             {headerGroups.map((headerGroup) => (
@@ -121,8 +121,8 @@ export const ExpiredTable = (props: any) => {
       </div>
     );
   } else {
-    return <PrevLogBox>연체 중인 사용자가 없습니다.</PrevLogBox>;
+    return <PrevLogBox>영구 정지된 사용자가 없습니다.</PrevLogBox>;
   }
 };
 
-export default ExpiredTable;
+export default BanUserTable;

@@ -23,7 +23,7 @@ export const prevUserTableStruct = [
   },
   {
     Header: "반납일",
-    accessor: "expire_time",
+    accessor: "return_time",
     Cell: (props: any) => {
       const date = props;
       return moment(date.value).format("YY-MM-DD");

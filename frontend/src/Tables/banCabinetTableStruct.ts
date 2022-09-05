@@ -1,21 +1,21 @@
 // import moment from "moment";
 
-export const disabledTableStruct = [
+export const banCabinetTableStruct = [
   {
     Header: "층",
     accessor: "floor",
   },
   {
+    Header: "위치",
+    accessor: "section",
+  },
+  {
     Header: "번호",
     accessor: "cabinet_num",
   },
-  {
-    Header: "사유",
-    accessor: "note",
-  },
   // {
   //   Header: "고장 발생일",
-  //   accessor: "disabled_time",
+  //   accessor: "expire_time",
   //   Cell: (props: any) => {
   //     const date = props;
   //     return moment(date.value).format("YY-MM-DD");

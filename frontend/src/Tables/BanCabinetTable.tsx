@@ -1,32 +1,32 @@
 import { useMemo } from "react";
-import { expiredTableStruct } from "./expiredTableStruct";
+import { banCabinetTableStruct } from "./banCabinetTableStruct";
 import { usePagination, useSortBy, useTable } from "react-table";
-import { useSelector, shallowEqual } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../ReduxModules/rootReducer";
 import {
   TableHead,
-  TableIndexBox,
-  TablePageControlBox,
   TableSheet,
   Td,
   Th,
   Tr,
+  TablePageControlBox,
+  TableIndexBox,
 } from "./tableStyleComponent";
-import { StatusResponseExpired } from "../type";
+import { TaskBanCabinet } from "../type";
 import { PrevLogBox } from "../Components/DashboardStyleComponent";
 
-export const ExpiredTable = (props: any) => {
-  const StatusExpiredRedux = useSelector(
-    (state: RootState) => state.StatusExpired,
-    shallowEqual
+export const BanCabinetTable = (props: any) => {
+  const TaskBanCabinetRedux = useSelector(
+    (state: RootState) => state.TaskBanCabinet
   );
 
-  const columns = useMemo(() => expiredTableStruct, []);
-  const data = useMemo(() => StatusExpiredRedux || [], [StatusExpiredRedux]);
+  const columns = useMemo(() => banCabinetTableStruct, []);
+  const data = useMemo(() => TaskBanCabinetRedux || [], [TaskBanCabinetRedux]);
+
   const { setParams } = props;
 
-  const SetUserParams = (data: StatusResponseExpired) => {
-    setParams(data.intra_id);
+  const SetCabinetParams = (data: TaskBanCabinet) => {
+    setParams({ floor: data.floor, cabinetNum: data.cabinet_num });
   };
 
   const {
@@ -55,12 +55,12 @@ export const ExpiredTable = (props: any) => {
     usePagination
   );
   const { pageIndex } = state;
-  const totalDataCount = StatusExpiredRedux.length;
+  const totalDataCount = TaskBanCabinetRedux.length;
 
-  if (StatusExpiredRedux.length !== 0) {
+  if (TaskBanCabinetRedux.length !== 0) {
     return (
       <div>
-        <h2>연체 중인 사용자</h2>
+        <h2>강제 반납 사물함</h2>
         <TableSheet {...getTableProps()}>
           <TableHead>
             {headerGroups.map((headerGroup) => (
@@ -83,7 +83,7 @@ export const ExpiredTable = (props: any) => {
               return (
                 <Tr
                   {...row.getRowProps()}
-                  onClick={() => SetUserParams(row.original)}
+                  onClick={() => SetCabinetParams(row.original)}
                 >
                   {row.cells.map((cell: any) => {
                     return (
@@ -121,8 +121,8 @@ export const ExpiredTable = (props: any) => {
       </div>
     );
   } else {
-    return <PrevLogBox>연체 중인 사용자가 없습니다.</PrevLogBox>;
+    return <PrevLogBox>확인해야 할 사물함이 없습니다!</PrevLogBox>;
   }
 };
 
-export default ExpiredTable;
+export default BanCabinetTable;

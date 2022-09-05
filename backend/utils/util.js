@@ -17,8 +17,10 @@ const wrap = (asyncFn) => async (req, res, next) => {
   }
 };
 
-const isNumeric = (num) => !Number.isNaN(num);
-
+const isNumeric = (n) => {
+  const regExp = /^\d+$/;
+  return regExp.test(n);
+};
 const isLogin = (path) => {
   const regExp = /login$/;
   return regExp.test(path);
@@ -26,6 +28,11 @@ const isLogin = (path) => {
 
 const sendResponse = (res, data, status) => {
   res.status(status).json(data);
+};
+
+const isString = (str) => {
+  const regExp = /^[a-zA-Z0-9-]+$/;
+  return regExp.test(str);
 };
 
 const isVerified = (token) => {
@@ -43,4 +50,5 @@ module.exports = {
   isNumeric,
   isLogin,
   isVerified,
+  isString,
 };
