@@ -12,6 +12,7 @@ export class RawqueryLentRepository implements ILentRepository {
     this.pool = mariadb.createPool({
       host: this.configService.get<string>('database.host'),
       user: this.configService.get<string>('database.username'),
+      port: this.configService.get<number>('database.port'),
       password: this.configService.get<string>('database.password'),
       database: this.configService.get<string>('database.database'),
       bigIntAsNumber: true,
