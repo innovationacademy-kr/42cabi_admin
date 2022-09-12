@@ -23,7 +23,11 @@ const ExpiredInfo = () => {
     if (todayString.isAfter(expire_time)) {
       const overDays = todayString.diff(expire_time, "days");
       return (
-        <ExpiredMessage>연체 상황 : {overDays}일 째 연체 중!</ExpiredMessage>
+        <ExpiredMessage>
+          {overDays === 0
+            ? `금일 대여기간 만료 예정`
+            : `${overDays}일 째 연체 중!`}
+        </ExpiredMessage>
       );
     } else {
       return <div>연체 상황 : 해당 없음</div>;
