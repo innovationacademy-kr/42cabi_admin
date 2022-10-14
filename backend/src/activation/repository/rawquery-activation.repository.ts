@@ -11,10 +11,11 @@ export class RawqueryActivationRepository implements IActivationRepository {
 
   constructor(@Inject(ConfigService) private configService: ConfigService) {
     this.pool = mariadb.createPool({
-      host: configService.get<string>('database.host'),
-      user: configService.get<string>('database.username'),
-      password: configService.get<string>('database.password'),
-      database: configService.get<string>('database.database'),
+      host: this.configService.get<string>('database.host'),
+      user: this.configService.get<string>('database.username'),
+      port: this.configService.get<number>('database.port'),
+      password:this.configService.get<string>('database.password'),
+      database: this.configService.get<string>('database.database'),
       bigIntAsNumber: true,
     });
   }

@@ -12,6 +12,7 @@ export class RawqueryReturnRepository implements IReturnRepository {
     this.pool = mariadb.createPool({
       host: this.configService.get<string>('database.host'),
       user: this.configService.get<string>('database.username'),
+      port: this.configService.get<number>('database.port'),
       password: this.configService.get<string>('database.password'),
       database: this.configService.get<string>('database.database'),
       bigIntAsNumber: true,
@@ -24,7 +25,7 @@ export class RawqueryReturnRepository implements IReturnRepository {
       SELECT *
       FROM cabinet c
       LEFT JOIN lent l ON c.cabinet_id=l.lent_cabinet_id
-      LEFT JOIN user u ON l.lent_user_id=u.user_id 
+      LEFT JOIN user u ON l.lent_user_id=u.user_id
       WHERE c.cabinet_id = ?;
     `;
     const [result] = await connection.query(query, cabinetIdx);
@@ -74,8 +75,8 @@ export class RawqueryReturnRepository implements IReturnRepository {
 
   async deleteLent(connection: any, cabinetIdx: number): Promise<void> {
     const query = `
-      DELETE 
-      FROM lent 
+      DELETE
+      FROM lent
       WHERE lent_cabinet_id= ?
     `;
     await connection.query(query, cabinetIdx);
@@ -83,7 +84,7 @@ export class RawqueryReturnRepository implements IReturnRepository {
 
   async addLentLog(connection: any, cabinetLentDto: any[]): Promise<void> {
     const query = `
-      INSERT INTO lent_log(log_cabinet_id, log_user_id, lent_time, return_time) 
+      INSERT INTO lent_log(log_cabinet_id, log_user_id, lent_time, return_time)
       VALUES ( ?, ?, ?, now())
     `;
     connection.query(query, cabinetLentDto);

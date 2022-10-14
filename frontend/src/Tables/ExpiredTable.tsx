@@ -50,6 +50,7 @@ export const ExpiredTable = (props: any) => {
       data,
       initialState: { pageSize: 10 },
       autoResetPage: false,
+      autoResetSortBy: false,
     },
     useSortBy,
     usePagination

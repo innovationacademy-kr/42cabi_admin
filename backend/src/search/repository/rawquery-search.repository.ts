@@ -12,6 +12,7 @@ export class RawquerySearchRepository implements ISearchRepository {
     this.pool = mariadb.createPool({
       host: this.configService.get<string>('database.host'),
       user: this.configService.get<string>('database.username'),
+      port: this.configService.get<number>('database.port'),
       password: this.configService.get<string>('database.password'),
       database: this.configService.get<string>('database.database'),
       bigIntAsNumber: true,
@@ -66,7 +67,7 @@ export class RawquerySearchRepository implements ISearchRepository {
     LEFT JOIN cabinet c
     ON ll.log_cabinet_id=c.cabinet_id
     WHERE u.intra_id = ?
-    ORDER BY lent_time DESC 
+    ORDER BY lent_time DESC
     LIMIT 10;
     `;
     const getLentLogByIntraId = await connection.query(content, intraId);
