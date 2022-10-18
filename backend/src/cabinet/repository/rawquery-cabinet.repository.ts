@@ -23,13 +23,11 @@ export class RawqueryCabinetRepository implements ICabinetRepository {
     const content = `
       SELECT c.floor,
       COUNT(*) as total,
-      COUNT(case when c.cabinet_id=l.lent_cabinet_id and l.expire_time>=DATE_FORMAT(NOW(), '%Y-%m-%d') then 1 end) as used,
-      COUNT(case when l.expire_time<DATE_FORMAT(NOW(), '%Y-%m-%d') then 1 end) as overdue,
-      COUNT(case when l.lent_cabinet_id is null and c.activation=1 then 1 end) as unused,
-      COUNT(case when c.activation!=1 then 1 end) as disabled
+      COUNT(case when c.cabinet_status='SET_EXPIRE_FULL' then 1 end) as used,
+      COUNT(case when c.cabinet_status='EXPIRED' then 1 end) as overdue,
+      COUNT(case when c.cabinet_status LIKE '%AVAILABLE%' then 1 end) as unused,
+      COUNT(case when c.cabinet_status='BROKEN' or c.cabinet_status='BANNED' then 1 end) as disabled
       FROM cabinet c
-      LEFT JOIN lent l
-      ON c.cabinet_id=l.lent_cabinet_id
       group by floor;
     `;
     const result = await connection.query(content);
