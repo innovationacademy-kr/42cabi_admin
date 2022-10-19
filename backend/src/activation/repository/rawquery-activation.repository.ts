@@ -23,11 +23,9 @@ export class RawqueryActivationRepository implements IActivationRepository {
   async getInactivatedCabinetList(): Promise<InactivatedCabinetDto[]> {
     const connection = await this.pool.getConnection();
     const content = `
-        SELECT c.floor, c.cabinet_num, d.note
-        FROM cabinet c
-        JOIN disable d
-        ON d.disable_cabinet_id = c.cabinet_id AND d.status = 1
-        WHERE c.activation=0;
+      SELECT c.floor, c.cabinet_num, c.memo as note
+      FROM cabinet c
+      WHERE c.cabinet_status='BROKEN';
     `;
     const result = await connection.query(content);
     connection.release();
@@ -39,13 +37,15 @@ export class RawqueryActivationRepository implements IActivationRepository {
     const content = `
       SELECT c.floor, c.section, c.cabinet_num
       FROM cabinet c
-      WHERE c.activation=2;
+      WHERE c.cabinet_status='BANNED';
     `;
     const result = await connection.query(content);
     connection.release();
     return result;
   }
 
+  // FIXME: activation 대신 cabinet_status와 lent_type을 변경하도록 기능이 변경되었지만
+  // 일단 v3로의 포팅에서는 activation 대신 cabinet_status로 대체하도록 하겠습니다.
   async modifyCabinetActivation(
     connection: any,
     cabinetIdx: number,
@@ -53,31 +53,42 @@ export class RawqueryActivationRepository implements IActivationRepository {
   ) {
     const content = `
       UPDATE cabinet c
-      SET activation= ?
+      SET cabinet_status=?
       WHERE cabinet_id= ?
       `;
+    let status = 'AVAILABLE';
+    if (activation === 0) {
+      status = 'BANNED';
+    };
     await connection.query(content, [activation, cabinetIdx]);
   }
 
+  // disable 테이블 대신 cabinet.memo에 저장
   async addDisableLog(connection: any, cabinetIdx: number, reason: string) {
     const content = `
-      INSERT INTO disable (disable_cabinet_id, note)
-      VALUES (?, ?);
-    `;
-    await connection.query(content, [cabinetIdx, reason]);
+      UPDATE cabinet c
+      SET memo=?
+      WHERE cabinet_id=?
+      `;
+    await connection.query(content, [reason, cabinetIdx]);
   }
 
+  // disable 테이블 대신 cabinet.memo에 저장하므로 addDisableLog와 동일
   async modifyDisableLog(
     connection: any,
     cabinetIdx: number,
     activation: number,
   ) {
+    let status = 'AVAILABLE';
+    if (activation === 0) {
+      status = 'BANNED';
+    };
     const content = `
       UPDATE cabinet c
-      SET activation= ?
+      SET cabinet_status= ?
       WHERE cabinet_id= ?
       `;
-    await connection.query(content, [activation, cabinetIdx]);
+    await connection.query(content, [status, cabinetIdx]);
   }
 
   async patchActivation(cabinetInfo: PatchActivationDto): Promise<boolean> {
