@@ -58,7 +58,7 @@ export class RawqueryActivationRepository implements IActivationRepository {
       `;
     let status = 'AVAILABLE';
     if (activation === 0) {
-      status = 'BANNED';
+      status = 'BROKEN';
     };
     await connection.query(content, [status, cabinetIdx]);
   }
@@ -73,22 +73,17 @@ export class RawqueryActivationRepository implements IActivationRepository {
     await connection.query(content, [reason, cabinetIdx]);
   }
 
-  // disable 테이블 대신 cabinet.memo에 저장하므로 addDisableLog와 동일
   async modifyDisableLog(
     connection: any,
     cabinetIdx: number,
     activation: number,
   ) {
-    let status = 'AVAILABLE';
-    if (activation === 0) {
-      status = 'BANNED';
-    };
     const content = `
       UPDATE cabinet c
-      SET cabinet_status= ?
+      SET memo= null
       WHERE cabinet_id= ?
       `;
-    await connection.query(content, [status, cabinetIdx]);
+    await connection.query(content, [cabinetIdx]);
   }
 
   async patchActivation(cabinetInfo: PatchActivationDto): Promise<boolean> {
