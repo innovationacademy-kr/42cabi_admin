@@ -60,7 +60,7 @@ export class RawqueryActivationRepository implements IActivationRepository {
     if (activation === 0) {
       status = 'BANNED';
     };
-    await connection.query(content, [activation, cabinetIdx]);
+    await connection.query(content, [status, cabinetIdx]);
   }
 
   // disable 테이블 대신 cabinet.memo에 저장
