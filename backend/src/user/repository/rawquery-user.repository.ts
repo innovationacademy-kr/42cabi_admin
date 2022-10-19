@@ -22,9 +22,11 @@ export class RawqueryUserRepository implements IUserRepository {
     const connection = await this.pool.getConnection();
 
     const content = `
-      SELECT u.intra_id, b.bannedDate
-      FROM user u join ban_user b on b.user_id=u.user_id
-      where u.auth=1;
+      SELECT u.intra_id, b.banned_date, MAX(b.unbanned_date) as unbanned_date
+      FROM user u join ban_log b on b.ban_user_id=u.user_id
+      where b.unbanned_date > DATE_FORMAT(NOW(), '%Y-%m-%d')
+      GROUP BY u.intra_id
+      order by unbanned_date DESC
     `;
 
     const result = await connection.query(content);

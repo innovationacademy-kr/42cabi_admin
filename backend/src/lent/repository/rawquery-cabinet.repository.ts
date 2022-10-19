@@ -23,7 +23,8 @@ export class RawqueryLentRepository implements ILentRepository {
     const connection = await this.pool.getConnection();
     const lentInfo = [];
 
-    const content = `SELECT u.intra_id, l.*
+    const content = `
+    SELECT u.intra_id, l.*
     FROM user u
     RIGHT JOIN lent l
     ON l.lent_user_id=u.user_id
@@ -50,13 +51,13 @@ export class RawqueryLentRepository implements ILentRepository {
     const connection = await this.pool.getConnection();
 
     const content = `
-      SELECT u.intra_id, c.floor, c.cabinet_num, l.lent_time,l.expire_time from lent l
-      JOIN cabinet c
-      ON c.cabinet_id = l.lent_cabinet_id
-      JOIN user u
-      ON u.user_id = l.lent_user_id
-      where l.expire_time < DATE_FORMAT(NOW(), '%Y-%m-%d')
-      ORDER BY l.expire_time;
+    SELECT u.intra_id, c.floor, c.cabinet_num, l.lent_time,l.expire_time from lent l
+    JOIN cabinet c
+    ON c.cabinet_id = l.lent_cabinet_id
+    JOIN user u
+    ON u.user_id = l.lent_user_id
+    WHERE c.cabinet_status='EXPIRED'
+    ORDER BY l.expire_time;
     `;
 
     const results = await connection.query(content);
