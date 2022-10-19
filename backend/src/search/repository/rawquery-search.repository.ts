@@ -25,7 +25,7 @@ export class RawquerySearchRepository implements ISearchRepository {
     const lentInfo = [];
 
     const content = `
-    SELECT u.intra_id, u.auth, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_id, l.lent_time, l.expire_time
+    SELECT u.intra_id, u.state, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.cabinet_status, l.lent_id, l.lent_time, l.expire_time
     FROM user u
     LEFT JOIN lent l
     ON u.user_id=l.lent_user_id
@@ -38,13 +38,14 @@ export class RawquerySearchRepository implements ISearchRepository {
     for (let i = 0; i < getLentInfoByIntraId.length; i += 1) {
       lentInfo.push({
         intra_id: getLentInfoByIntraId[i].intra_id,
-        auth: getLentInfoByIntraId[i].auth,
+        auth: getLentInfoByIntraId[i].state === 'NORMAL' ? 1 : 0,
         cabinet_id: getLentInfoByIntraId[i].cabinet_id,
         cabinet_num: getLentInfoByIntraId[i].cabinet_num,
         location: getLentInfoByIntraId[i].location,
         section: getLentInfoByIntraId[i].section,
         floor: getLentInfoByIntraId[i].floor,
-        activation: getLentInfoByIntraId[i].activation,
+        activation:
+          getLentInfoByIntraId[i].cabinet_status === 'AVAILABLE' ? 1 : 0,
         lent_id: getLentInfoByIntraId[i].lent_id,
         lent_time: getLentInfoByIntraId[i].lent_time,
         expire_time: getLentInfoByIntraId[i].expire_time,
@@ -60,9 +61,9 @@ export class RawquerySearchRepository implements ISearchRepository {
     const lentLogInfo = [];
 
     const content = `
-    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.log_id, ll.lent_time, ll.return_time
+    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.cabinet_status, ll.log_id, ll.lent_time, ll.return_time
     FROM user u
-    LEFT JOIN lent_log ll
+    RIGHT JOIN lent_log ll
     ON u.user_id=ll.log_user_id
     LEFT JOIN cabinet c
     ON ll.log_cabinet_id=c.cabinet_id
@@ -80,7 +81,8 @@ export class RawquerySearchRepository implements ISearchRepository {
         location: getLentLogByIntraId[i].location,
         section: getLentLogByIntraId[i].section,
         floor: getLentLogByIntraId[i].floor,
-        activation: getLentLogByIntraId[i].activation,
+        activation:
+          getLentLogByIntraId[i].cabinet_status === 'AVAILABLE' ? 1 : 0,
         log_id: getLentLogByIntraId[i].log_id,
         lent_time: getLentLogByIntraId[i].lent_time,
         return_time: getLentLogByIntraId[i].return_time,
@@ -99,7 +101,7 @@ export class RawquerySearchRepository implements ISearchRepository {
     const lentInfo = [];
 
     const content = `
-    SELECT (select intra_id from user u where u.user_id=l.lent_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, l.lent_id, l.lent_time, l.expire_time
+    SELECT (select intra_id from user u where u.user_id=l.lent_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.cabinet_status, l.lent_id, l.lent_time, l.expire_time
     FROM cabinet c
     LEFT JOIN lent l
     ON c.cabinet_id=l.lent_cabinet_id
@@ -118,7 +120,8 @@ export class RawquerySearchRepository implements ISearchRepository {
         location: getLentByCabinetNum[i].location,
         section: getLentByCabinetNum[i].section,
         floor: getLentByCabinetNum[i].floor,
-        activation: getLentByCabinetNum[i].activation,
+        activation:
+          getLentByCabinetNum[i].cabinet_status === 'AVAILABLE' ? 1 : 0,
         lent_id: getLentByCabinetNum[i].lent_id,
         log_id: getLentByCabinetNum[i].log_id,
         lent_time: getLentByCabinetNum[i].lent_time,
@@ -137,9 +140,9 @@ export class RawquerySearchRepository implements ISearchRepository {
     const connection = await this.pool.getConnection();
     const lentLogInfo = [];
     const content = `
-    SELECT (select intra_id from user u where u.user_id=ll.log_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.activation, ll.log_id, ll.lent_time, ll.return_time
+    SELECT (select intra_id from user u where u.user_id=ll.log_user_id) as intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.cabinet_status, ll.log_id, ll.lent_time, ll.return_time
     FROM cabinet c
-    LEFT JOIN lent_log ll
+    RIGHT JOIN lent_log ll
     ON c.cabinet_id=ll.log_cabinet_id
     WHERE c.cabinet_num = ? AND c.floor = ?
     ORDER BY lent_time DESC
@@ -158,7 +161,8 @@ export class RawquerySearchRepository implements ISearchRepository {
         location: getLentLogByCabinetNum[i].location,
         section: getLentLogByCabinetNum[i].section,
         floor: getLentLogByCabinetNum[i].floor,
-        activation: getLentLogByCabinetNum[i].activation,
+        activation:
+          getLentLogByCabinetNum[i].cabinet_status === 'AVAILABLE' ? 1 : 0,
         lent_id: getLentLogByCabinetNum[i].lent_id,
         log_id: getLentLogByCabinetNum[i].log_id,
         lent_time: getLentLogByCabinetNum[i].lent_time,

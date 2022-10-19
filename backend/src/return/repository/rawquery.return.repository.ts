@@ -30,7 +30,28 @@ export class RawqueryReturnRepository implements IReturnRepository {
     `;
     const [result] = await connection.query(query, cabinetIdx);
     connection.release();
-    return result;
+    const rtn = {
+      cabinet_id: result.cabinet_id,
+      cabinet_num: result.cabinet_num,
+      location: result.location,
+      floor: result.floor,
+      section: result.section,
+      activation: result.cabinet_status !== 'BROKEN' ? 0 : 1,
+      lent_id: result.lent_id,
+      lent_cabinet_id: result.lent_cabinet_id,
+      lent_user_id: result.lent_user_id,
+      lent_time: result.lent_time,
+      expire_time: result.expire_time,
+      extension: 0, //  NOTE: 무슨 필드?
+      user_id: result.user_id,
+      intra_id: result.intra_id,
+      auth: 0, //  NOTE: 무슨 필드?
+      email: result.email,
+      phone: '010-123-4567', //  NOTE: 삭제 필요
+      firstLogin: result.first_login,
+      lastLogin: result.last_login,
+    };
+    return rtn;
   }
 
   async returnCabinet(cabinetIdx: number): Promise<boolean> {
@@ -82,10 +103,11 @@ export class RawqueryReturnRepository implements IReturnRepository {
     await connection.query(query, cabinetIdx);
   }
 
+  // FIXME: 추후에 cabinetLentDto에 log_intra_id도 들어와야 함...
   async addLentLog(connection: any, cabinetLentDto: any[]): Promise<void> {
     const query = `
-      INSERT INTO lent_log(log_cabinet_id, log_user_id, lent_time, return_time)
-      VALUES ( ?, ?, ?, now())
+      INSERT INTO lent_log(log_cabinet_id, log_intra_id, log_user_id, lent_time, return_time)
+      VALUES ( ?, 'mock_id', ?, ?, now())
     `;
     connection.query(query, cabinetLentDto);
   }
