@@ -1,10 +1,28 @@
-import { BlockedUserDto } from '../dto/blocked-user.dto';
+import { InjectRepository } from "@nestjs/typeorm";
+import BanLog from "src/entities/ban.log.entity";
+import User from "src/entities/user.entity";
+import { Repository } from 'typeorm';
+import { BlockedUserDto } from "../dto/blocked-user.dto";
+import { IUserRepository } from "./user.interface.repository";
 
-export abstract class IUserRepository {
-  /**
-   * ban 당한 유저들의 정보를 가져옵니다.
-   *
-   * @returns BlockedUserDto[]
-   */
-  abstract getBanUser(): Promise<BlockedUserDto[]>;
+export class UserRepository implements IUserRepository {
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    @InjectRepository(BanLog)
+    private banLogRepository: Repository<BanLog>,
+  ) {}
+
+  async getBanUser(): Promise<BlockedUserDto[]> {
+	const result = await this.userRepository.createQueryBuilder(this.getBanUser.name)
+	.select(['u.intra_id as intra_id', 'bl.banned_date as banned_date'])
+	.addSelect('MAX(bl.unbanned_date)', 'unbanned_date')
+	.from('user', 'u')
+	.leftJoin('ban_log', 'bl', 'bl.ban_user_id=u.user_id')
+	.where("bl.unbanned_date > DATE_FORMAT(NOW(), '%Y-%m-%d')")
+	.groupBy('u.intra_id')
+	.orderBy('unbanned_date', 'DESC')
+	.getRawMany();
+	return result;
+  }
 }
