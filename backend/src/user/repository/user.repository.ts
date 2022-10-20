@@ -1,5 +1,4 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import BanLog from "src/entities/ban.log.entity";
 import User from "src/entities/user.entity";
 import { Repository } from 'typeorm';
 import { BlockedUserDto } from "../dto/blocked-user.dto";
@@ -9,13 +8,12 @@ export class UserRepository implements IUserRepository {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    @InjectRepository(BanLog)
-    private banLogRepository: Repository<BanLog>,
   ) {}
 
   async getBanUser(): Promise<BlockedUserDto[]> {
 	const result = await this.userRepository.createQueryBuilder(this.getBanUser.name)
-	.select(['u.intra_id as intra_id', 'bl.banned_date as banned_date'])
+	.select('u.intra_id', 'intra_id')
+	.addSelect('bl.banned_date', 'banned_date')
 	.addSelect('MAX(bl.unbanned_date)', 'unbanned_date')
 	.from('user', 'u')
 	.leftJoin('ban_log', 'bl', 'bl.ban_user_id=u.user_id')
