@@ -1,9 +1,9 @@
 import { ConfigService } from '@nestjs/config';
 import * as mariadb from 'mariadb';
 import { Inject } from '@nestjs/common';
-import { IReturnRepository } from './return.repository';
 import { CabinetLentDto } from '../dto/cabinet-lent.dto';
 import { CabinetDto } from '../dto/cabinet.dto';
+import { IReturnRepository } from './return.repository.interface';
 
 export class RawqueryReturnRepository implements IReturnRepository {
   private pool;

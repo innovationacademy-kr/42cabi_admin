@@ -1,9 +1,9 @@
 import * as mariadb from 'mariadb';
-import { ISearchRepository } from './ISearchRepository';
 import { LentLogDto } from '../dto/search-lentlog.dto';
 import { LentDto } from '../dto/search-lent.dto';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ISearchRepository } from './search.repository.interface';
 
 export class RawquerySearchRepository implements ISearchRepository {
   private pool;

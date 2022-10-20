@@ -1,8 +1,8 @@
 import * as mariadb from 'mariadb';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { IUserRepository } from './user.repository';
 import { BlockedUserDto } from '../dto/blocked-user.dto';
+import { IUserRepository } from './user.repository.interface';
 
 export class RawqueryUserRepository implements IUserRepository {
   private pool;
