@@ -10,8 +10,8 @@ export class ActivationService {
 
   constructor(
     @Inject('IActivationRepository')
-    private activationRepository: IActivationRepository
-    ) {}
+    private activationRepository: IActivationRepository,
+  ) {}
   async getInactivatedCabinetList(): Promise<InactivatedCabinetDto[]> {
     this.logger.debug('call getInactivatedCabinet');
     const result = await this.activationRepository.getInactivatedCabinetList();

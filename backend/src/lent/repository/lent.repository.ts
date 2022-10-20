@@ -1,10 +1,10 @@
-import { InjectRepository } from "@nestjs/typeorm";
-import Lent from "src/entities/lent.entity";
-import { ILentRepository } from "./lent.interface.repository";
+import { InjectRepository } from '@nestjs/typeorm';
+import Lent from 'src/entities/lent.entity';
+import { ILentRepository } from './lent.interface.repository';
 import { Repository } from 'typeorm';
-import { LentInfoDto } from "../dto/lent-info.dto";
-import { OverdueInfoDto } from "../dto/overdue-info.dto";
-import CabinetStatusType from "src/enums/cabinet.status.type.enum";
+import { LentInfoDto } from '../dto/lent-info.dto';
+import { OverdueInfoDto } from '../dto/overdue-info.dto';
+import CabinetStatusType from 'src/enums/cabinet.status.type.enum';
 
 export class LentRepository implements ILentRepository {
   constructor(
@@ -26,7 +26,7 @@ export class LentRepository implements ILentRepository {
         lent_user_id: true,
         lent_time: true,
         expire_time: true,
-      }
+      },
     });
 
     const lentInfo: LentInfoDto[] = [];

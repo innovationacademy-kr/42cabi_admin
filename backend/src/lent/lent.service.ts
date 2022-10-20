@@ -10,7 +10,7 @@ export class LentService {
   constructor(
     @Inject('ILentRepository')
     private lentRepository: ILentRepository,
-    ) {}
+  ) {}
 
   async getLentUserInfo(): Promise<LentInfoResponseDto> {
     this.logger.debug('call getLentUserInfo');

@@ -1,12 +1,11 @@
-import { InjectRepository } from "@nestjs/typeorm";
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, QueryRunner } from 'typeorm';
-import Cabinet from "src/entities/cabinet.entity";
-import { IActivationRepository } from "./activation.interface.repository";
-import { InactivatedCabinetDto } from "../dto/inactivated-cabinet.dto";
-import { BanCabinetDto } from "../dto/ban-cabinet.dto";
-import { PatchActivationDto } from "../dto/patch-activation.dto";
-import CabinetStatusType from "src/enums/cabinet.status.type.enum";
-
+import Cabinet from 'src/entities/cabinet.entity';
+import { IActivationRepository } from './activation.interface.repository';
+import { InactivatedCabinetDto } from '../dto/inactivated-cabinet.dto';
+import { BanCabinetDto } from '../dto/ban-cabinet.dto';
+import { PatchActivationDto } from '../dto/patch-activation.dto';
+import CabinetStatusType from 'src/enums/cabinet.status.type.enum';
 
 export class ActivationRepository implements IActivationRepository {
   constructor(
@@ -16,26 +15,27 @@ export class ActivationRepository implements IActivationRepository {
   ) {}
 
   async getInactivatedCabinetList(): Promise<InactivatedCabinetDto[]> {
-    const result = await this.activationRepository.createQueryBuilder(this.getInactivatedCabinetList.name)
-    .select(['floor', 'cabinet_num', 'memo as note'])
-    .where({
+    const result = await this.activationRepository
+      .createQueryBuilder(this.getInactivatedCabinetList.name)
+      .select(['floor', 'cabinet_num', 'memo as note'])
+      .where({
         status: CabinetStatusType.BROKEN,
-    })
-    .getRawMany();
+      })
+      .getRawMany();
     console.log(result);
     return result;
   }
 
   async getBanCabinetList(): Promise<BanCabinetDto[]> {
     const result = await this.activationRepository.find({
-        select: {
-            floor: true,
-            section: true,
-            cabinet_num: true,
-        },
-        where: {
-            status: CabinetStatusType.BANNED,
-        },
+      select: {
+        floor: true,
+        section: true,
+        cabinet_num: true,
+      },
+      where: {
+        status: CabinetStatusType.BANNED,
+      },
     });
     console.log(result);
     return result;
@@ -48,43 +48,49 @@ export class ActivationRepository implements IActivationRepository {
     cabinetIdx: number,
     activation: number,
   ) {
-    await this.activationRepository.createQueryBuilder(this.modifyCabinetActivation.name, queryRunner)
-    .update(Cabinet)
-    .set({
-        status: activation ? CabinetStatusType.AVAILABLE: CabinetStatusType.BROKEN,
-    })
-    .where({
+    await this.activationRepository
+      .createQueryBuilder(this.modifyCabinetActivation.name, queryRunner)
+      .update(Cabinet)
+      .set({
+        status: activation
+          ? CabinetStatusType.AVAILABLE
+          : CabinetStatusType.BROKEN,
+      })
+      .where({
         cabinet_id: cabinetIdx,
-    })
-    .execute();
+      })
+      .execute();
   }
 
   // disable 테이블 대신 cabinet.memo에 저장
-  async addDisableLog(queryRunner: QueryRunner, cabinetIdx: number, reason: string) {
-    await this.activationRepository.createQueryBuilder(this.addDisableLog.name, queryRunner)
-    .update(Cabinet)
-    .set({
-        memo: reason,
-    })
-    .where({
-        cabinet_id: cabinetIdx,
-    })
-    .execute();
-  }
-
-  async modifyDisableLog(
+  async addDisableLog(
     queryRunner: QueryRunner,
     cabinetIdx: number,
+    reason: string,
   ) {
-    await this.activationRepository.createQueryBuilder(this.modifyDisableLog.name, queryRunner)
-    .update(Cabinet)
-    .set({
-        memo: null,
-    })
-    .where({
+    await this.activationRepository
+      .createQueryBuilder(this.addDisableLog.name, queryRunner)
+      .update(Cabinet)
+      .set({
+        memo: reason,
+      })
+      .where({
         cabinet_id: cabinetIdx,
-    })
-    .execute();
+      })
+      .execute();
+  }
+
+  async modifyDisableLog(queryRunner: QueryRunner, cabinetIdx: number) {
+    await this.activationRepository
+      .createQueryBuilder(this.modifyDisableLog.name, queryRunner)
+      .update(Cabinet)
+      .set({
+        memo: null,
+      })
+      .where({
+        cabinet_id: cabinetIdx,
+      })
+      .execute();
   }
 
   async patchActivation(cabinetInfo: PatchActivationDto): Promise<boolean> {
@@ -104,13 +110,9 @@ export class ActivationRepository implements IActivationRepository {
           cabinetInfo.cabinetIdx,
           cabinetInfo.reason,
         );
-      else
-        await this.modifyDisableLog(
-          queryRunner,
-          cabinetInfo.cabinetIdx,
-        );
-        await queryRunner.commitTransaction();
-        return true;
+      else await this.modifyDisableLog(queryRunner, cabinetInfo.cabinetIdx);
+      await queryRunner.commitTransaction();
+      return true;
     } catch (err) {
       await queryRunner.rollbackTransaction();
       console.log(err);

@@ -8,8 +8,8 @@ export class CabinetService {
 
   constructor(
     @Inject('ICabinetRepository')
-    private cabinetRepository: ICabinetRepository
-    ) {}
+    private cabinetRepository: ICabinetRepository,
+  ) {}
 
   async getCabinetCountFloor(): Promise<CabinetFloorDto[]> {
     this.logger.debug('call getCabinetCountFloor');
