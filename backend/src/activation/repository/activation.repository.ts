@@ -19,7 +19,7 @@ export class ActivationRepository implements IActivationRepository {
     const result = await this.activationRepository.createQueryBuilder(this.getInactivatedCabinetList.name)
     .select(['floor', 'cabinet_num', 'memo as note'])
     .where({
-        cabinet_status: CabinetStatusType.BROKEN,
+        status: CabinetStatusType.BROKEN,
     })
     .getRawMany();
     console.log(result);
@@ -109,14 +109,14 @@ export class ActivationRepository implements IActivationRepository {
           queryRunner,
           cabinetInfo.cabinetIdx,
         );
-        queryRunner.commitTransaction();
-      return true;
+        await queryRunner.commitTransaction();
+        return true;
     } catch (err) {
-      queryRunner.rollbackTransaction();
+      await queryRunner.rollbackTransaction();
       console.log(err);
       return false;
     } finally {
-      queryRunner.release();
+      await queryRunner.release();
     }
   }
 }
