@@ -13,15 +13,22 @@ export class CabinetRepository implements ICabinetRepository {
 
   async findAll(): Promise<CabinetFloorDto[]> {
     const result = await this.cabinetRepository.createQueryBuilder(this.findAll.name)
-    .select(['floor'])
-    .addSelect("COUNT(*) as total")
-    .addSelect(`COUNT(case when cabinet_status='${CabinetStatusType.SET_EXPIRE_FULL}' then 1 end) as used`)
-    .addSelect(`COUNT(case when cabinet_status='${CabinetStatusType.EXPIRED}' then 1 end) as overdue`)
-    .addSelect(`COUNT(case when cabinet_status='${CabinetStatusType.AVAILABLE}' or
-                                cabinet_status='${CabinetStatusType.SET_EXPIRE_AVAILABLE}' then 1 end) as unused`)
-    .addSelect(`COUNT(case when cabinet_status='${CabinetStatusType.BROKEN}' or cabinet_status='${CabinetStatusType.BANNED}' then 1 end) as disabled`)
+    .select('floor')
+    .addSelect("COUNT(*)", "total")
+    .addSelect(`COUNT(CASE WHEN cabinet_status='${CabinetStatusType.SET_EXPIRE_FULL}' THEN 1 END)`, 'used')
+    .addSelect(`COUNT(CASE WHEN cabinet_status='${CabinetStatusType.EXPIRED}' THEN 1 END)`, 'overdue')
+    .addSelect(`COUNT(CASE WHEN cabinet_status='${CabinetStatusType.AVAILABLE}' or
+                                cabinet_status='${CabinetStatusType.SET_EXPIRE_AVAILABLE}' THEN 1 END)`, 'unused')
+    .addSelect(`COUNT(CASE WHEN cabinet_status='${CabinetStatusType.BROKEN}' or cabinet_status='${CabinetStatusType.BANNED}' THEN 1 END)`, 'disabled')
     .groupBy('floor')
-    .execute();
+    .getRawMany();
+    result.map((item) => {
+      item.total = Number(item.total);
+      item.used = Number(item.used);
+      item.overdue = Number(item.overdue);
+      item.unused = Number(item.unused);
+      item.disabled = Number(item.disabled);
+    });
     return result;
   }
 }
