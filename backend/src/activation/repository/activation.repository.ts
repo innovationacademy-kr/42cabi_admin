@@ -1,7 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, QueryRunner } from 'typeorm';
 import Cabinet from 'src/entities/cabinet.entity';
-import { IActivationRepository } from './activation.interface.repository';
+import { IActivationRepository } from './activation.repository.interface';
 import { InactivatedCabinetDto } from '../dto/inactivated-cabinet.dto';
 import { BanCabinetDto } from '../dto/ban-cabinet.dto';
 import { PatchActivationDto } from '../dto/patch-activation.dto';

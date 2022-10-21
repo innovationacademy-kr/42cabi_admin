@@ -1,6 +1,6 @@
 import { CabinetFloorDto } from '../dto/cabinet-floor.dto';
 import { Repository } from 'typeorm';
-import { ICabinetRepository } from './cabinet.interface.repository';
+import { ICabinetRepository } from './cabinet.repository.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import Cabinet from 'src/entities/cabinet.entity';
 import CabinetStatusType from 'src/enums/cabinet.status.type.enum';

@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { LentInfoResponseDto } from './dto/lent-info.response.dto';
 import { OverdueInfoDto } from './dto/overdue-info.dto';
-import { ILentRepository } from './repository/lent.interface.repository';
+import { ILentRepository } from './repository/lent.repository.interface';
 
 @Injectable()
 export class LentService {

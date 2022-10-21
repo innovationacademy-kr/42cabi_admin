@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CabinetFloorDto } from './dto/cabinet-floor.dto';
-import { ICabinetRepository } from './repository/cabinet.interface.repository';
+import { ICabinetRepository } from './repository/cabinet.repository.interface';
 
 @Injectable()
 export class CabinetService {

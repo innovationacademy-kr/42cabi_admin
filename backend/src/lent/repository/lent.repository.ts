@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import Lent from 'src/entities/lent.entity';
-import { ILentRepository } from './lent.interface.repository';
+import { ILentRepository } from './lent.repository.interface';
 import { Repository } from 'typeorm';
 import { LentInfoDto } from '../dto/lent-info.dto';
 import { OverdueInfoDto } from '../dto/overdue-info.dto';
