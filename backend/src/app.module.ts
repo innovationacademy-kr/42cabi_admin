@@ -9,12 +9,18 @@ import { LentModule } from './lent/lent.module';
 import { ReturnModule } from './return/return.module';
 import { SearchModule } from './search/search.module';
 import { join } from 'path';
+import TypeOrmConfigService from './config/typeorm.config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [configuration],
       isGlobal: true, // TODO: remove after
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useClass: TypeOrmConfigService,
     }),
     ActivationModule,
     AuthModule,

@@ -1,6 +1,5 @@
 import { Controller, Get, Logger, UseGuards } from '@nestjs/common';
 import { JWTAuthGuard } from 'src/auth/auth.guard';
-// import { LentInfoDto } from './dto/lent-info.dto';
 import { LentInfoResponseDto } from './dto/lent-info.response.dto';
 import { OverdueInfoDto } from './dto/overdue-info.dto';
 import { LentService } from './lent.service';

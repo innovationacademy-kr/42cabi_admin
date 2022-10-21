@@ -72,3 +72,7 @@ export type FloorStateData = {
 };
 
 export type PieData = { name: string; value: number };
+
+export type SearchQueryBody =
+  | { intraId: string | null }
+  | { floor: string | null; cabinetNum: string | null };
