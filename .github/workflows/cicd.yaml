@@ -83,4 +83,4 @@ jobs:
             echo "env 파일 복사"
             cp $HOME/42cabi-admin.env $HOME/git/42cabi-admin/backend/.env
             echo "앱 배포 (reload)"
-            pm2 reload 42cabi-admin
+            pm2 reload 42cabi-admin-prod
