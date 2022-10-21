@@ -1,12 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { LentDto } from './dto/search-lent.dto';
 import { LentLogDto } from './dto/search-lentlog.dto';
-import { ISearchRepository } from './repository/ISearchRepository';
+import { ISearchRepository } from './repository/search.repository.interface';
 
 @Injectable()
 export class SearchService {
   private logger = new Logger(SearchService.name);
-  constructor(private searchRepository: ISearchRepository) {}
+  constructor(
+    @Inject('ISearchRepository') private searchRepository: ISearchRepository,
+  ) {}
 
   async getLentByIntraId(intraId: string): Promise<LentDto[]> {
     this.logger.log('call getLentByIntraId');
