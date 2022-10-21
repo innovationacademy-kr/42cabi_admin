@@ -20,6 +20,7 @@ import {
   GrayBgBox,
   ButtonBox,
 } from "../Components/DashboardStyleComponent";
+import { SearchQueryBody } from "../type";
 
 const SearchDashboard = () => {
   const [isLoading, setisLoading] = useState(true);
@@ -35,7 +36,7 @@ const SearchDashboard = () => {
 
   const getSearchData = useCallback(async () => {
     try {
-      let params = {};
+      let params: SearchQueryBody;
       if (searchParams.get("intraId") !== null) {
         params = {
           intraId: searchParams.get("intraId"),

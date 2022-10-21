@@ -9,14 +9,17 @@ import {
   CancleButton,
 } from "./ModalStyleComponent";
 import * as API from "../Networks/APIType";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { GetTargetResponse } from "../ReduxModules/SearchResponse";
 import { GetExpiredResponse } from "../ReduxModules/StatusExpired";
+import { SearchQueryBody } from "../type";
 
 const ReturnModal = (props: any) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
 
   const { data, state, close, originPage } = props;
 
@@ -30,21 +33,9 @@ const ReturnModal = (props: any) => {
         "번"
       : "";
 
-  const ReturnAPI = async () => {
+  const UpdateInfo = async (params: SearchQueryBody) => {
     try {
-      const cabinetIdx = data !== undefined ? data.cabinet_id : "";
-      const urlReturn = "/api/return?cabinetIdx=" + cabinetIdx;
       const token = localStorage.getItem("accessToken");
-      await API.axiosFormat(
-        {
-          method: "PATCH",
-          url: API.url(urlReturn),
-        },
-        token
-      );
-      const params = {
-        intraId: data !== undefined ? data.intra_id : "",
-      };
       const resSearch = await API.axiosFormat(
         {
           method: "GET",
@@ -54,6 +45,28 @@ const ReturnModal = (props: any) => {
         token
       );
       dispatch(GetTargetResponse(resSearch.data));
+    } catch (e) {
+      console.log(e);
+      const axiosError = e as API.axiosError;
+      API.HandleError(navigate, axiosError);
+    } finally {
+      close(true);
+    }
+  };
+
+  const ReturnAPI = async () => {
+    try {
+      const cabinetIdx = data !== undefined ? data.cabinet_id : "";
+      const urlReturn = "/api/return?cabinetIdx=" + cabinetIdx;
+      const token = localStorage.getItem("accessToken");
+      let params: SearchQueryBody;
+      await API.axiosFormat(
+        {
+          method: "PATCH",
+          url: API.url(urlReturn),
+        },
+        token
+      );
       if (originPage === "status") {
         const resExpired = await API.axiosFormat(
           {
@@ -64,6 +77,17 @@ const ReturnModal = (props: any) => {
         );
         dispatch(GetExpiredResponse(resExpired.data));
       }
+      if (searchParams.get("intraId") !== null) {
+        params = {
+          intraId: data !== undefined ? data.intra_id : "",
+        };
+      } else {
+        params = {
+          cabinetNum: data !== undefined ? data.cabinet_num : "",
+          floor: data !== undefined ? data.floor : "",
+        };
+      }
+      UpdateInfo(params);
     } catch (e) {
       console.log(e);
       const axiosError = e as API.axiosError;
