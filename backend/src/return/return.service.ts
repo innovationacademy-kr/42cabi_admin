@@ -1,12 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CabinetDto } from './dto/cabinet.dto';
-import { IReturnRepository } from './repository/return.repository';
+import { IReturnRepository } from './repository/return.repository.interface';
 
 @Injectable()
 export class ReturnService {
   private logger = new Logger(ReturnService.name);
 
-  constructor(private returnRepository: IReturnRepository) {}
+  constructor(
+    @Inject('IReturnRepository') private returnRepository: IReturnRepository,
+  ) {}
 
   async getReturn(cabinetIdx: number): Promise<CabinetDto> {
     this.logger.debug(`call getReturn (cabinetIdx: ${cabinetIdx})`);

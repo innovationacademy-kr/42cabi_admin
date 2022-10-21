@@ -1,18 +1,18 @@
 import { LentInfoDto } from '../dto/lent-info.dto';
 import { OverdueInfoDto } from '../dto/overdue-info.dto';
 
-export abstract class ILentRepository {
+export interface ILentRepository {
   /**
    * 대여 사물함 정보 (lent id, cabinet id, user id, 빌린 시간, 만료 시간, 연장 여부, 인트라 아이디) 를 가져옵니다.
    *
    * @returns LentInfoDto[]
    */
-  abstract getLentInfo(): Promise<LentInfoDto[]>;
+  getLentInfo(): Promise<LentInfoDto[]>;
 
   /**
    * 연체된 사물함 리스트를 가져옵니다.
    *
    * @returns OverdueInfoDto[]
    */
-  abstract getLentOverdue(): Promise<OverdueInfoDto[]>;
+  getLentOverdue(): Promise<OverdueInfoDto[]>;
 }

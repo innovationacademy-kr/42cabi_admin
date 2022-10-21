@@ -1,18 +1,20 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
-import { ISearchRepository } from './repository/ISearchRepository';
-import { RawquerySearchRepository } from './repository/rawquery-search.repository';
+import Cabinet from 'src/entities/cabinet.entity';
+import User from 'src/entities/user.entity';
+import { SearchRepository } from './repository/search.repository';
 import { SearchController } from './search.controller';
 import { SearchService } from './search.service';
 
 const repo = {
-  provide: ISearchRepository,
-  useClass: RawquerySearchRepository,
+  provide: 'ISearchRepository',
+  useClass: SearchRepository,
 };
 
 @Module({
   controllers: [SearchController],
   providers: [SearchService, repo],
-  imports: [AuthModule], // for JWTAuthGuard
+  imports: [AuthModule, TypeOrmModule.forFeature([User, Cabinet])],
 })
 export class SearchModule {}
