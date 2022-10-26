@@ -12,9 +12,9 @@ const NavBar = () => {
         <Link to="task" className="menu">
           TASK
         </Link>
-        <Link to="status" className="menu">
+        {/* <Link to="status" className="menu">
           연체/밴
-        </Link>
+        </Link> */}
         <Link to="search" className="menu">
           검색
         </Link>
