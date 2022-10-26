@@ -22,7 +22,6 @@ export class ActivationRepository implements IActivationRepository {
         status: CabinetStatusType.BROKEN,
       })
       .getRawMany();
-    console.log(result);
     return result;
   }
 

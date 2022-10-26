@@ -33,9 +33,10 @@ export class SearchService {
     floor: number,
   ): Promise<LentLogDto[]> {
     this.logger.log('call getLentLogByCabinetNum');
-    return await this.searchRepository.getLentLogByCabinetNum(
+    const result = await this.searchRepository.getLentLogByCabinetNum(
       cabinetNum,
       floor,
     );
+    return result;
   }
 }
