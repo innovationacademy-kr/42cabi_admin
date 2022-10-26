@@ -9,8 +9,8 @@ import {
   Td,
   Th,
   Tr,
-  SmallGrayText,
   BigBlackText,
+  // SmallGrayText,
 } from "./tableStyleComponent";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { SearchResponseFromLentLog } from "../type";

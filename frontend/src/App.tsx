@@ -3,7 +3,7 @@ import "./App.css";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import Task from "./Pages/Task";
-import Status from "./Pages/Status";
+// import Status from "./Pages/Status";
 import Search from "./Pages/Search";
 import PageNotFound from "./Pages/PageNotFound";
 import Layout from "./Components/Layout";
