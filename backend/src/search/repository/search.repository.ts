@@ -11,6 +11,7 @@ export class SearchRepository implements ISearchRepository {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Cabinet) private cabinetRepository: Repository<Cabinet>,
+    @InjectRepository(LentLog) private lentLogRepository: Repository<LentLog>,
   ) {}
 
   async getLentByIntraId(intraId: string): Promise<LentDto[]> {
@@ -101,16 +102,15 @@ export class SearchRepository implements ISearchRepository {
     cabinetNum: number,
     floor: number,
   ): Promise<LentLogDto[]> {
-    const result = await this.cabinetRepository
-      .createQueryBuilder('c')
-      .innerJoinAndSelect(LentLog, 'll', 'c.cabinet_id = ll.log_cabinet_id')
-      .leftJoinAndSelect(User, 'u', 'u.user_id = ll.log_user_id')
-      .where('c.cabinet_num = :cabinetNum', { cabinetNum })
-      .andWhere('c.floor = :floor', { floor })
+    const result = await this.lentLogRepository
+      .createQueryBuilder('ll')
+      .innerJoinAndSelect(Cabinet, 'c', 'll.log_cabinet_id = c.cabinet_id')
+      .where('cabinet_num = :cabinetNum', { cabinetNum })
+      .andWhere('floor = :floor', { floor })
       .orderBy('ll.lent_time', 'DESC')
       .execute();
     return result.map((val) => ({
-      intra_id: val.u_intra_id,
+      intra_id: val.ll_log_intra_id,
       cabinet_id: val.c_cabinet_id,
       cabinet_num: val.c_cabinet_num,
       location: val.c_location,
