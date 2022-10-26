@@ -15,9 +15,9 @@ const CabinetDetail = () => {
     (state: RootState) => state.SearchResponse,
     shallowEqual
   );
-  const DisableResponseRedux = useSelector(
-    (state: RootState) => state.StatusDisabled
-  );
+  // const DisableResponseRedux = useSelector(
+  //   (state: RootState) => state.StatusDisabled
+  // );
 
   const data = useMemo(
     () => SearchResponseRedux.resultFromLent,
@@ -87,23 +87,23 @@ const CabinetDetail = () => {
     // }
   }, [CabinetActivationInfo, getDisableData]);
 
-  const cabinetFloor =
-    data !== undefined && data[0] !== undefined ? data[0].floor : 0;
+  // const cabinetFloor =
+  //   data !== undefined && data[0] !== undefined ? data[0].floor : 0;
 
-  const cabinetNum =
-    data !== undefined && data[0] !== undefined ? data[0].cabinet_num : 0;
+  // const cabinetNum =
+  //   data !== undefined && data[0] !== undefined ? data[0].cabinet_num : 0;
 
-  const targetCabinetData = DisableResponseRedux.find(
-    (key) => key.floor === cabinetFloor && key.cabinet_num === cabinetNum
-  );
+  // const targetCabinetData = DisableResponseRedux.find(
+  //   (key) => key.floor === cabinetFloor && key.cabinet_num === cabinetNum
+  // );
 
-  const CabinetDisabledReason =
-    data !== undefined &&
-    data[0] !== undefined &&
-    data[0].activation === 0 &&
-    targetCabinetData !== undefined
-      ? targetCabinetData.note
-      : "";
+  // const CabinetDisabledReason =
+  //   data !== undefined &&
+  //   data[0] !== undefined &&
+  //   data[0].activation === 0 &&
+  //   targetCabinetData !== undefined
+  //     ? targetCabinetData.note
+  //     : "";
 
   if (data === undefined || data.length === 0) {
     return (
@@ -128,14 +128,14 @@ const CabinetDetail = () => {
         <BigFontSize>{CabinetInfo}</BigFontSize>
         <p>현재 대여자 : {CabinetUserInfo}</p>
         <p>대여 기간 : {CabinetLentInfo}</p>
-        <CabinetStatusMessage
+        {/* <CabinetStatusMessage
           activation={CabinetActivationInfo !== "사용 불가"}
         >
           {CabinetActivationInfo === "사용 불가" ? CabinetActivationInfo : ""}
         </CabinetStatusMessage>
         {CabinetActivationInfo === "사용 불가" && (
           <p>비활성화 사유 : {CabinetDisabledReason}</p>
-        )}
+        )} */}
         <ExpiredInfo />
       </DetailBox>
     );
@@ -156,13 +156,13 @@ const NoneCabinet = styled.div`
   padding-bottom: 10rem;
 `;
 
-const CabinetStatusMessage = styled.p<{
-  activation: boolean;
-}>`
-  display: ${(props) => (props.activation ? "none" : "")};
-  font-size: ${(props) => (props.activation ? "1.6rem" : "2rem")};
-  font-weight: ${(props) => (props.activation ? "normal" : "bold")};
-  color: ${(props) => (props.activation ? "black" : "#bc0000")};
-`;
+// const CabinetStatusMessage = styled.p<{
+//   activation: boolean;
+// }>`
+//   display: ${(props) => (props.activation ? "none" : "")};
+//   font-size: ${(props) => (props.activation ? "1.6rem" : "2rem")};
+//   font-weight: ${(props) => (props.activation ? "normal" : "bold")};
+//   color: ${(props) => (props.activation ? "black" : "#bc0000")};
+// `;
 
 export default CabinetDetail;

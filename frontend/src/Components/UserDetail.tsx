@@ -5,7 +5,7 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import ExpiredInfo from "./ExpiredInfo";
 import { DetailBox, BigFontSize } from "./DetailStyleComponent";
-import LentDisabledInfo from "./LentDisabled";
+// import LentDisabledInfo from "./LentDisabled";
 import styled from "styled-components";
 
 const UserDetail = () => {
@@ -60,7 +60,7 @@ const UserDetail = () => {
   }
   return (
     <DetailBox>
-      <LentDisabledInfo />
+      {/* <LentDisabledInfo /> */}
       <BigFontSize>{UserInfo}</BigFontSize>
       {data[0].auth === 1 && (
         <BigRedMessage>페널티가 남아있는 사용자입니다.</BigRedMessage>
