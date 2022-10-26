@@ -7,4 +7,13 @@ export interface ICabinetRepository {
    * @returns CabinetFloorDto[]
    */
   findAll(): Promise<CabinetFloorDto[]>;
+
+  /**
+   * section별로 lent된 cabinetid list를 가져옵니다.
+   * 
+   * @param location 
+   * @param floor 
+   * @param section 
+   */
+  getCabinetIdBySection(location: string, floor: number, section: string): Promise<number[]>;
 }

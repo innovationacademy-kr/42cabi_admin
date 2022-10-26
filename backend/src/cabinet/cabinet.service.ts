@@ -16,4 +16,9 @@ export class CabinetService {
     const result = await this.cabinetRepository.findAll();
     return result;
   }
+
+  async getCabinetIdBySection(location: string, floor: number, section: string): Promise<number[]> {
+    this.logger.debug(`Called ${this.getCabinetIdBySection.name}`);
+    return await this.cabinetRepository.getCabinetIdBySection(location, floor, section);
+  }
 }
