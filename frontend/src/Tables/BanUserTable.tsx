@@ -61,7 +61,7 @@ export const BanUserTable = (props: any) => {
   if (TaskBanUserRedux.length !== 0) {
     return (
       <div>
-        <h2>영구 정지 사용자</h2>
+        <h2>페널티 적용 중인 사용자</h2>
         <TableSheet {...getTableProps()}>
           <TableHead>
             {headerGroups.map((headerGroup) => (

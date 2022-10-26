@@ -57,24 +57,19 @@ const UserDetail = () => {
         <NoneUser>목록에서 유저를 선택해주세요!</NoneUser>
       </DetailBox>
     );
-  } else if (data[0].auth === 1) {
-    return (
-      <DetailBox>
-        <BigFontSize>{UserInfo}</BigFontSize>
-        <BigRedMessage>영구 정지된 사용자입니다!</BigRedMessage>
-      </DetailBox>
-    );
-  } else {
-    return (
-      <DetailBox>
-        <LentDisabledInfo />
-        <BigFontSize>{UserInfo}</BigFontSize>
-        <p>현재 사물함 : {UserCabinetInfo}</p>
-        <p>대여기간 : {UserLentInfo}</p>
-        <ExpiredInfo />
-      </DetailBox>
-    );
   }
+  return (
+    <DetailBox>
+      <LentDisabledInfo />
+      <BigFontSize>{UserInfo}</BigFontSize>
+      {data[0].auth === 1 && (
+        <BigRedMessage>페널티가 남아있는 사용자입니다.</BigRedMessage>
+      )}
+      <p>현재 사물함 : {UserCabinetInfo}</p>
+      <p>대여기간 : {UserLentInfo}</p>
+      <ExpiredInfo />
+    </DetailBox>
+  );
 };
 
 const BigRedMessage = styled.div`

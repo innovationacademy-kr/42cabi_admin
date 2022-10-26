@@ -9,8 +9,8 @@ import {
   Td,
   Th,
   Tr,
-  SmallGrayText,
   BigBlackText,
+  // SmallGrayText,
 } from "./tableStyleComponent";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { SearchResponseFromLentLog } from "../type";
@@ -52,7 +52,7 @@ export const PrevUserTable = () => {
   return (
     <div>
       <BigBlackText>이전 대여 사물함 기록</BigBlackText>
-      <SmallGrayText>최근 10건까지 표시됩니다.</SmallGrayText>
+      {/* <SmallGrayText>최근 10건까지 표시됩니다.</SmallGrayText> */}
       <TableSheet {...getTableProps()}>
         <TableHead>
           {headerGroups.map((headerGroup) => (
