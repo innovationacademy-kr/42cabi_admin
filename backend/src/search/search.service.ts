@@ -12,12 +12,14 @@ export class SearchService {
 
   async getLentByIntraId(intraId: string): Promise<LentDto[]> {
     this.logger.log('call getLentByIntraId');
-    return await this.searchRepository.getLentByIntraId(intraId);
+    const result = await this.searchRepository.getLentByIntraId(intraId);
+    return result;
   }
 
   async getLentLogByIntraId(intraId: string): Promise<LentLogDto[]> {
     this.logger.log('call getLentLogByIntraId');
-    return await this.searchRepository.getLentLogByIntraId(intraId);
+    const result = await this.searchRepository.getLentLogByIntraId(intraId);
+    return result;
   }
 
   async getLentByCabinetNum(
