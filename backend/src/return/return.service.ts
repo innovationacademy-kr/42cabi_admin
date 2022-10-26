@@ -24,8 +24,8 @@ export class ReturnService {
     return result;
   }
 
-  async allReturn(location: string, floor: number, section: string): Promise<void> {
-    this.logger.debug(`Called ${this.allReturn.name}`);
+  async sectionReturn(location: string, floor: number, section: string): Promise<void> {
+    this.logger.debug(`Called ${this.sectionReturn.name}`);
     const cabinetList = await this.cabinetService.getCabinetIdBySection(location, floor, section);
     cabinetList.forEach(async (id) => await this.patchReturn(id));
   }
