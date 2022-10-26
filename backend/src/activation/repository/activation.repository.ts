@@ -36,7 +36,6 @@ export class ActivationRepository implements IActivationRepository {
         status: CabinetStatusType.BANNED,
       },
     });
-    console.log(result);
     return result;
   }
 

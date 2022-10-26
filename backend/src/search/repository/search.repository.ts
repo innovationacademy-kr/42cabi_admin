@@ -15,44 +15,41 @@ export class SearchRepository implements ISearchRepository {
   ) {}
 
   async getLentByIntraId(intraId: string): Promise<LentDto[]> {
-    const result = await this.userRepository.find({
-      relations: {
-        Lent: {
-          cabinet: true,
-        },
-      },
-      where: {
-        intra_id: intraId,
-      },
-    });
-    if (result.length === 0 || result[0].Lent === null) {
+    const result = await this.userRepository.createQueryBuilder('u')
+    .select(['u.intra_id', 'u.state'])
+    .addSelect(['c.cabinet_id', 'c.cabinet_id', 'c.cabinet_num', 'c.location', 'c.section', 'c.floor', 'c.cabinet_status'])
+    .addSelect(['l.lent_id', 'l.lent_time', 'l.expire_time'])
+    .leftJoin('lent', 'l', 'l.lent_user_id = u.user_id')
+    .leftJoin('cabinet', 'c', 'c.cabinet_id = l.lent_cabinet_id')
+    .where('u.intra_id = :intraId', { intraId })
+    .execute();
+    if (result.length === 0) {
       return [];
     }
     return result.map((val) => ({
-      intra_id: val.intra_id,
-      auth: val.state === 'NORMAL' ? 1 : 0,
-      cabinet_id: val.Lent.cabinet.cabinet_id,
-      cabinet_num: val.Lent.cabinet.cabinet_num,
-      location: val.Lent.cabinet.location,
-      section: val.Lent.cabinet.section,
-      floor: val.Lent.cabinet.floor,
-      activation: val.Lent.cabinet.status === 'AVAILABLE' ? 1 : 0,
-      lent_id: val.Lent.lent_id,
-      lent_time: val.Lent.lent_time,
-      expire_time: val.Lent.expire_time,
+      intra_id: val.u_intra_id,
+      auth: val.u_state === 'NORMAL' ? 1 : 0,
+      cabinet_id: val.c_cabinet_id,
+      cabinet_num: val.c_cabinet_num,
+      location: val.c_location,
+      section: val.c_section,
+      floor: val.c_floor,
+      activation: val.cabinet_status === 'AVAILABLE' ? 1 : 0,
+      lent_id: val.l_lent_id,
+      lent_time: val.l_lent_time,
+      expire_time: val.l_expire_time,
     }));
   }
 
   async getLentLogByIntraId(intraId: string): Promise<LentLogDto[]> {
-    const result = await this.userRepository
-      .createQueryBuilder('u')
-      .innerJoinAndSelect(LentLog, 'll', 'u.user_id = ll.log_user_id')
-      .leftJoinAndSelect(Cabinet, 'c', 'll.log_cabinet_id = c.cabinet_id')
-      .where('u.intra_id = :intraId', { intraId })
+    const result = await this.lentLogRepository
+      .createQueryBuilder('ll')
+      .innerJoinAndSelect(Cabinet, 'c', 'll.log_cabinet_id = c.cabinet_id')
+      .where('ll.log_intra_id = :intraId', { intraId })
       .orderBy('ll.lent_time', 'DESC')
       .execute();
     return result.map((val) => ({
-      intra_id: val.u_intra_id,
+      intra_id: val.ll_log_intra_id,
       cabinet_id: val.c_cabinet_id,
       cabinet_num: val.c_cabinet_num,
       location: val.c_location,
