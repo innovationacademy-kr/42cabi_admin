@@ -19,7 +19,7 @@ const App = () => {
         <Route path="saerom" element={<Layout />}>
           <Route path="" element={<Home />} />
           <Route path="task" element={<Task />} />
-          <Route path="status" element={<Status />} />
+          {/* <Route path="status" element={<Status />} /> */}
           <Route path="search" element={<Search />}>
             <Route path="searchDashboard" element={<SearchDashboard />} />
             <Route

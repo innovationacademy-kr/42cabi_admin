@@ -50,7 +50,7 @@ export const PrevCabinetTable = () => {
   return (
     <div>
       <BigBlackText>이전 대여 사물함 기록</BigBlackText>
-      <SmallGrayText>최근 10건까지 표시됩니다.</SmallGrayText>
+      {/* <SmallGrayText>최근 10건까지 표시됩니다.</SmallGrayText> */}
       <TableSheet {...getTableProps()}>
         <TableHead>
           {headerGroups.map((headerGroup) => (
