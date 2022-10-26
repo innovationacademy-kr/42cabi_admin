@@ -80,8 +80,23 @@ export class SearchRepository implements ISearchRepository {
         floor,
       },
     });
-    if (result.length === 0 || result[0].lent.length === 0) {
+    if (result.length === 0) {
       return [];
+    }
+    if (result[0].lent.length === 0) {
+      return result.map((val) => ({
+        intra_id: null,
+        cabinet_id: val.cabinet_id,
+        cabinet_num: val.cabinet_num,
+        location: val.location,
+        section: val.section,
+        floor: val.floor,
+        activation: val.status === 'AVAILABLE' ? 1 : 0,
+        lent_id: null,
+        lent_time: null,
+        expire_time: null,
+        auth: 0,
+      }));
     }
     return result.map((val) => ({
       intra_id: val.lent[0].user.intra_id,
