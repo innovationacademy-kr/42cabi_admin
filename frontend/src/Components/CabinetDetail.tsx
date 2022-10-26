@@ -5,7 +5,7 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import ExpiredInfo from "./ExpiredInfo";
 import { DetailBox, BigFontSize } from "./DetailStyleComponent";
-import LentDisabledInfo from "./LentDisabled";
+// import LentDisabledInfo from "./LentDisabled";
 import { GetDisabledResponse } from "../ReduxModules/StatusDisabled";
 import styled from "styled-components";
 import * as API from "../Networks/APIType";
@@ -124,7 +124,7 @@ const CabinetDetail = () => {
   } else {
     return (
       <DetailBox>
-        <LentDisabledInfo />
+        {/* <LentDisabledInfo /> */}
         <BigFontSize>{CabinetInfo}</BigFontSize>
         <p>현재 대여자 : {CabinetUserInfo}</p>
         <p>대여 기간 : {CabinetLentInfo}</p>
