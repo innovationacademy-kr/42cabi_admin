@@ -1,4 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { CabinetService } from 'src/cabinet/cabinet.service';
 import { CabinetDto } from './dto/cabinet.dto';
 import { IReturnRepository } from './repository/return.repository.interface';
 
@@ -8,6 +9,7 @@ export class ReturnService {
 
   constructor(
     @Inject('IReturnRepository') private returnRepository: IReturnRepository,
+    private cabinetService: CabinetService,
   ) {}
 
   async getReturn(cabinetIdx: number): Promise<CabinetDto> {
@@ -20,5 +22,11 @@ export class ReturnService {
     this.logger.debug(`call patchReturn (cabinetIdx: ${cabinetIdx})`);
     const result = await this.returnRepository.returnCabinet(cabinetIdx);
     return result;
+  }
+
+  async sectionReturn(location: string, floor: number, section: string): Promise<void> {
+    this.logger.debug(`Called ${this.sectionReturn.name}`);
+    const cabinetList = await this.cabinetService.getCabinetIdBySection(location, floor, section);
+    cabinetList.forEach(async (id) => await this.patchReturn(id));
   }
 }

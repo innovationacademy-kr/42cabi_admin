@@ -1,8 +1,10 @@
 import {
   BadRequestException,
   Controller,
+  Delete,
   Get,
   Logger,
+  Param,
   ParseIntPipe,
   Patch,
   Query,
@@ -38,4 +40,16 @@ export class ReturnController {
     }
     return 'ok';
   }
+
+  // TODO: 섹션별로 일괄 반납을 하는 로직을 만들었으나 당장 사용할 기능은 아니므로 주석 처리해놨습니다.
+  // @Delete('/:location/:floor/:section')
+  // async sectionReturn(
+  //   @Param('location') location: string,
+  //   @Param('floor', ParseIntPipe) floor: number,
+  //   @Param('section') section: string
+  // ):Promise<void>
+  // {
+  //   this.logger.debug(`Called ${this.sectionReturn.name}`);
+  //   await this.returnService.sectionReturn(location, floor, section);
+  // }
 }

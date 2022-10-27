@@ -14,6 +14,7 @@ const repo = {
 @Module({
   controllers: [CabinetController],
   providers: [CabinetService, repo],
+  exports: [CabinetService],
   imports: [AuthModule, TypeOrmModule.forFeature([Cabinet])], // for JWTAuthGuard
 })
 export class CabinetModule {}
