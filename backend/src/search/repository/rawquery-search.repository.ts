@@ -38,14 +38,13 @@ export class RawquerySearchRepository implements ISearchRepository {
     for (let i = 0; i < getLentInfoByIntraId.length; i += 1) {
       lentInfo.push({
         intra_id: getLentInfoByIntraId[i].intra_id,
-        auth: getLentInfoByIntraId[i].state === 'NORMAL' ? 1 : 0,
+        auth: getLentInfoByIntraId[i].state === 'BANNED' ? 0 : 1,
         cabinet_id: getLentInfoByIntraId[i].cabinet_id,
         cabinet_num: getLentInfoByIntraId[i].cabinet_num,
         location: getLentInfoByIntraId[i].location,
         section: getLentInfoByIntraId[i].section,
         floor: getLentInfoByIntraId[i].floor,
-        activation:
-          getLentInfoByIntraId[i].cabinet_status === 'AVAILABLE' ? 1 : 0,
+        activation: getLentInfoByIntraId[i].cabinet_status === 'BROKEN' ? 0 : 1,
         lent_id: getLentInfoByIntraId[i].lent_id,
         lent_time: getLentInfoByIntraId[i].lent_time,
         expire_time: getLentInfoByIntraId[i].expire_time,
@@ -81,8 +80,7 @@ export class RawquerySearchRepository implements ISearchRepository {
         location: getLentLogByIntraId[i].location,
         section: getLentLogByIntraId[i].section,
         floor: getLentLogByIntraId[i].floor,
-        activation:
-          getLentLogByIntraId[i].cabinet_status === 'AVAILABLE' ? 1 : 0,
+        activation: getLentLogByIntraId[i].cabinet_status === 'BROKEN' ? 0 : 1,
         log_id: getLentLogByIntraId[i].log_id,
         lent_time: getLentLogByIntraId[i].lent_time,
         return_time: getLentLogByIntraId[i].return_time,
@@ -120,8 +118,7 @@ export class RawquerySearchRepository implements ISearchRepository {
         location: getLentByCabinetNum[i].location,
         section: getLentByCabinetNum[i].section,
         floor: getLentByCabinetNum[i].floor,
-        activation:
-          getLentByCabinetNum[i].cabinet_status === 'AVAILABLE' ? 1 : 0,
+        activation: getLentByCabinetNum[i].cabinet_status === 'BROKEN' ? 0 : 1,
         lent_id: getLentByCabinetNum[i].lent_id,
         log_id: getLentByCabinetNum[i].log_id,
         lent_time: getLentByCabinetNum[i].lent_time,
@@ -162,7 +159,7 @@ export class RawquerySearchRepository implements ISearchRepository {
         section: getLentLogByCabinetNum[i].section,
         floor: getLentLogByCabinetNum[i].floor,
         activation:
-          getLentLogByCabinetNum[i].cabinet_status === 'AVAILABLE' ? 1 : 0,
+          getLentLogByCabinetNum[i].cabinet_status === 'BROKEN' ? 0 : 1,
         lent_id: getLentLogByCabinetNum[i].lent_id,
         log_id: getLentLogByCabinetNum[i].log_id,
         lent_time: getLentLogByCabinetNum[i].lent_time,

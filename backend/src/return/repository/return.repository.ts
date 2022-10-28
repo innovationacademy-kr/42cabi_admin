@@ -40,7 +40,7 @@ export class ReturnRepository implements IReturnRepository {
       extension: 0, //  NOTE: 무슨 필드?
       user_id: result.lent[0].user.user_id,
       intra_id: result.lent[0].user.intra_id,
-      auth: result.lent[0].user.state === 'NORMAL' ? 1 : 0,
+      auth: result.lent[0].user.state === 'BANNED' ? 0 : 1,
       email: result.lent[0].user.email,
       phone: '010-123-4567', //  NOTE: 삭제 필요
       firstLogin: result.lent[0].user.first_login,
