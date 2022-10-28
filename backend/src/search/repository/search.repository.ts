@@ -1,4 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
+import BanLog from 'src/entities/ban.log.entity';
 import Cabinet from 'src/entities/cabinet.entity';
 import LentLog from 'src/entities/lent.log.entity';
 import User from 'src/entities/user.entity';
@@ -17,9 +18,8 @@ export class SearchRepository implements ISearchRepository {
   async getLentByIntraId(intraId: string): Promise<LentDto[]> {
     const result = await this.userRepository
       .createQueryBuilder('u')
-      .select(['u.intra_id', 'u.state'])
+      .select(['u.intra_id', 'u.state', 'u.user_id'])
       .addSelect([
-        'c.cabinet_id',
         'c.cabinet_id',
         'c.cabinet_num',
         'c.location',
@@ -35,9 +35,18 @@ export class SearchRepository implements ISearchRepository {
     if (result.length === 0) {
       return [];
     }
+    const blocked = await this.userRepository.manager.findOne(BanLog, {
+      where: {
+        ban_user_id: result.u_user_id,
+      },
+      order: {
+        unbanned_date: 'DESC',
+      },
+    });
+    const banned = blocked && blocked.unbanned_date > new Date();
     return result.map((val) => ({
       intra_id: val.u_intra_id,
-      auth: val.u_state === 'BANNED' ? 0 : 1,
+      auth: banned ? 0 : 1,
       cabinet_id: val.c_cabinet_id,
       cabinet_num: val.c_cabinet_num,
       location: val.c_location,
@@ -101,7 +110,7 @@ export class SearchRepository implements ISearchRepository {
         lent_id: null,
         lent_time: null,
         expire_time: null,
-        auth: val.lent[0].user.state === 'BANNED' ? 0 : 1,
+        auth: 1, // 현재 빌리고 있는데 블럭 당할수가 없음.
       }));
     }
     return result.map((val) => ({
@@ -115,7 +124,7 @@ export class SearchRepository implements ISearchRepository {
       lent_id: val.lent[0].lent_id,
       lent_time: val.lent[0].lent_time,
       expire_time: val.lent[0].expire_time,
-      auth: val.lent[0].user.state === 'BANNED' ? 0 : 1,
+      auth: 1, // 현재 빌리고 있는데 블럭 당할수가 없음.
     }));
   }
 
