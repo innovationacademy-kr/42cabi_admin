@@ -45,15 +45,20 @@ export class CabinetRepository implements ICabinetRepository {
     return result;
   }
 
-  async getCabinetIdBySection(location: string, floor: number, section: string): Promise<number[]> {
-    const result = await this.cabinetRepository.createQueryBuilder('c')
-    .innerJoin('c.lent', 'lent')
-    .select('lent_cabinet_id')
-    .where( {location} )
-    .andWhere({ floor })
-    .andWhere({ section })
-    .getRawMany();
+  async getCabinetIdBySection(
+    location: string,
+    floor: number,
+    section: string,
+  ): Promise<number[]> {
+    const result = await this.cabinetRepository
+      .createQueryBuilder('c')
+      .innerJoin('c.lent', 'lent')
+      .select('lent_cabinet_id')
+      .where({ location })
+      .andWhere({ floor })
+      .andWhere({ section })
+      .getRawMany();
 
-    return result.map((c) => c.lent_cabinet_id)
+    return result.map((c) => c.lent_cabinet_id);
   }
 }

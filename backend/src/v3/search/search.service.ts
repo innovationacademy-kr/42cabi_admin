@@ -1,5 +1,5 @@
-import { Inject, Injectable, Logger } from "@nestjs/common";
-import { ISearchRepository } from "./repository/search.repository.interface";
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { ISearchRepository } from './repository/search.repository.interface';
 
 @Injectable()
 export class SearchService {

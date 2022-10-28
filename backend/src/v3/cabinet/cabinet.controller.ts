@@ -1,4 +1,4 @@
-import { Controller, Get, Logger, UseGuards } from '@nestjs/common';
+import { Controller, Logger, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { JWTAuthGuard } from 'src/auth/auth.guard';
 import { CabinetService } from './cabinet.service';
