@@ -16,7 +16,7 @@ export class SearchRepository implements ISearchRepository {
 
   async getLentByIntraId(intraId: string): Promise<LentDto[]> {
     const result = await this.userRepository.createQueryBuilder('u')
-    .select(['u.intra_id', 'u.state'])
+    .select(['u.intra_id'])
     .addSelect(['c.cabinet_id', 'c.cabinet_id', 'c.cabinet_num', 'c.location', 'c.section', 'c.floor', 'c.cabinet_status'])
     .addSelect(['l.lent_id', 'l.lent_time', 'l.expire_time'])
     .leftJoin('lent', 'l', 'l.lent_user_id = u.user_id')
