@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
+import { CabinetModule } from 'src/cabinet/cabinet.module';
 import Cabinet from 'src/entities/cabinet.entity';
 import { ReturnRepository } from './repository/return.repository';
 import { ReturnController } from './return.controller';
@@ -14,6 +15,6 @@ const repo = {
 @Module({
   controllers: [ReturnController],
   providers: [ReturnService, repo],
-  imports: [AuthModule, TypeOrmModule.forFeature([Cabinet])], // for JWTAuthGuard
+  imports: [AuthModule, TypeOrmModule.forFeature([Cabinet]), CabinetModule], // for JWTAuthGuard
 })
 export class ReturnModule {}
