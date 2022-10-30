@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import Cabinet from 'src/entities/cabinet.entity';
 import Lent from 'src/entities/lent.entity';
 import LentLog from 'src/entities/lent.log.entity';
+import BanLog from 'src/entities/ban.log.entity';
 
 export class ReturnRepository implements IReturnRepository {
   constructor(
@@ -25,6 +26,15 @@ export class ReturnRepository implements IReturnRepository {
     if (result === null || result.lent.length === 0) {
       return null;
     }
+    const blocked = await this.cabinetRepository.manager.findOne(BanLog, {
+      where: {
+        ban_user_id: result.lent[0].user.user_id,
+      },
+      order: {
+        unbanned_date: 'DESC',
+      },
+    });
+    const banned = blocked && blocked.unbanned_date > new Date();
     const rtn = {
       cabinet_id: result.cabinet_id,
       cabinet_num: result.cabinet_num,
@@ -40,7 +50,7 @@ export class ReturnRepository implements IReturnRepository {
       extension: 0, //  NOTE: 무슨 필드?
       user_id: result.lent[0].user.user_id,
       intra_id: result.lent[0].user.intra_id,
-      auth: result.lent[0].user.state === 'NORMAL' ? 1 : 0,
+      auth: banned ? 0 : 1,
       email: result.lent[0].user.email,
       phone: '010-123-4567', //  NOTE: 삭제 필요
       firstLogin: result.lent[0].user.first_login,

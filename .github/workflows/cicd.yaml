@@ -72,14 +72,15 @@ jobs:
           script: |
             source $HOME/.bash_profile
             echo "해당 리포지토리로 이동"
-            cd $HOME/git/42cabi-admin/backend
+            cd $HOME/git/42cabi-admin
             echo "리포지토리 pull"
             git pull origin main
             echo "앱 빌드"
+            cd $HOME/git/42cabi-admin/backend
             npm install
             npm run build:fe
             npm run build
             echo "env 파일 복사"
-            cp 42cabi-admin.env $HOME/git/42cabi-admin/backend/.env
+            cp $HOME/42cabi-admin.env $HOME/git/42cabi-admin/backend/.env
             echo "앱 배포 (reload)"
-            pm2 reload 42cabi-admin
+            pm2 reload 42cabi-admin-prod
