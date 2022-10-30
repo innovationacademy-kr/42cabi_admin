@@ -38,7 +38,7 @@ export class RawquerySearchRepository implements ISearchRepository {
     for (let i = 0; i < getLentInfoByIntraId.length; i += 1) {
       lentInfo.push({
         intra_id: getLentInfoByIntraId[i].intra_id,
-        auth: getLentInfoByIntraId[i].state === 'BANNED' ? 0 : 1,
+        //auth: getLentInfoByIntraId[i].state === 'BANNED' ? 0 : 1,
         cabinet_id: getLentInfoByIntraId[i].cabinet_id,
         cabinet_num: getLentInfoByIntraId[i].cabinet_num,
         location: getLentInfoByIntraId[i].location,
