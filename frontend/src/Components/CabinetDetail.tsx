@@ -1,14 +1,14 @@
-import { useSelector, shallowEqual, useDispatch } from "react-redux";
-import { useEffect, useMemo, useCallback } from "react";
+import { useSelector, shallowEqual } from "react-redux";
+import { useEffect, useMemo } from "react";
 import { RootState } from "../ReduxModules/rootReducer";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import ExpiredInfo from "./ExpiredInfo";
 import { DetailBox, BigFontSize } from "./DetailStyleComponent";
-// import LentDisabledInfo from "./LentDisabled";
-import { GetDisabledResponse } from "../ReduxModules/StatusDisabled";
+import LentDisabledInfo from "./LentDisabled";
+// import { GetDisabledResponse } from "../ReduxModules/StatusDisabled";
 import styled from "styled-components";
-import * as API from "../Networks/APIType";
+// import * as API from "../Networks/APIType";
 
 const CabinetDetail = () => {
   const SearchResponseRedux = useSelector(
@@ -25,7 +25,7 @@ const CabinetDetail = () => {
   );
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const currentPage = window.location.pathname.split("/")[2];
 
   useEffect(() => {
@@ -59,33 +59,33 @@ const CabinetDetail = () => {
       : "없음";
 
   const CabinetActivationInfo =
-    data !== undefined && data[0] !== undefined && data[0].activation === 1
-      ? "사용 가능"
-      : "사용 불가";
+    data !== undefined && data[0] !== undefined && data[0].activation === 0
+      ? "사용 불가"
+      : "";
 
-  const getDisableData = useCallback(async () => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      const res = await API.axiosFormat(
-        {
-          method: "GET",
-          url: API.url("/api/activation"),
-        },
-        token
-      );
-      dispatch(GetDisabledResponse(res.data));
-    } catch (e) {
-      console.log(e);
-      const axiosError = e as API.axiosError;
-      API.HandleError(navigate, axiosError);
-    }
-  }, [dispatch, navigate]);
+  // const getDisableData = useCallback(async () => {
+  //   try {
+  //     const token = localStorage.getItem("accessToken");
+  //     const res = await API.axiosFormat(
+  //       {
+  //         method: "GET",
+  //         url: API.url("/api/activation"),
+  //       },
+  //       token
+  //     );
+  //     dispatch(GetDisabledResponse(res.data));
+  //   } catch (e) {
+  //     console.log(e);
+  //     const axiosError = e as API.axiosError;
+  //     API.HandleError(navigate, axiosError);
+  //   }
+  // }, [dispatch, navigate]);
 
-  useEffect(() => {
-    // if (CabinetActivationInfo === "사용 불가") {
-    getDisableData();
-    // }
-  }, [CabinetActivationInfo, getDisableData]);
+  // useEffect(() => {
+  //   if (CabinetActivationInfo === "사용 불가") {
+  //     getDisableData();
+  //   }
+  // }, [CabinetActivationInfo, getDisableData]);
 
   // const cabinetFloor =
   //   data !== undefined && data[0] !== undefined ? data[0].floor : 0;
@@ -100,9 +100,8 @@ const CabinetDetail = () => {
   // const CabinetDisabledReason =
   //   data !== undefined &&
   //   data[0] !== undefined &&
-  //   data[0].activation === 0 &&
-  //   targetCabinetData !== undefined
-  //     ? targetCabinetData.note
+  //   data[0].activation === 0 ?
+  //     data[0].note;
   //     : "";
 
   if (data === undefined || data.length === 0) {
@@ -124,16 +123,12 @@ const CabinetDetail = () => {
   } else {
     return (
       <DetailBox>
-        {/* <LentDisabledInfo /> */}
+        <LentDisabledInfo />
         <BigFontSize>{CabinetInfo}</BigFontSize>
         <p>현재 대여자 : {CabinetUserInfo}</p>
         <p>대여 기간 : {CabinetLentInfo}</p>
-        {/* <CabinetStatusMessage
-          activation={CabinetActivationInfo !== "사용 불가"}
-        >
-          {CabinetActivationInfo === "사용 불가" ? CabinetActivationInfo : ""}
-        </CabinetStatusMessage>
-        {CabinetActivationInfo === "사용 불가" && (
+        <CabinetStatusMessage>{CabinetActivationInfo}</CabinetStatusMessage>
+        {/* {CabinetActivationInfo === "사용 불가" && (
           <p>비활성화 사유 : {CabinetDisabledReason}</p>
         )} */}
         <ExpiredInfo />
@@ -156,13 +151,10 @@ const NoneCabinet = styled.div`
   padding-bottom: 10rem;
 `;
 
-// const CabinetStatusMessage = styled.p<{
-//   activation: boolean;
-// }>`
-//   display: ${(props) => (props.activation ? "none" : "")};
-//   font-size: ${(props) => (props.activation ? "1.6rem" : "2rem")};
-//   font-weight: ${(props) => (props.activation ? "normal" : "bold")};
-//   color: ${(props) => (props.activation ? "black" : "#bc0000")};
-// `;
+const CabinetStatusMessage = styled.p`
+  font-size: 2rem;
+  font-weight: bold;
+  color: #bc0000;
+`;
 
 export default CabinetDetail;

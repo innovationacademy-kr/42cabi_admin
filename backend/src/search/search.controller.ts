@@ -38,7 +38,7 @@ export class SearchController {
           intra_id: resultFromLentLog[0].intra_id,
           auth: 0,
           cabinet_id: null,
-          cabinet_num:null,
+          cabinet_num: null,
           location: null,
           section: null,
           floor: null,

@@ -10,10 +10,14 @@ export interface ICabinetRepository {
 
   /**
    * section별로 lent된 cabinetid list를 가져옵니다.
-   * 
-   * @param location 
-   * @param floor 
-   * @param section 
+   *
+   * @param location
+   * @param floor
+   * @param section
    */
-  getCabinetIdBySection(location: string, floor: number, section: string): Promise<number[]>;
+  getCabinetIdBySection(
+    location: string,
+    floor: number,
+    section: string,
+  ): Promise<number[]>;
 }
