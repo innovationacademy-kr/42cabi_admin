@@ -38,7 +38,7 @@ export class SearchRepository implements ISearchRepository {
     }
     const blocked = await this.userRepository.manager.findOne(BanLog, {
       where: {
-        ban_user_id: result.u_user_id,
+        ban_user_id: result[0].u_user_id,
       },
       order: {
         unbanned_date: 'DESC',
