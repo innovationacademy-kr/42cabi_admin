@@ -25,7 +25,7 @@ export class RawquerySearchRepository implements ISearchRepository {
     const lentInfo = [];
 
     const content = `
-    SELECT u.intra_id, u.state, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.cabinet_status, l.lent_id, l.lent_time, l.expire_time
+    SELECT u.intra_id, c.cabinet_id, c.cabinet_num, c.location, c.section, c.floor, c.cabinet_status, l.lent_id, l.lent_time, l.expire_time
     FROM user u
     LEFT JOIN lent l
     ON u.user_id=l.lent_user_id
