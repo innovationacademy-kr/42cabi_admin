@@ -11,6 +11,7 @@ import { SearchModule } from './search/search.module';
 import { join } from 'path';
 import TypeOrmConfigService from './config/typeorm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { V3Module } from './v3/v3.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       rootPath: join(__dirname, '../../', 'frontend/build/'),
       serveRoot: '',
     }),
+    V3Module,
   ],
 })
 export class AppModule {}
