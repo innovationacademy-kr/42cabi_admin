@@ -3,7 +3,6 @@ import { useState, useRef } from "react";
 import {
   DropDownContainer,
   DropDownHeader,
-  DropDownHeaderSymbol,
   DropDownListContainer,
   DropDownList,
   ListItem,
@@ -14,12 +13,12 @@ import {
   useSearchParams,
 } from "react-router-dom";
 
-const options = ["ID", "2F", "4F", "5F"];
+const options = ["User", "Cabinet"];
 
 const SearchBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggling = () => setIsOpen(!isOpen);
-  const [selectedOption, setSelectedOption] = useState("ID");
+  const [selectedOption, setSelectedOption] = useState("User");
   const [currentParams] = useSearchParams();
 
   const onOptionClicked = (value: string) => () => {
@@ -34,7 +33,7 @@ const SearchBar = () => {
 
   const goToResultPage = () => {
     setIsOpen(false);
-    if (selectedOption === "ID") {
+    if (selectedOption === "User") {
       const inputId = searchText.current?.value || "";
       if (currentParams.get("intraId") === inputId) {
         // window.location.reload();
@@ -86,8 +85,8 @@ const SearchBar = () => {
     <SearchBarContainer>
       <DropDownContainer>
         <DropDownHeader onClick={toggling}>
-          {selectedOption}
-          <DropDownHeaderSymbol>▼</DropDownHeaderSymbol>
+          <div>{selectedOption}</div>
+          <div>▼</div>
         </DropDownHeader>
         {isOpen && (
           <DropDownListContainer>
@@ -126,8 +125,8 @@ const SearchInput = styled.input`
   padding-left: 1rem;
   padding-right: 1rem;
   text-align: right;
-  width: 23rem;
-  min-width: 6rem;
+  width: 20vw;
+  min-width: 10rem;
   height: 3rem;
   /* justify-content: flex-center; */
 `;

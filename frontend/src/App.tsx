@@ -10,6 +10,7 @@ import Layout from "./Components/Layout";
 import SearchDashboard from "./Pages/SearchDashboard";
 import Footer from "./Components/Footer";
 import InvalidSearchResult from "./Pages/InvalidSearchResult";
+import Management from "./Pages/Management";
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
               element={<InvalidSearchResult />}
             />
           </Route>
+          <Route path="management" element={<Management />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

@@ -18,6 +18,9 @@ const NavBar = () => {
         <Link to="search" className="menu">
           검색
         </Link>
+        <Link to="management" className="menu">
+          관리
+        </Link>
       </div>
       <div className="right">
         <div className="menu">
