@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  gateway_admin:
+    container_name: gateway_admin
+    image: nginx:latest
+    ports:
+      - '81:80'
+    volumes:
+      - ../dev/:/etc/nginx/conf.d/
