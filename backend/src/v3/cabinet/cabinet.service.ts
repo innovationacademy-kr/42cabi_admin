@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import CabinetStatusType from 'src/enums/cabinet.status.type.enum';
 import LentType from 'src/enums/lent.type.enum';
 import { CabinetInfoResponseDto } from './dto/cabinet.info.response.dto';
@@ -29,12 +35,18 @@ export class CabinetService {
     }
   }
 
-  async updateCabinetStatus(cabinet_id: number, status: CabinetStatusType): Promise<void> {
+  async updateCabinetStatus(
+    cabinet_id: number,
+    status: CabinetStatusType,
+  ): Promise<void> {
     this.logger.debug(
       `Called ${CabinetService.name} ${this.updateCabinetStatus.name}`,
     );
-    if (await this.isCabinetExist(cabinet_id) === false) {
-      throw new HttpException('🚨 존재하지 않는 사물함입니다 🚨',HttpStatus.BAD_REQUEST);
+    if ((await this.isCabinetExist(cabinet_id)) === false) {
+      throw new HttpException(
+        '🚨 존재하지 않는 사물함입니다 🚨',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     await this.cabinetRepository.updateCabinetStatus(cabinet_id, status);
   }
@@ -45,32 +57,47 @@ export class CabinetService {
     );
     const isLent = await this.cabinetRepository.cabinetIsLent(cabinet_id);
     if (isLent === true) {
-      throw new HttpException('🚨 대여자가 있는 사물함입니다 🚨',HttpStatus.FORBIDDEN);
+      throw new HttpException(
+        '🚨 대여자가 있는 사물함입니다 🚨',
+        HttpStatus.FORBIDDEN,
+      );
     }
-    if (await this.isCabinetExist(cabinet_id) === false) {
-      throw new HttpException('🚨 존재하지 않는 사물함입니다 🚨',HttpStatus.BAD_REQUEST);
+    if ((await this.isCabinetExist(cabinet_id)) === false) {
+      throw new HttpException(
+        '🚨 존재하지 않는 사물함입니다 🚨',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    await this.cabinetRepository.updateLentType(cabinet_id, lent_type); 
+    await this.cabinetRepository.updateLentType(cabinet_id, lent_type);
   }
 
-  async updateStatusNote(cabinet_id: number, status_note: string): Promise<void> {
+  async updateStatusNote(
+    cabinet_id: number,
+    status_note: string,
+  ): Promise<void> {
     this.logger.debug(
       `Called ${CabinetService.name} ${this.updateStatusNote.name}`,
     );
-    if (await this.isCabinetExist(cabinet_id) === false) {
-      throw new HttpException('🚨 존재하지 않는 사물함입니다 🚨',HttpStatus.BAD_REQUEST);
+    if ((await this.isCabinetExist(cabinet_id)) === false) {
+      throw new HttpException(
+        '🚨 존재하지 않는 사물함입니다 🚨',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     await this.cabinetRepository.updateStatusNote(cabinet_id, status_note);
   }
 
   //TODO: bundle에 들어있는 캐비넷 id가 bad request라면 exception을 발생시켜야할까요?..
-  async updateCabinetStatusByBundle(status: CabinetStatusType, bundle: number[]): Promise<number[]> {
+  async updateCabinetStatusByBundle(
+    status: CabinetStatusType,
+    bundle: number[],
+  ): Promise<number[]> {
     this.logger.debug(
       `Called ${CabinetService.name} ${this.updateCabinetStatusByBundle.name}`,
     );
     const result = [];
     for (const cabinet_id of bundle) {
-      if (await this.isCabinetExist(cabinet_id) === false) {
+      if ((await this.isCabinetExist(cabinet_id)) === false) {
         result.push(cabinet_id);
         continue;
       }
@@ -84,7 +111,10 @@ export class CabinetService {
     return result;
   }
 
-  async updateLentTypeByBundle(lent_type: LentType, bundle: number[]): Promise<number[]> {
+  async updateLentTypeByBundle(
+    lent_type: LentType,
+    bundle: number[],
+  ): Promise<number[]> {
     this.logger.debug(
       `Called ${CabinetService.name} ${this.updateCabinetStatusByBundle.name}`,
     );
@@ -95,7 +125,7 @@ export class CabinetService {
         result.push(cabinet_id);
         continue;
       }
-      if (await this.isCabinetExist(cabinet_id) === false) {
+      if ((await this.isCabinetExist(cabinet_id)) === false) {
         result.push(cabinet_id);
         continue;
       }
@@ -113,12 +143,15 @@ export class CabinetService {
     this.logger.debug(
       `Called ${CabinetService.name} ${this.updateCabinetTitle.name}`,
     );
-    if (await this.isCabinetExist(cabinet_id) === false) {
-      throw new HttpException('🚨 존재하지 않는 사물함입니다 🚨',HttpStatus.BAD_REQUEST);
+    if ((await this.isCabinetExist(cabinet_id)) === false) {
+      throw new HttpException(
+        '🚨 존재하지 않는 사물함입니다 🚨',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     await this.cabinetRepository.updateCabinetTitle(cabinet_id, title);
   }
-  
+
   async isCabinetExist(cabinet_id: number): Promise<boolean> {
     this.logger.debug(
       `Called ${CabinetService.name} ${this.isCabinetExist.name}`,

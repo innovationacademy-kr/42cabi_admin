@@ -12,7 +12,6 @@ export class CabinetRepository implements ICabinetRepository {
     private cabinetRepository: Repository<Cabinet>,
   ) {}
 
-
   async getCabinetResponseInfo(
     cabinet_id: number,
   ): Promise<CabinetInfoResponseDto> {
@@ -62,11 +61,8 @@ export class CabinetRepository implements ICabinetRepository {
       .execute();
   }
 
-  async updateLentType(
-    cabinet_id: number,
-    lent_type: LentType,
-  ): Promise<void> {
-    const result = await this.cabinetRepository
+  async updateLentType(cabinet_id: number, lent_type: LentType): Promise<void> {
+    await this.cabinetRepository
       .createQueryBuilder(this.updateLentType.name)
       .update()
       .set({
@@ -78,7 +74,10 @@ export class CabinetRepository implements ICabinetRepository {
       .execute();
   }
 
-  async updateStatusNote(cabinet_id: number, status_note: string): Promise<void> {
+  async updateStatusNote(
+    cabinet_id: number,
+    status_note: string,
+  ): Promise<void> {
     await this.cabinetRepository
       .createQueryBuilder(this.updateLentType.name)
       .update()
@@ -111,7 +110,7 @@ export class CabinetRepository implements ICabinetRepository {
       },
       where: {
         cabinet_id,
-      }
+      },
     });
     if (result === null) {
       return false;
