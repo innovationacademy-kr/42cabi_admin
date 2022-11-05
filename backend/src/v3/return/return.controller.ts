@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, HttpCode, HttpException, HttpStatus, InternalServerErrorException, Logger, Param, ParseArrayPipe, ParseIntPipe, UseGuards } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBody, ApiNoContentResponse, ApiNotFoundResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JWTAuthGuard } from 'src/auth/auth.guard';
+import { ReturnBundleDataDto } from './dto/return.bundle.data.dto';
 import { ReturnService } from './return.service';
 
 @ApiTags('(V3) Return')
@@ -79,7 +80,7 @@ export class ReturnController {
   }
 
   @ApiOperation({
-    summary: '선택한 캐비넷이나 유저를 일괄 반납합니다.',
+    summary: '선택한 캐비넷이나 유저를 일괄 반납',
     description: 'Request Body로 cabinet_id 배열이나 user_id 배열을 보내면 해당 캐비넷 혹은 유저에 대해 일괄 반납 처리를 합니다.',
   })
   @ApiNoContentResponse({
@@ -87,9 +88,10 @@ export class ReturnController {
   })
   @ApiBadRequestResponse({
     description:
-      `대여중인 사물함이 없는 유저가 있거나 대여중인 유저가 없는 사물함이 있다면 경우, 400 Bad Request를 응답합니다.
+      `대여중인 사물함이 없는 유저가 있거나 대여중인 유저가 없는 사물함이 있는 경우, 400 Bad Request를 응답합니다.
       이때 response body로 처리에 실패한 user_id나 cabinet_id의 배열을 전달합니다.`,
   })
+  @ApiBody({ type: ReturnBundleDataDto })
   @Delete('bundle/cabinet')
   @HttpCode(HttpStatus.NO_CONTENT)
   async returnBundle(
