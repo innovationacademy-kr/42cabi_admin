@@ -125,4 +125,8 @@ export class LentTools {
     runOnTransactionComplete((err) => err && this.logger.error(err));
     return excepction_type;
   }
+
+  async getLentCabinetId(user_id: number): Promise<number> {
+    return await this.lentRepository.getLentCabinetId(user_id);
+  }
 }

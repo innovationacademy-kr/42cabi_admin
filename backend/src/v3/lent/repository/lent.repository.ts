@@ -146,4 +146,19 @@ export class LentRepository implements ILentRepository {
       })
       .execute();
   }
+
+  async getLentCabinetId(user_id: number): Promise<number> {
+    const result = await this.lentRepository.findOne({
+      select: {
+        lent_cabinet_id: true,
+      },
+      where: {
+        lent_user_id: user_id,
+      },
+    });
+    if (result === null) {
+      return null;
+    }
+    return result.lent_cabinet_id;
+  }
 }

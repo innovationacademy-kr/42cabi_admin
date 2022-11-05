@@ -55,4 +55,12 @@ export interface ILentRepository {
    * @return void
    */
    setExpireTime(lent_id: number, expire_time: Date): Promise<void>;
+
+  /**
+   * 해당 user_id로 대여중인 Cabinet id를 반환합니다.
+   * 실패 시,
+   * @param user_id
+   * @return number
+   */
+  getLentCabinetId(user_id: number): Promise<number>;
 }
