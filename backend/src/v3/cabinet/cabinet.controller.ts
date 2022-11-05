@@ -1,10 +1,12 @@
-import { Body, Controller, Get, Logger, Param, ParseIntPipe, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, ParseEnumPipe, ParseIntPipe, Patch, UseGuards, ValidationPipe } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JWTAuthGuard } from 'src/auth/auth.guard';
 import CabinetStatusType from 'src/enums/cabinet.status.type.enum';
 import LentType from 'src/enums/lent.type.enum';
 import { CabinetService } from './cabinet.service';
 import { CabinetInfoResponseDto } from './dto/cabinet.info.response.dto';
+import { CabinetStatusNoteRequestDto } from './dto/cabinet.status.note.request.dto';
+import { CabinetTitleRequestDto } from './dto/cabinet.title.request.dto';
 
 @ApiTags('(V3) Cabinet')
 @Controller({
@@ -35,6 +37,9 @@ export class CabinetController {
     return await this.cabinetService.getCabinetResponseInfo(cabinet_id);
   }
 
+  /**
+   * FIXME: enum validation을 위한 pipe를 추가해야할 것 같습니다.
+   */
   @ApiOperation({
     summary: '사물함 상태 변경',
     description: 'cabinet_id를 받아 사물함의 상태를 변경합니다.',
@@ -51,6 +56,9 @@ export class CabinetController {
     await this.cabinetService.updateCabinetStatus(cabinet_id, status);
   }
 
+  /**
+   * FIXME: enum validation을 위한 pipe를 추가해야할 것 같습니다.
+   */
   @ApiOperation({
     summary: '사물함 lent_type 변경',
     description: 'cabinet_id를 받아 사물함의 lent_type을 변경합니다.',
@@ -81,11 +89,14 @@ export class CabinetController {
     description: '존재하지 않는 cabinet_id',
   })
   @Patch('/status_note/:cabinet_id')
-  async updateStatusNote(@Param('cabinet_id', ParseIntPipe) cabinet_id:number, @Body() status_note: string): Promise<void> {
+  async updateStatusNote(@Param('cabinet_id', ParseIntPipe) cabinet_id:number, @Body(new ValidationPipe()) status_note: CabinetStatusNoteRequestDto): Promise<void> {
     this.logger.debug(`Called ${this.updateStatusNote.name}`);
-    await this.cabinetService.updateStatusNote(cabinet_id, status_note);
+    await this.cabinetService.updateStatusNote(cabinet_id, status_note.status_note);
   }
 
+  /**
+   * FIXME: enum validation을 위한 pipe를 추가해야할 것 같습니다.
+   */
   @ApiOperation({
     summary: '특정 사물함들의 상태 변경',
     description: 'cabinet_id 배열을 받아 사물함들의 상태를 변경합니다.',
@@ -103,6 +114,9 @@ export class CabinetController {
     return fail;
   }
 
+  /**
+   * FIXME: enum validation을 위한 pipe를 추가해야할 것 같습니다.
+   */
   @ApiOperation({
     summary: '특정 사물함들의 lent_type 변경',
     description: 'cabinet_id 배열을 받아 사물함들의 lent_type을 변경합니다.',
@@ -134,8 +148,8 @@ export class CabinetController {
     description: '존재하지 않는 cabinet_id',
   })
   @Patch('/title/:cabinet_id')
-  async updateCabinetTitle(@Param('cabinet_id',ParseIntPipe) cabinet_id : number, @Body() title : string): Promise<void> {
+  async updateCabinetTitle(@Param('cabinet_id',ParseIntPipe) cabinet_id : number, @Body(new ValidationPipe()) title : CabinetTitleRequestDto): Promise<void> {
     this.logger.debug(`Called ${this.updateCabinetTitle.name}`);
-    await this.cabinetService.updateCabinetTitle(cabinet_id, title);
+    await this.cabinetService.updateCabinetTitle(cabinet_id, title.title);
   }
 }

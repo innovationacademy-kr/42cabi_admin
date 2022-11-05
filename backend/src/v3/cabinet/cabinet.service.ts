@@ -33,14 +33,10 @@ export class CabinetService {
     this.logger.debug(
       `Called ${CabinetService.name} ${this.updateCabinetStatus.name}`,
     );
-    try {
-      await this.cabinetRepository.updateCabinetStatus(cabinet_id, status);
-    } catch (e) {
-      throw new HttpException(
-        '🚨 존재하지 않는 사물함입니다 🚨',
-        HttpStatus.BAD_REQUEST,
-      );
+    if (await this.isCabinetExist(cabinet_id) === false) {
+      throw new HttpException('🚨 존재하지 않는 사물함입니다 🚨',HttpStatus.BAD_REQUEST);
     }
+    await this.cabinetRepository.updateCabinetStatus(cabinet_id, status);
   }
 
   async updateLentType(cabinet_id: number, lent_type: LentType): Promise<void> {
@@ -51,33 +47,33 @@ export class CabinetService {
     if (isLent === true) {
       throw new HttpException('🚨 대여자가 있는 사물함입니다 🚨',HttpStatus.FORBIDDEN);
     }
-    try {
-      await this.cabinetRepository.updateLentType(cabinet_id, lent_type); 
-    } catch (e) {
+    if (await this.isCabinetExist(cabinet_id) === false) {
       throw new HttpException('🚨 존재하지 않는 사물함입니다 🚨',HttpStatus.BAD_REQUEST);
     }
+    await this.cabinetRepository.updateLentType(cabinet_id, lent_type); 
   }
 
   async updateStatusNote(cabinet_id: number, status_note: string): Promise<void> {
     this.logger.debug(
       `Called ${CabinetService.name} ${this.updateStatusNote.name}`,
     );
-    try {
-      await this.cabinetRepository.updateStatusNote(cabinet_id, status_note);
-    } catch (e) {
-      throw new HttpException(
-        '🚨 존재하지 않는 사물함입니다 🚨',
-        HttpStatus.BAD_REQUEST,
-      );
+    if (await this.isCabinetExist(cabinet_id) === false) {
+      throw new HttpException('🚨 존재하지 않는 사물함입니다 🚨',HttpStatus.BAD_REQUEST);
     }
+    await this.cabinetRepository.updateStatusNote(cabinet_id, status_note);
   }
 
+  //TODO: bundle에 들어있는 캐비넷 id가 bad request라면 exception을 발생시켜야할까요?..
   async updateCabinetStatusByBundle(status: CabinetStatusType, bundle: number[]): Promise<number[]> {
     this.logger.debug(
       `Called ${CabinetService.name} ${this.updateCabinetStatusByBundle.name}`,
     );
     const result = [];
     for (const cabinet_id of bundle) {
+      if (await this.isCabinetExist(cabinet_id) === false) {
+        result.push(cabinet_id);
+        continue;
+      }
       try {
         await this.cabinetRepository.updateCabinetStatus(cabinet_id, status);
       } catch (e) {
@@ -94,6 +90,15 @@ export class CabinetService {
     );
     const result = [];
     for (const cabinet_id of bundle) {
+      const isLent = await this.cabinetRepository.cabinetIsLent(cabinet_id);
+      if (isLent === true) {
+        result.push(cabinet_id);
+        continue;
+      }
+      if (await this.isCabinetExist(cabinet_id) === false) {
+        result.push(cabinet_id);
+        continue;
+      }
       try {
         await this.cabinetRepository.updateLentType(cabinet_id, lent_type);
       } catch (e) {
@@ -108,14 +113,10 @@ export class CabinetService {
     this.logger.debug(
       `Called ${CabinetService.name} ${this.updateCabinetTitle.name}`,
     );
-    try {
-      await this.cabinetRepository.updateCabinetTitle(cabinet_id, title);
-    } catch (e) {
-      throw new HttpException(
-        '🚨 존재하지 않는 사물함입니다 🚨',
-        HttpStatus.BAD_REQUEST,
-      );
+    if (await this.isCabinetExist(cabinet_id) === false) {
+      throw new HttpException('🚨 존재하지 않는 사물함입니다 🚨',HttpStatus.BAD_REQUEST);
     }
+    await this.cabinetRepository.updateCabinetTitle(cabinet_id, title);
   }
   
   async isCabinetExist(cabinet_id: number): Promise<boolean> {

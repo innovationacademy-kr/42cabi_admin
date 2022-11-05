@@ -66,7 +66,7 @@ export class CabinetRepository implements ICabinetRepository {
     cabinet_id: number,
     lent_type: LentType,
   ): Promise<void> {
-    await this.cabinetRepository
+    const result = await this.cabinetRepository
       .createQueryBuilder(this.updateLentType.name)
       .update()
       .set({
@@ -113,15 +113,18 @@ export class CabinetRepository implements ICabinetRepository {
         cabinet_id,
       }
     });
+    if (result === null) {
+      return false;
+    }
     return result.lent.length === 0 ? false : true;
   }
-  
+
   async isCabinetExist(cabinet_id: number): Promise<boolean> {
     const result = await this.cabinetRepository.findOne({
       where: {
         cabinet_id,
       },
     });
-    return result === undefined ? false : true;
+    return result === null ? false : true;
   }
 }
