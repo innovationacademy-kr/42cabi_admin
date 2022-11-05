@@ -42,7 +42,7 @@ export class CabinetService {
     );
     const isLent = this.lentService.isLent(cabinet_id);
     if (isLent == 1) {
-      throw new HttpException('🚨 대여 중인 사물함입니다 🚨',HttpStatus.FORBIDDEN);
+      throw new HttpException('🚨 대여자가 있는 사물함입니다 🚨',HttpStatus.FORBIDDEN);
     }
     try {
       await this.cabinetRepository.updateLentType(cabinet_id, lent_type); 
