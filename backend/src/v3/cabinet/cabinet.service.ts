@@ -33,15 +33,22 @@ export class CabinetService {
     this.logger.debug(
       `Called ${CabinetService.name} ${this.updateCabinetStatus.name}`,
     );
-    await this.cabinetRepository.updateCabinetStatus(cabinet_id, status);
+    try {
+      await this.cabinetRepository.updateCabinetStatus(cabinet_id, status);
+    } catch (e) {
+      throw new HttpException(
+        '🚨 존재하지 않는 사물함입니다 🚨',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async updateLentType(cabinet_id: number, lent_type: LentType): Promise<void> {
     this.logger.debug(
       `Called ${CabinetService.name} ${this.updateLentType.name}`,
     );
-    const isLent = this.lentService.isLent(cabinet_id);
-    if (isLent == 1) {
+    const isLent = await this.cabinetRepository.cabinetIsLent(cabinet_id);
+    if (isLent === true) {
       throw new HttpException('🚨 대여자가 있는 사물함입니다 🚨',HttpStatus.FORBIDDEN);
     }
     try {
@@ -55,7 +62,14 @@ export class CabinetService {
     this.logger.debug(
       `Called ${CabinetService.name} ${this.updateStatusNote.name}`,
     );
-    await this.cabinetRepository.updateStatusNote(cabinet_id, status_note);
+    try {
+      await this.cabinetRepository.updateStatusNote(cabinet_id, status_note);
+    } catch (e) {
+      throw new HttpException(
+        '🚨 존재하지 않는 사물함입니다 🚨',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async updateCabinetStatusByBundle(status: CabinetStatusType, bundle: number[]): Promise<number[]> {
@@ -94,7 +108,14 @@ export class CabinetService {
     this.logger.debug(
       `Called ${CabinetService.name} ${this.updateCabinetTitle.name}`,
     );
-    await this.cabinetRepository.updateCabinetTitle(cabinet_id, title);
+    try {
+      await this.cabinetRepository.updateCabinetTitle(cabinet_id, title);
+    } catch (e) {
+      throw new HttpException(
+        '🚨 존재하지 않는 사물함입니다 🚨',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
   
   async isCabinetExist(cabinet_id: number): Promise<boolean> {

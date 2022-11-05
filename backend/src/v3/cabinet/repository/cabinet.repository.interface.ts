@@ -50,6 +50,13 @@ export interface ICabinetRepository {
   updateCabinetTitle(cabinet_id: number, title: string): Promise<void>;
 
   /**
+   * cabinet이 대여중인 상태인지 확인합니다.
+   * 
+   * @param cabinet_id 
+   */
+  cabinetIsLent(cabinet_id: number): Promise<boolean>;
+
+  /**
    * 인자로 받은 id의 사물함이 존재하는지 확인합니다.
    *
    * @param cabinet_id 

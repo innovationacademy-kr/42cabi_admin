@@ -103,6 +103,18 @@ export class CabinetRepository implements ICabinetRepository {
       })
       .execute();
   }
+
+  async cabinetIsLent(cabinet_id: number): Promise<boolean> {
+    const result = await this.cabinetRepository.findOne({
+      relations: {
+        lent: true,
+      },
+      where: {
+        cabinet_id,
+      }
+    });
+    return result.lent.length === 0 ? false : true;
+  }
   
   async isCabinetExist(cabinet_id: number): Promise<boolean> {
     const result = await this.cabinetRepository.findOne({
