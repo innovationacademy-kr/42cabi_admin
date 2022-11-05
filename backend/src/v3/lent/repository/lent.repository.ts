@@ -3,6 +3,7 @@ import Cabinet from "src/entities/cabinet.entity";
 import Lent from "src/entities/lent.entity";
 import User from "src/entities/user.entity";
 import { Repository } from "typeorm";
+import { IsolationLevel, Propagation, Transactional } from "typeorm-transactional";
 import { LentCabinetDataDto } from "../dto/lent.cabinet.data.dto";
 import { LentDto } from "../dto/lent.dto";
 import { UserDto } from "../dto/user.dto";
@@ -34,7 +35,7 @@ export class LentRepository implements ILentRepository {
   }
 
   async isCabinetExist(cabinet_id: number): Promise<boolean> {
-    const result = await this.cabinetRepository.find({
+    const result = await this.cabinetRepository.findOne({
       where: {
         cabinet_id: cabinet_id,
       }
@@ -57,10 +58,10 @@ export class LentRepository implements ILentRepository {
     return true;
   }
 
-  // @Transactional({
-  //   propagation: Propagation.REQUIRED,
-  //   isolationLevel: IsolationLevel.SERIALIZABLE,
-  // })
+  @Transactional({
+    propagation: Propagation.REQUIRED,
+    isolationLevel: IsolationLevel.SERIALIZABLE,
+  })
   async getLentCabinetData(cabinet_id: number): Promise<LentCabinetDataDto> {
     const result = await this.cabinetRepository
       .createQueryBuilder('c')
@@ -82,10 +83,10 @@ export class LentRepository implements ILentRepository {
     };
   }
 
-  // @Transactional({
-  //   propagation: Propagation.REQUIRED,
-  //   isolationLevel: IsolationLevel.SERIALIZABLE,
-  // })
+  @Transactional({
+    propagation: Propagation.REQUIRED,
+    isolationLevel: IsolationLevel.SERIALIZABLE,
+  })
   async lentCabinet(cabinet_id: number, user: UserDto): Promise<LentDto> {
     const lent_time = new Date();
     const expire_time: Date | null = null;
@@ -110,10 +111,10 @@ export class LentRepository implements ILentRepository {
     };
   }
 
-  // @Transactional({
-  //   propagation: Propagation.REQUIRED,
-  //   isolationLevel: IsolationLevel.SERIALIZABLE,
-  // })
+  @Transactional({
+    propagation: Propagation.REQUIRED,
+    isolationLevel: IsolationLevel.SERIALIZABLE,
+  })
   async setExpireTimeAll(cabinet_id: number, expire_time: Date): Promise<void> {
     expire_time.setHours(23, 59, 59, 999);
     await this.lentRepository
@@ -128,10 +129,10 @@ export class LentRepository implements ILentRepository {
       .execute();
   }
 
-  // @Transactional({
-  //   propagation: Propagation.REQUIRED,
-  //   isolationLevel: IsolationLevel.SERIALIZABLE,
-  // })
+  @Transactional({
+    propagation: Propagation.REQUIRED,
+    isolationLevel: IsolationLevel.SERIALIZABLE,
+  })
   async setExpireTime(lent_id: number, expire_time: Date): Promise<void> {
     expire_time.setHours(23, 59, 59, 999);
     await this.lentRepository

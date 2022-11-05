@@ -48,7 +48,7 @@ export class LentService {
       switch (excepction_type) {
         case LentExceptionType.LENT_CIRCLE:
           throw new HttpException(
-            `🚨 해당 사물함은 동아리 전용 사물함입니다 🚨`,
+            `🚨 해당 사물함은 동아리 전용 사물함입니다. 🚨`,
             HttpStatus.I_AM_A_TEAPOT,
           );
         case LentExceptionType.LENT_FULL:

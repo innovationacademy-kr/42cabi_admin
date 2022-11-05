@@ -1,5 +1,5 @@
-import { Controller, Get, HttpCode, HttpException, HttpStatus, InternalServerErrorException, Logger, Param, Post, UseGuards } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, HttpCode, HttpException, HttpStatus, InternalServerErrorException, Logger, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
+import { ApiBadRequestResponse, ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JWTAuthGuard } from 'src/auth/auth.guard';
 import { LentService } from './lent.service';
 
@@ -20,13 +20,12 @@ export class LentController {
   @ApiCreatedResponse({
     description: '대여에 성공 시, 201 Created를 응답합니다.',
   })
+  @ApiNotFoundResponse({
+    description: '해당 캐비넷이나 유저가 존재하지 않으면, 404 Not Found를 응답합니다.',
+  })
   @ApiBadRequestResponse({
     description:
-      '이미 대여중인 사물함이 있는 경우, 400 Bad_Request를 응답합니다.',
-  })
-  @ApiForbiddenResponse({
-    description:
-      '임시 밴 사물함이나 고장 사물함을 대여 시도한 경우, 403 Forbidden을 응답합니다.',
+      '이미 대여중인 사물함이 있는 경우, 400 Bad Request를 응답합니다.',
   })
   @ApiResponse({
     status: HttpStatus.I_AM_A_TEAPOT,
@@ -34,14 +33,15 @@ export class LentController {
       "동아리 사물함을 대여 시도한 경우, 418 I'm a teapot을 응답합니다.",
   })
   @ApiConflictResponse({
-    description: '잔여 자리가 없는 경우, 409 Conflict를 응답합니다.',
+    description: `잔여 자리가 없는 경우, 연체 사물함을 대여 시도한 경우,
+      임시 밴 사물함이나 고장 사물함을 대여 시도한 경우 409 Conflict를 응답합니다.`,
   })
   @Post('/cabinet/:cabinet_id/:user_id')
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(JWTAuthGuard)
   async lentCabinet(
-    @Param('cabinet_id') cabinet_id: number,
-    @Param('user_id') user_id: number,
+    @Param('cabinet_id', ParseIntPipe) cabinet_id: number,
+    @Param('user_id', ParseIntPipe) user_id: number,
   ): Promise<void> {
     try {
       this.logger.debug(`Called ${this.lentCabinet.name}`);

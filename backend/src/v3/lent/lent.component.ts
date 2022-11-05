@@ -3,6 +3,7 @@ import { ConfigService } from "@nestjs/config";
 import CabinetStatusType from "src/enums/cabinet.status.type.enum";
 import LentExceptionType from "src/enums/lent.exception.enum";
 import LentType from "src/enums/lent.type.enum";
+import { IsolationLevel, Propagation, runOnTransactionComplete, Transactional } from "typeorm-transactional";
 import { UserDto } from "./dto/user.dto";
 import { LentService } from "./lent.service";
 import { ILentRepository } from "./repository/lent.repository.interface";
@@ -26,10 +27,10 @@ export class LentTools {
    * @param last_lent_time
    * @param lent_type
    */
-  //  @Transactional({
-  //   propagation: Propagation.REQUIRED,
-  //   isolationLevel: IsolationLevel.SERIALIZABLE,
-  // })
+   @Transactional({
+    propagation: Propagation.REQUIRED,
+    isolationLevel: IsolationLevel.SERIALIZABLE,
+  })
   async setExpireTimeAll(
     cabinet_id: number,
     last_lent_time: Date,
@@ -49,13 +50,13 @@ export class LentTools {
       );
     }
     await this.lentRepository.setExpireTimeAll(cabinet_id, expire_time);
-    // runOnTransactionComplete((err) => err && this.logger.error(err));
+    runOnTransactionComplete((err) => err && this.logger.error(err));
   }
 
-  // @Transactional({
-  //   propagation: Propagation.REQUIRED,
-  //   isolationLevel: IsolationLevel.SERIALIZABLE,
-  // })
+  @Transactional({
+    propagation: Propagation.REQUIRED,
+    isolationLevel: IsolationLevel.SERIALIZABLE,
+  })
   async lentStateTransition(
     cabinet_id: number,
     user: UserDto,
@@ -121,7 +122,7 @@ export class LentTools {
         excepction_type = LentExceptionType.LENT_BANNED;
         break;
     }
-    // runOnTransactionComplete((err) => err && this.logger.error(err));
+    runOnTransactionComplete((err) => err && this.logger.error(err));
     return excepction_type;
   }
 }
