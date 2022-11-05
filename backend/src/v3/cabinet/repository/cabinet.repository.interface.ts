@@ -17,7 +17,7 @@ export interface ICabinetRepository {
    * @param cabinet_id
    * @param status
    */
-   updateCabinetStatusById(
+   updateCabinetStatus(
     cabinet_id: number,
     status: CabinetStatusType,
   ): Promise<void>;
@@ -28,8 +28,31 @@ export interface ICabinetRepository {
    * @param cabinet_id
    * @param lent_type
    */
-   updateLentTypeById(
+   updateLentType(
     cabinet_id: number,
     lent_type: LentType,
   ): Promise<void>;
+
+  /**
+   * 특정 사물함의 StatusNote를 변경합니다.
+   * 
+   * @param cabinet_id 
+   * @param status_note 
+   */
+  updateStatusNote(cabinet_id: number, status_note: string): Promise<void>;
+
+  /**
+   * 특정 사물함의 title을 변경합니다.
+   * 
+   * @param cabinet_id 
+   * @param title 
+   */
+  updateCabinetTitle(cabinet_id: number, title: string): Promise<void>;
+
+  /**
+   * 인자로 받은 id의 사물함이 존재하는지 확인합니다.
+   *
+   * @param cabinet_id 
+   */
+  isCabinetExist(cabinet_id: number): Promise<boolean>;
 }

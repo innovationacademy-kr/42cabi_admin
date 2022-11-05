@@ -29,17 +29,78 @@ export class CabinetService {
     }
   }
 
-  async updateCabinetStatusById(cabinet_id: number, status: CabinetStatusType) {
+  async updateCabinetStatus(cabinet_id: number, status: CabinetStatusType): Promise<void> {
     this.logger.debug(
-      `Called ${CabinetService.name} ${this.updateCabinetStatusById.name}`,
+      `Called ${CabinetService.name} ${this.updateCabinetStatus.name}`,
     );
-    await this.cabinetRepository.updateCabinetStatusById(cabinet_id, status);
+    await this.cabinetRepository.updateCabinetStatus(cabinet_id, status);
   }
 
-  async updateLentTypeById(cabinet_id: number, lent_type: LentType) {
+  async updateLentType(cabinet_id: number, lent_type: LentType): Promise<void> {
     this.logger.debug(
-      `Called ${CabinetService.name} ${this.updateLentTypeById.name}`,
+      `Called ${CabinetService.name} ${this.updateLentType.name}`,
     );
-    await this.cabinetRepository.updateLentTypeById(cabinet_id, lent_type);
+    const isLent = this.lentService.isLent(cabinet_id);
+    if (isLent == 1) {
+      throw new HttpException('🚨 대여 중인 사물함입니다 🚨',HttpStatus.FORBIDDEN);
+    }
+    try {
+      await this.cabinetRepository.updateLentType(cabinet_id, lent_type); 
+    } catch (e) {
+      throw new HttpException('🚨 존재하지 않는 사물함입니다 🚨',HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async updateStatusNote(cabinet_id: number, status_note: string): Promise<void> {
+    this.logger.debug(
+      `Called ${CabinetService.name} ${this.updateStatusNote.name}`,
+    );
+    await this.cabinetRepository.updateStatusNote(cabinet_id, status_note);
+  }
+
+  async updateCabinetStatusByBundle(status: CabinetStatusType, bundle: number[]): Promise<number[]> {
+    this.logger.debug(
+      `Called ${CabinetService.name} ${this.updateCabinetStatusByBundle.name}`,
+    );
+    const result = [];
+    for (const cabinet_id of bundle) {
+      try {
+        await this.cabinetRepository.updateCabinetStatus(cabinet_id, status);
+      } catch (e) {
+        result.push(cabinet_id);
+        continue;
+      }
+    }
+    return result;
+  }
+
+  async updateLentTypeByBundle(lent_type: LentType, bundle: number[]): Promise<number[]> {
+    this.logger.debug(
+      `Called ${CabinetService.name} ${this.updateCabinetStatusByBundle.name}`,
+    );
+    const result = [];
+    for (const cabinet_id of bundle) {
+      try {
+        await this.cabinetRepository.updateLentType(cabinet_id, lent_type);
+      } catch (e) {
+        result.push(cabinet_id);
+        continue;
+      }
+    }
+    return result;
+  }
+
+  async updateCabinetTitle(cabinet_id: number, title: string): Promise<void> {
+    this.logger.debug(
+      `Called ${CabinetService.name} ${this.updateCabinetTitle.name}`,
+    );
+    await this.cabinetRepository.updateCabinetTitle(cabinet_id, title);
+  }
+  
+  async isCabinetExist(cabinet_id: number): Promise<boolean> {
+    this.logger.debug(
+      `Called ${CabinetService.name} ${this.isCabinetExist.name}`,
+    );
+    return await this.cabinetRepository.isCabinetExist(cabinet_id);
   }
 }

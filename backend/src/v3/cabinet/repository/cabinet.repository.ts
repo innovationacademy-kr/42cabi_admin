@@ -46,12 +46,12 @@ export class CabinetRepository implements ICabinetRepository {
     };
   }
 
-  async updateCabinetStatusById(
+  async updateCabinetStatus(
     cabinet_id: number,
     status: CabinetStatusType,
   ): Promise<void> {
     await this.cabinetRepository
-      .createQueryBuilder(this.updateCabinetStatusById.name)
+      .createQueryBuilder(this.updateCabinetStatus.name)
       .update()
       .set({
         status,
@@ -62,12 +62,12 @@ export class CabinetRepository implements ICabinetRepository {
       .execute();
   }
 
-  async updateLentTypeById(
+  async updateLentType(
     cabinet_id: number,
     lent_type: LentType,
   ): Promise<void> {
     await this.cabinetRepository
-      .createQueryBuilder(this.updateLentTypeById.name)
+      .createQueryBuilder(this.updateLentType.name)
       .update()
       .set({
         lent_type,
@@ -76,5 +76,40 @@ export class CabinetRepository implements ICabinetRepository {
         cabinet_id,
       })
       .execute();
+  }
+
+  async updateStatusNote(cabinet_id: number, status_note: string): Promise<void> {
+    await this.cabinetRepository
+      .createQueryBuilder(this.updateLentType.name)
+      .update()
+      .set({
+        status_note,
+      })
+      .where({
+        cabinet_id,
+      })
+      .execute();
+  }
+
+  async updateCabinetTitle(cabinet_id: number, title: string): Promise<void> {
+    await this.cabinetRepository
+      .createQueryBuilder(this.updateCabinetTitle.name)
+      .update()
+      .set({
+        title,
+      })
+      .where({
+        cabinet_id,
+      })
+      .execute();
+  }
+  
+  async isCabinetExist(cabinet_id: number): Promise<boolean> {
+    const result = await this.cabinetRepository.findOne({
+      where: {
+        cabinet_id,
+      },
+    });
+    return result === undefined ? false : true;
   }
 }
