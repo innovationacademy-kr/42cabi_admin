@@ -4,6 +4,7 @@ import CabinetStatusType from "src/enums/cabinet.status.type.enum";
 import LentExceptionType from "src/enums/lent.exception.enum";
 import LentType from "src/enums/lent.type.enum";
 import { IsolationLevel, Propagation, runOnTransactionComplete, Transactional } from "typeorm-transactional";
+import { CabinetService } from "../cabinet/cabinet.service";
 import { UserDto } from "./dto/user.dto";
 import { LentService } from "./lent.service";
 import { ILentRepository } from "./repository/lent.repository.interface";
@@ -14,10 +15,7 @@ export class LentTools {
   constructor(
     @Inject('ILentRepository')
     private lentRepository: ILentRepository,
-    // private cabinetInfoService: CabinetInfoService,
-    @Inject(forwardRef(() => LentService))
-    private lentService: LentService,
-    // private banService: BanService,
+    private cabinetService: CabinetService,
     @Inject(ConfigService) private configService: ConfigService,
   ) {}
 
@@ -97,11 +95,10 @@ export class LentTools {
             );
           }
           // 상태를 SET_EXPIRE_FULL로 변경
-          // TODO: Cabinet 모듈이 구현되면 해당 모듈에서 가져와서 사용.
-          // await this.cabinetInfoService.updateCabinetStatus(
-          //   cabinet_id,
-          //   CabinetStatusType.SET_EXPIRE_FULL,
-          // );
+          await this.cabinetService.updateCabinetStatus(
+            cabinet_id,
+            CabinetStatusType.SET_EXPIRE_FULL,
+          );
         }
         break;
 

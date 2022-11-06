@@ -1,5 +1,6 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import LentExceptionType from 'src/enums/lent.exception.enum';
+import { CabinetService } from '../cabinet/cabinet.service';
 import { LentTools } from './lent.component';
 import { ILentRepository } from './repository/lent.repository.interface';
 
@@ -10,8 +11,8 @@ export class LentService {
   constructor(
     @Inject('ILentRepository')
     private lentRepository: ILentRepository,
-    @Inject(forwardRef(() => LentTools))
     private lentTools: LentTools,
+    private cabinetService: CabinetService,
   ) {}
 
   async lentCabinet(cabinet_id: number, user_id: number): Promise<void> {
@@ -27,8 +28,7 @@ export class LentService {
         );
       }
       // 캐비넷이 존재하는지 확인
-      // FIXME: Cabinet 모듈에서 각각 가져와서 사용하는게 더 좋을듯합니다.
-      if (!await this.lentRepository.isCabinetExist(cabinet_id)) {
+      if (!await this.cabinetService.isCabinetExist(cabinet_id)) {
         throw new HttpException(
           `🚨 해당 캐비넷이 존재하지 않습니다. 🚨`,
           HttpStatus.NOT_FOUND,
