@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
+import BanLog from 'src/entities/ban.log.entity';
 import Cabinet from 'src/entities/cabinet.entity';
-import LentLog from 'src/entities/lent.log.entity';
 import User from 'src/entities/user.entity';
 import { SearchRepository } from './repository/search.repository';
 import { SearchController } from './search.controller';
@@ -16,6 +16,6 @@ const repo = {
 @Module({
   controllers: [SearchController],
   providers: [SearchService, repo],
-  imports: [AuthModule, TypeOrmModule.forFeature([User, Cabinet, LentLog])],
+  imports: [AuthModule, TypeOrmModule.forFeature([User, Cabinet, BanLog])],
 })
 export class SearchModule {}

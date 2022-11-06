@@ -13,6 +13,7 @@ async function bootstrap() {
     .setTitle('Cabi Admin v2 API')
     .setDescription('Cabi Admin v2 API 명세')
     .setVersion('2.0')
+    .addBearerAuth()
     .build();
   const SwaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('docs', app, SwaggerDocument);
