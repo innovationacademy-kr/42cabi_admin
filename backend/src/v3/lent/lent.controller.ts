@@ -1,9 +1,14 @@
 import { Controller, Get, HttpCode, HttpException, HttpStatus, InternalServerErrorException, Logger, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { JWTAuthGuard } from 'src/auth/auth.guard';
 import { LentService } from './lent.service';
 
 @ApiTags('(V3) Lent')
+@ApiTags('(V3) Return')
+@ApiBearerAuth()
+@ApiUnauthorizedResponse({
+  description: '로그아웃 상태',
+})
 @Controller({
   version: '3',
   path: 'lent',

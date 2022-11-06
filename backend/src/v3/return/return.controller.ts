@@ -1,10 +1,15 @@
 import { Body, Controller, Delete, HttpCode, HttpException, HttpStatus, InternalServerErrorException, Logger, Param, ParseArrayPipe, ParseIntPipe, UseGuards } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiBody, ApiNoContentResponse, ApiNotFoundResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiNoContentResponse, ApiNotFoundResponse, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { JWTAuthGuard } from 'src/auth/auth.guard';
+import { ReturnBundleFailedResponseDto } from './dto/response/return.bundle.failed.response.dto';
 import { ReturnBundleDataDto } from './dto/return.bundle.data.dto';
 import { ReturnService } from './return.service';
 
 @ApiTags('(V3) Return')
+@ApiBearerAuth()
+@ApiUnauthorizedResponse({
+  description: '로그아웃 상태',
+})
 @Controller({
   version: '3',
   path: 'return',
@@ -87,8 +92,8 @@ export class ReturnController {
     description: '모든 요청에 대해 반납에 성공 시, 204 No Content를 응답합니다.',
   })
   @ApiBadRequestResponse({
-    description:
-      `대여중인 사물함이 없는 유저가 있거나 대여중인 유저가 없는 사물함이 있는 경우, 400 Bad Request를 응답합니다.
+    type: ReturnBundleFailedResponseDto,
+    description: `대여중인 사물함이 없는 유저가 있거나 대여중인 유저가 없는 사물함이 있는 경우, 400 Bad Request를 응답합니다.
       이때 response body로 처리에 실패한 user_id나 cabinet_id의 배열을 전달합니다.`,
   })
   @ApiBody({ type: ReturnBundleDataDto })
