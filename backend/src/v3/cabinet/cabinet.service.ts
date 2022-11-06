@@ -87,7 +87,6 @@ export class CabinetService {
     await this.cabinetRepository.updateStatusNote(cabinet_id, status_note);
   }
 
-  //TODO: bundle에 들어있는 캐비넷 id가 bad request라면 exception을 발생시켜야할까요?..
   async updateCabinetStatusByBundle(
     status: CabinetStatusType,
     bundle: number[],
