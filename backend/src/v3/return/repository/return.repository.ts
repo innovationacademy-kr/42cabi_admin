@@ -3,7 +3,7 @@ import Cabinet from 'src/entities/cabinet.entity';
 import Lent from 'src/entities/lent.entity';
 import LentLog from 'src/entities/lent.log.entity';
 import User from 'src/entities/user.entity';
-import { UserDto } from 'src/v3/lent/dto/user.dto';
+import { UserDto } from 'src/v3/user/dto/user.dto';
 import { Repository } from 'typeorm';
 import { IsolationLevel, Propagation, Transactional } from 'typeorm-transactional';
 import { ReturnCabinetDataDto } from '../dto/return.cabinet.data.dto';
@@ -12,25 +12,9 @@ import { IReturnRepository } from './return.repository.interface';
 export class ReturnRepository implements IReturnRepository {
   constructor(
     @InjectRepository(Cabinet) private cabinetRepository: Repository<Cabinet>,
-    @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Lent) private lentRepository: Repository<Lent>,
     @InjectRepository(LentLog) private lentLogRepository: Repository<LentLog>,
   ) {}
-
-  async getUserIfExist(user_id: number): Promise<UserDto> {
-    const result = await this.userRepository.findOne({
-      where: {
-        user_id: user_id,
-      }
-    })
-    if (!result) {
-      return null;
-    }
-    return {
-      user_id: result.user_id,
-      intra_id: result.intra_id,
-    };
-  }
 
   @Transactional({
     propagation: Propagation.REQUIRED,

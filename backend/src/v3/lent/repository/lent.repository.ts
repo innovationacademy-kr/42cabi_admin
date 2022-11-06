@@ -6,33 +6,16 @@ import { Repository } from "typeorm";
 import { IsolationLevel, Propagation, Transactional } from "typeorm-transactional";
 import { LentCabinetDataDto } from "../dto/lent.cabinet.data.dto";
 import { LentDto } from "../dto/lent.dto";
-import { UserDto } from "../dto/user.dto";
+import { UserDto } from "../../user/dto/user.dto";
 import { ILentRepository } from "./lent.repository.interface";
 
 export class LentRepository implements ILentRepository {
   constructor(
     @InjectRepository(Lent)
     private lentRepository: Repository<Lent>,
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
     @InjectRepository(Cabinet)
     private cabinetRepository: Repository<Cabinet>,
   ) {}
-
-  async getUserIfExist(user_id: number): Promise<UserDto> {
-    const result = await this.userRepository.findOne({
-      where: {
-        user_id: user_id,
-      }
-    })
-    if (!result) {
-      return null;
-    }
-    return {
-      user_id: result.user_id,
-      intra_id: result.intra_id,
-    };
-  }
 
   async isCabinetExist(cabinet_id: number): Promise<boolean> {
     const result = await this.cabinetRepository.findOne({

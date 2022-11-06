@@ -1,8 +1,9 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import LentType from 'src/enums/lent.type.enum';
 import { CabinetService } from 'src/v3/cabinet/cabinet.service';
-import { UserDto } from '../lent/dto/user.dto';
+import { UserDto } from '../user/dto/user.dto';
 import { LentTools } from '../lent/lent.component';
+import { UserService } from '../user/user.service';
 import { IReturnRepository } from './repository/return.repository.interface';
 import { ReturnTools } from './return.component';
 
@@ -12,7 +13,7 @@ export class ReturnService {
 
   constructor(
     @Inject('IReturnRepository') private returnRepository: IReturnRepository,
-    private cabinetService: CabinetService,
+    private userService: UserService,
     private lentTools: LentTools,
     @Inject(forwardRef(() => ReturnTools))
     private returnTools: ReturnTools,
@@ -22,8 +23,7 @@ export class ReturnService {
     this.logger.debug(`Called ${ReturnService.name} ${this.returnUserCabinet.name}`);
     try {
       // 유저가 존재하는지 확인
-      // FIXME: User 모듈에서 가져와서 사용하는게 더 좋을듯합니다.
-      const user = await this.returnRepository.getUserIfExist(user_id);
+      const user = await this.userService.getUserIfExist(user_id);
       if (!user) {
         throw new HttpException(
           `🚨 해당 유저가 존재하지 않습니다. 🚨`,
@@ -44,8 +44,6 @@ export class ReturnService {
         cabinet_id,
         user,
       );
-      // 4. Lent Log Table에서 값 추가.
-      // FIXME: 어느 모듈에 넣어야할 지 되게 애매하네요 ㅠㅠ (lent, return, log)
       await this.returnRepository.addLentLog(lent, user, cabinet_id);
     } catch (err) {
       throw err;

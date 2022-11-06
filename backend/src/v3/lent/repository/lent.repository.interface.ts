@@ -1,16 +1,9 @@
 import { LentCabinetDataDto } from "../dto/lent.cabinet.data.dto";
 import { LentDto } from "../dto/lent.dto";
-import { UserDto } from "../dto/user.dto";
+import { UserDto } from "../../user/dto/user.dto";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ILentRepository {
-
-  /**
-   * 해당 유저가 존재하는지 확인합니다.
-   * @param user_id
-   */
-  getUserIfExist(user_id: number): Promise<UserDto>;
-
   /**
    * 해당 캐비넷이 존재하는지 확인합니다.
    * @param cabinet_id

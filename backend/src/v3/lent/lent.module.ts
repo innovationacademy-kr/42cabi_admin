@@ -5,6 +5,7 @@ import Cabinet from 'src/entities/cabinet.entity';
 import Lent from 'src/entities/lent.entity';
 import User from 'src/entities/user.entity';
 import { CabinetModule } from '../cabinet/cabinet.module';
+import { UserModule } from '../user/user.module';
 import { LentTools } from './lent.component';
 import { LentController } from './lent.controller';
 import { LentService } from './lent.service';
@@ -18,7 +19,7 @@ const repo = {
 @Module({
   controllers: [LentController],
   providers: [LentService, repo, LentTools],
-  imports: [AuthModule, CabinetModule, TypeOrmModule.forFeature([Lent, User, Cabinet])], // for JWTAuthGuard
+  imports: [AuthModule, CabinetModule, UserModule, TypeOrmModule.forFeature([Lent, User, Cabinet])], // for JWTAuthGuard
   exports: [LentTools],
 })
 export class LentModule {}

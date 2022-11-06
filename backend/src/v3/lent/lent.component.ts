@@ -5,7 +5,7 @@ import LentExceptionType from "src/enums/lent.exception.enum";
 import LentType from "src/enums/lent.type.enum";
 import { IsolationLevel, Propagation, runOnTransactionComplete, Transactional } from "typeorm-transactional";
 import { CabinetService } from "../cabinet/cabinet.service";
-import { UserDto } from "./dto/user.dto";
+import { UserDto } from "../user/dto/user.dto";
 import { LentService } from "./lent.service";
 import { ILentRepository } from "./repository/lent.repository.interface";
 

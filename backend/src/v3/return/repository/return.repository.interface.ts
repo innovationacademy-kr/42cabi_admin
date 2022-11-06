@@ -1,15 +1,9 @@
 import Lent from "src/entities/lent.entity";
-import { UserDto } from "src/v3/lent/dto/user.dto";
+import { UserDto } from "src/v3/user/dto/user.dto";
 import { ReturnCabinetDataDto } from "../dto/return.cabinet.data.dto";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IReturnRepository {
-  /**
-   * 해당 유저가 존재하는지 확인합니다.
-   * @param user_id
-   */
-  getUserIfExist(user_id: number): Promise<UserDto>;
-
   /**
    * 대여중인 사물함을 반납하기 위해 사물함에 대한 정보를 가져옴.
    * @param cabinet_id

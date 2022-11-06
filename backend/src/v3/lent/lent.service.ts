@@ -1,6 +1,7 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import LentExceptionType from 'src/enums/lent.exception.enum';
 import { CabinetService } from '../cabinet/cabinet.service';
+import { UserService } from '../user/user.service';
 import { LentTools } from './lent.component';
 import { ILentRepository } from './repository/lent.repository.interface';
 
@@ -11,6 +12,7 @@ export class LentService {
   constructor(
     @Inject('ILentRepository')
     private lentRepository: ILentRepository,
+    private userService: UserService,
     private lentTools: LentTools,
     private cabinetService: CabinetService,
   ) {}
@@ -19,8 +21,7 @@ export class LentService {
     this.logger.debug(`Called ${LentService.name} ${this.lentCabinet.name}`);
     try {
       // 유저가 존재하는지 확인
-      // FIXME: User 모듈에서 각각 가져와서 사용하는게 더 좋을듯합니다.
-      const user = await this.lentRepository.getUserIfExist(user_id);
+      const user = await this.userService.getUserIfExist(user_id);
       if (!user) {
         throw new HttpException(
           `🚨 해당 유저가 존재하지 않습니다. 🚨`,

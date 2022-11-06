@@ -5,8 +5,9 @@ import CabinetStatusType from "src/enums/cabinet.status.type.enum";
 import { LentService } from "src/lent/lent.service";
 import { ILentRepository } from "src/lent/repository/lent.repository.interface";
 import { IsolationLevel, Propagation, runOnTransactionComplete, Transactional } from "typeorm-transactional";
+import { BanService } from "../ban/ban.service";
 import { CabinetService } from "../cabinet/cabinet.service";
-import { UserDto } from "../lent/dto/user.dto";
+import { UserDto } from "../user/dto/user.dto";
 import { IReturnRepository } from "./repository/return.repository.interface";
 import { ReturnService } from "./return.service";
 
@@ -18,9 +19,7 @@ export class ReturnTools {
     private returnRepository: IReturnRepository,
     private cabinetService: CabinetService,
     @Inject(forwardRef(() => ReturnService))
-    private lentService: LentService,
-    // private banService: BanService,
-    @Inject(ConfigService) private configService: ConfigService,
+    private banService: BanService,
   ) {}
 
   @Transactional({
@@ -58,41 +57,36 @@ export class ReturnTools {
         }
         break;
       case CabinetStatusType.SET_EXPIRE_FULL:
-        // TODO: Cabinet 모듈이 구현되면 해당 모듈에서 가져와서 사용.
-        // await this.cabinetInfoService.updateCabinetStatus(
-        //   cabinet_id,
-        //   CabinetStatusType.SET_EXPIRE_AVAILABLE,
-        // );
+        await this.cabinetService.updateCabinetStatus(
+          cabinet_id,
+          CabinetStatusType.SET_EXPIRE_AVAILABLE,
+        );
       case CabinetStatusType.SET_EXPIRE_AVAILABLE:
         if (lent_count - 1 === 0) {
-          // TODO: Cabinet 모듈이 구현되면 해당 모듈에서 가져와서 사용.
-          // await this.cabinetInfoService.updateCabinetStatus(
-          //   cabinet_id,
-          //   CabinetStatusType.AVAILABLE,
-          // );
+          await this.cabinetService.updateCabinetStatus(
+            cabinet_id,
+            CabinetStatusType.AVAILABLE,
+          );
           await this.clearCabinetInfo(cabinet_id);
         }
         break;
       case CabinetStatusType.BANNED:
       case CabinetStatusType.EXPIRED:
-        // TODO: 해당 상태에서 반납을 했을 때 메인에서는 연체 누적 연체 일수만큼 패널티를 주게 되는데
-        // 이 부분은 어드민에서도 유지를 하는게 좋을까요?
-        // const overdue = await this.banService.calDateDiff(
-        //   lent.expire_time,
-        //   new Date(),
-        // );
-        // const cumulative = await this.banService.addOverdueDays(user.user_id);
-        // await this.banService.blockingUser(lent, overdue + cumulative, false);
-        // if (
-        //   cabinet.status === CabinetStatusType.EXPIRED &&
-        //   lent_count - 1 === 0
-        // ) {
-        //   // TODO: Cabinet 모듈이 구현되면 해당 모듈에서 가져와서 사용.
-        //   // await this.cabinetInfoService.updateCabinetStatus(
-        //   //   cabinet_id,
-        //   //   CabinetStatusType.AVAILABLE,
-        //   // );
-        // }
+        const overdue = this.banService.calDateDiff(
+          lent.expire_time,
+          new Date(),
+        );
+        const cumulative = await this.banService.addOverdueDays(user.user_id);
+        await this.banService.blockingUser(lent, overdue + cumulative, false);
+        if (
+          cabinet.status === CabinetStatusType.EXPIRED &&
+          lent_count - 1 === 0
+        ) {
+          await this.cabinetService.updateCabinetStatus(
+            cabinet_id,
+            CabinetStatusType.AVAILABLE,
+          );
+        }
         break;
     }
     // 3. Lent Table에서 값 제거.
