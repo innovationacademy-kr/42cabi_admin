@@ -72,35 +72,30 @@ export class ReturnService {
 
   async returnBundle(users: number[], cabinets: number[]): Promise<void> {
     this.logger.debug(`Called ${ReturnService.name} ${this.returnBundle.name}`);
+    const user_failures = []
+    const cabinets_failures = []
     if (users) {
-      const failures = []
       for await (const user_id of users) {
         await this.returnUserCabinet(user_id)
         .catch(() => {
-          failures.push(user_id);
+          user_failures.push(user_id);
         })
-      }
-      if (failures.length !== 0) {
-        throw new HttpException(
-        { "user_failures": failures },
-        HttpStatus.BAD_REQUEST,
-        );
       }
     }
     if (cabinets) {
-      const failures = []
       for await (const cabinet_id of cabinets) {
         await this.returnCabinet(cabinet_id)
         .catch(() => {
-          failures.push(cabinet_id);
+          cabinets_failures.push(cabinet_id);
         })
       }
-      if (failures.length !== 0) {
-        throw new HttpException(
-        { "cabinet_failures": failures },
-        HttpStatus.BAD_REQUEST,
-        );
-      }
+    }
+    if (!(user_failures.length === 0 && cabinets_failures.length === 0)) {
+      throw new HttpException({
+        "user_failures": user_failures,
+        "cabinet_failures": cabinets_failures,
+      }, HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }

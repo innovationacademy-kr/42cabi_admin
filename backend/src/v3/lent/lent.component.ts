@@ -50,7 +50,6 @@ export class LentTools {
       );
     }
     await this.lentRepository.setExpireTimeAll(cabinet_id, expire_time);
-    runOnTransactionComplete((err) => err && this.logger.error(err));
   }
 
   @Transactional({
