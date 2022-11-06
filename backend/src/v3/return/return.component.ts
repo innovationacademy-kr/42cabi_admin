@@ -18,7 +18,6 @@ export class ReturnTools {
     @Inject('IReturnRepository')
     private returnRepository: IReturnRepository,
     private cabinetService: CabinetService,
-    @Inject(forwardRef(() => ReturnService))
     private banService: BanService,
   ) {}
 

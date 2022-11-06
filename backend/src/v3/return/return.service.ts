@@ -15,8 +15,8 @@ export class ReturnService {
     @Inject('IReturnRepository') private returnRepository: IReturnRepository,
     private userService: UserService,
     private lentTools: LentTools,
-    @Inject(forwardRef(() => ReturnTools))
     private returnTools: ReturnTools,
+    private cabinetService: CabinetService,
   ) {}
 
   async returnUserCabinet(user_id: number): Promise<void> {
@@ -27,7 +27,7 @@ export class ReturnService {
       if (!user) {
         throw new HttpException(
           `🚨 해당 유저가 존재하지 않습니다. 🚨`,
-          HttpStatus.NOT_FOUND,
+          HttpStatus.BAD_REQUEST,
         );
       }
       // 1. 해당 유저가 대여중인 cabinet_id를 가져온다.
@@ -36,8 +36,8 @@ export class ReturnService {
       );
       if (cabinet_id === null) {
         throw new HttpException(
-          `${user.intra_id} doesn't lent cabinet!`,
-          HttpStatus.FORBIDDEN,
+          `🚨 해당 유저가 대여중인 사물함이 없습니다. 🚨`,
+          HttpStatus.BAD_REQUEST,
         );
       }
       const lent = await this.returnTools.returnStateTransition(
@@ -53,6 +53,13 @@ export class ReturnService {
   async returnCabinet(cabinet_id: number): Promise<void> {
     this.logger.debug(`Called ${ReturnService.name} ${this.returnCabinet.name}`);
     try {
+      // 캐비넷이 존재하는지 확인
+      if (!await this.cabinetService.isCabinetExist(cabinet_id)) {
+        throw new HttpException(
+          `🚨 해당 캐비넷이 존재하지 않습니다. 🚨`,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       const users = await this.returnRepository.getUsersByCabinetId(cabinet_id);
       if (users === null) {
         throw new HttpException(

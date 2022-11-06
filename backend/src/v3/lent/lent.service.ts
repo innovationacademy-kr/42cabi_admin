@@ -25,14 +25,14 @@ export class LentService {
       if (!user) {
         throw new HttpException(
           `🚨 해당 유저가 존재하지 않습니다. 🚨`,
-          HttpStatus.NOT_FOUND,
+          HttpStatus.BAD_REQUEST,
         );
       }
       // 캐비넷이 존재하는지 확인
       if (!await this.cabinetService.isCabinetExist(cabinet_id)) {
         throw new HttpException(
           `🚨 해당 캐비넷이 존재하지 않습니다. 🚨`,
-          HttpStatus.NOT_FOUND,
+          HttpStatus.BAD_REQUEST,
         );
       }
       // 유저가 대여한 사물함 확인

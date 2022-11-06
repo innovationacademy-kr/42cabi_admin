@@ -25,12 +25,8 @@ export class LentController {
   @ApiCreatedResponse({
     description: '대여에 성공 시, 201 Created를 응답합니다.',
   })
-  @ApiNotFoundResponse({
-    description: '해당 캐비넷이나 유저가 존재하지 않으면, 404 Not Found를 응답합니다.',
-  })
   @ApiBadRequestResponse({
-    description:
-      '이미 대여중인 사물함이 있는 경우, 400 Bad Request를 응답합니다.',
+    description:'해당 캐비넷이나 유저가 존재하지 않는 경우 or 해당 유저가 이미 대여중인 사물함이 있는 경우, 400 Bad Request를 응답합니다.',
   })
   @ApiResponse({
     status: HttpStatus.I_AM_A_TEAPOT,
@@ -38,8 +34,7 @@ export class LentController {
       "동아리 사물함을 대여 시도한 경우, 418 I'm a teapot을 응답합니다.",
   })
   @ApiConflictResponse({
-    description: `잔여 자리가 없는 경우, 연체 사물함을 대여 시도한 경우,
-      임시 밴 사물함이나 고장 사물함을 대여 시도한 경우 409 Conflict를 응답합니다.`,
+    description: '해당 캐비넷에 잔여 자리가 없는 경우 or 연체 사물함을 대여 시도한 경우 or 임시 밴 사물함이나 고장 사물함을 대여 시도한 경우, 409 Conflict를 응답합니다.',
   })
   @Post('/cabinet/:cabinet_id/:user_id')
   @HttpCode(HttpStatus.CREATED)

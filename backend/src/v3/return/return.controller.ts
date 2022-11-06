@@ -27,12 +27,9 @@ export class ReturnController {
   @ApiNoContentResponse({
     description: '반납에 성공 시, 204 No Content를 응답합니다.',
   })
-  @ApiNotFoundResponse({
-    description: '해당 유저가 존재하지 않으면, 404 Not Found를 응답합니다.',
-  })
   @ApiBadRequestResponse({
     description:
-      '대여중인 사물함이 없는 경우, 400 Bad Request를 응답합니다.',
+      '해당 유저가 존재하지 않거나 대여중인 사물함이 없는 경우, 400 Bad Request를 응답합니다.',
   })
   @Delete('/user/:user_id')
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -59,12 +56,9 @@ export class ReturnController {
   @ApiNoContentResponse({
     description: '반납에 성공 시, 204 No Content를 응답합니다.',
   })
-  @ApiNotFoundResponse({
-    description: '해당 캐비넷이 존재하지 않으면, 404 Not Found를 응답합니다.',
-  })
   @ApiBadRequestResponse({
     description:
-      '해당 사물함을 대여중인 유저가 없다면, 400 Bad Request를 응답합니다.',
+      '해당 캐비넷이 존재하지 않거나 해당 사물함을 대여중인 유저가 없다면, 400 Bad Request를 응답합니다.',
   })
   @Delete('/cabinet/:cabinet_id')
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -93,8 +87,7 @@ export class ReturnController {
   })
   @ApiBadRequestResponse({
     type: ReturnBundleFailedResponseDto,
-    description: `대여중인 사물함이 없는 유저가 있거나 대여중인 유저가 없는 사물함이 있는 경우, 400 Bad Request를 응답합니다.
-      이때 response body로 처리에 실패한 user_id나 cabinet_id의 배열을 전달합니다.`,
+    description: '존재하지 않는 유저이거나 대여중인 사물함이 없는 유저가 포함되어 있는 경우 or 존재하지 않는 사물함이거나 유저가 대여중이지 않은 사물함이 포함되어 있는 경우, 400 Bad Request를 응답합니다. 이때 response body로 처리에 실패한 user_id나 cabinet_id의 배열을 전달합니다.',
   })
   @ApiBody({ type: ReturnBundleDataDto })
   @Delete('bundle/cabinet')
@@ -115,7 +108,7 @@ export class ReturnController {
       this.logger.debug(`Called ${this.returnBundle.name}`);
       return await this.returnService.returnBundle(users, cabinets);
     } catch (err) {
-      this.logger.error(err);
+      this.logger.error(err, err.response);
       if (err instanceof HttpException) {
         throw err;
       } else {
