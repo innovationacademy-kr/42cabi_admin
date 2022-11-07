@@ -1,13 +1,16 @@
-import { InjectRepository } from "@nestjs/typeorm";
-import Cabinet from "src/entities/cabinet.entity";
-import Lent from "src/entities/lent.entity";
-import User from "src/entities/user.entity";
-import { Repository } from "typeorm";
-import { IsolationLevel, Propagation, Transactional } from "typeorm-transactional";
-import { LentCabinetDataDto } from "../dto/lent.cabinet.data.dto";
-import { LentDto } from "../dto/lent.dto";
-import { UserDto } from "../../user/dto/user.dto";
-import { ILentRepository } from "./lent.repository.interface";
+import { InjectRepository } from '@nestjs/typeorm';
+import Cabinet from 'src/entities/cabinet.entity';
+import Lent from 'src/entities/lent.entity';
+import { Repository } from 'typeorm';
+import {
+  IsolationLevel,
+  Propagation,
+  Transactional,
+} from 'typeorm-transactional';
+import { LentCabinetDataDto } from '../dto/lent.cabinet.data.dto';
+import { LentDto } from '../dto/lent.dto';
+import { UserDto } from '../../user/dto/user.dto';
+import { ILentRepository } from './lent.repository.interface';
 
 export class LentRepository implements ILentRepository {
   constructor(
@@ -21,8 +24,8 @@ export class LentRepository implements ILentRepository {
     const result = await this.cabinetRepository.findOne({
       where: {
         cabinet_id: cabinet_id,
-      }
-    })
+      },
+    });
     if (!result) {
       return false;
     }

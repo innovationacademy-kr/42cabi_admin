@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import LentType from 'src/enums/lent.type.enum';
 
 export class BrokenCabinetInfoDto {

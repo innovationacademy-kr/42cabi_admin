@@ -1,8 +1,11 @@
-import { Inject, Injectable, Logger } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import Lent from "src/entities/lent.entity";
-import { IsolationLevel, Propagation, Transactional } from "typeorm-transactional";
-import { IBanRepository } from "./repository/ban.repository.interface";
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import Lent from 'src/entities/lent.entity';
+import {
+  IsolationLevel,
+  Propagation,
+  Transactional,
+} from 'typeorm-transactional';
+import { IBanRepository } from './repository/ban.repository.interface';
 
 @Injectable()
 export class BanService {
@@ -19,7 +22,7 @@ export class BanService {
    * @param end
    * @returns days
    */
-   calDateDiff(begin: Date, end: Date): number {
+  calDateDiff(begin: Date, end: Date): number {
     this.logger.debug(`Called ${BanService.name} ${this.calDateDiff.name}`);
     const endYear = end.getFullYear();
     const endMonth = end.getMonth();
@@ -41,7 +44,7 @@ export class BanService {
    * 유저의 누적 연체일을 계산
    * @param user_id
    */
-   @Transactional({
+  @Transactional({
     propagation: Propagation.REQUIRED,
     isolationLevel: IsolationLevel.SERIALIZABLE,
   })
@@ -51,10 +54,7 @@ export class BanService {
     let accumulate = 0;
     for (const log of banLog) {
       if (log.is_penalty == false)
-        accumulate += this.calDateDiff(
-          log.banned_date,
-          log.unbanned_date,
-        );
+        accumulate += this.calDateDiff(log.banned_date, log.unbanned_date);
     }
     return accumulate;
   }
@@ -64,7 +64,7 @@ export class BanService {
    * @param user_id
    * @param ban_day
    */
-   @Transactional({
+  @Transactional({
     propagation: Propagation.REQUIRED,
     isolationLevel: IsolationLevel.SERIALIZABLE,
   })

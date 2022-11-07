@@ -1,15 +1,16 @@
-import { forwardRef, Inject, Injectable, Logger } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import Lent from "src/entities/lent.entity";
-import CabinetStatusType from "src/enums/cabinet.status.type.enum";
-import { LentService } from "src/lent/lent.service";
-import { ILentRepository } from "src/lent/repository/lent.repository.interface";
-import { IsolationLevel, Propagation, runOnTransactionComplete, Transactional } from "typeorm-transactional";
-import { BanService } from "../ban/ban.service";
-import { CabinetService } from "../cabinet/cabinet.service";
-import { UserDto } from "../user/dto/user.dto";
-import { IReturnRepository } from "./repository/return.repository.interface";
-import { ReturnService } from "./return.service";
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import Lent from 'src/entities/lent.entity';
+import CabinetStatusType from 'src/enums/cabinet.status.type.enum';
+import {
+  IsolationLevel,
+  Propagation,
+  runOnTransactionComplete,
+  Transactional,
+} from 'typeorm-transactional';
+import { BanService } from '../ban/ban.service';
+import { CabinetService } from '../cabinet/cabinet.service';
+import { UserDto } from '../user/dto/user.dto';
+import { IReturnRepository } from './repository/return.repository.interface';
 
 @Injectable()
 export class ReturnTools {
@@ -26,7 +27,9 @@ export class ReturnTools {
     isolationLevel: IsolationLevel.SERIALIZABLE,
   })
   async clearCabinetInfo(cabinet_id: number): Promise<void> {
-    this.logger.debug(`Called ${ReturnTools.name} ${this.clearCabinetInfo.name}`);
+    this.logger.debug(
+      `Called ${ReturnTools.name} ${this.clearCabinetInfo.name}`,
+    );
     await this.returnRepository.clearCabinetInfo(cabinet_id);
   }
 
@@ -43,7 +46,9 @@ export class ReturnTools {
     );
     // 대여하고 있는 유저들의 대여 정보를 포함하는 cabinet 정보를 가져옴.
     // 가져오는 정보 : 캐비넷 상태, 캐비넷 대여타입, 캐비넷을 빌린 사람들의 인원 수
-    const cabinet = await this.returnRepository.getReturnCabinetData(cabinet_id);
+    const cabinet = await this.returnRepository.getReturnCabinetData(
+      cabinet_id,
+    );
     const lent = cabinet.lents.filter(
       (lent) => lent.lent_user_id === user.user_id,
     )[0];

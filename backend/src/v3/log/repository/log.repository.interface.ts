@@ -1,4 +1,3 @@
-import { CabinetLentLogDto } from '../dto/cabinet-lent-log.dto';
 import { LogPagenationDto } from '../dto/log.pagenation.dto';
 
 export interface ILogRepository {

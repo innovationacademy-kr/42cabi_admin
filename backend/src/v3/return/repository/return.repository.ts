@@ -2,10 +2,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import Cabinet from 'src/entities/cabinet.entity';
 import Lent from 'src/entities/lent.entity';
 import LentLog from 'src/entities/lent.log.entity';
-import User from 'src/entities/user.entity';
 import { UserDto } from 'src/v3/user/dto/user.dto';
 import { Repository } from 'typeorm';
-import { IsolationLevel, Propagation, Transactional } from 'typeorm-transactional';
+import {
+  IsolationLevel,
+  Propagation,
+  Transactional,
+} from 'typeorm-transactional';
 import { ReturnCabinetDataDto } from '../dto/return.cabinet.data.dto';
 import { IReturnRepository } from './return.repository.interface';
 
@@ -107,7 +110,7 @@ export class ReturnRepository implements IReturnRepository {
       },
       where: {
         lent_cabinet_id: cabinet_id,
-      }
+      },
     });
     if (result.length === 0) {
       return null;

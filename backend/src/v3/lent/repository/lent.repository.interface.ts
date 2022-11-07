@@ -1,6 +1,6 @@
-import { LentCabinetDataDto } from "../dto/lent.cabinet.data.dto";
-import { LentDto } from "../dto/lent.dto";
-import { UserDto } from "../../user/dto/user.dto";
+import { LentCabinetDataDto } from '../dto/lent.cabinet.data.dto';
+import { LentDto } from '../dto/lent.dto';
+import { UserDto } from '../../user/dto/user.dto';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ILentRepository {
@@ -15,7 +15,7 @@ export interface ILentRepository {
    * @param user_id
    * @return boolean
    */
-   getIsLent(user_id: number): Promise<boolean>;
+  getIsLent(user_id: number): Promise<boolean>;
 
   /**
    * 사물함을 빌리기 전 사물함에 대한 최소한의 정보를 가져옴.
@@ -47,7 +47,7 @@ export interface ILentRepository {
    * @param expire_time
    * @return void
    */
-   setExpireTime(lent_id: number, expire_time: Date): Promise<void>;
+  setExpireTime(lent_id: number, expire_time: Date): Promise<void>;
 
   /**
    * 해당 user_id로 대여중인 Cabinet id를 반환합니다.

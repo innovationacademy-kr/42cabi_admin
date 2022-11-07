@@ -1,9 +1,9 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 /**
  * 유저의 기본적인 정보를 저장
  */
- export class UserDto {
+export class UserDto {
   @ApiProperty({
     description: '42 고유 ID',
     example: 12345,
@@ -21,4 +21,4 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
     example: 'joopark@student.42seoul.kr',
   })
   email?: string; // 42 이메일 ID (확장성을 위해 옵셔널 필드로 지정)
-  }
+}

@@ -13,8 +13,8 @@ export class UserRepository implements IUserRepository {
     const result = await this.userRepository.findOne({
       where: {
         user_id: user_id,
-      }
-    })
+      },
+    });
     if (!result) {
       return null;
     }

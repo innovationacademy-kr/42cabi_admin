@@ -19,7 +19,12 @@ const repo = {
 @Module({
   controllers: [LentController],
   providers: [LentService, repo, LentTools],
-  imports: [AuthModule, CabinetModule, UserModule, TypeOrmModule.forFeature([Lent, User, Cabinet])], // for JWTAuthGuard
+  imports: [
+    AuthModule,
+    CabinetModule,
+    UserModule,
+    TypeOrmModule.forFeature([Lent, User, Cabinet]),
+  ], // for JWTAuthGuard
   exports: [LentTools],
 })
 export class LentModule {}

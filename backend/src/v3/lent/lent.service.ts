@@ -1,4 +1,10 @@
-import { forwardRef, HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import LentExceptionType from 'src/enums/lent.exception.enum';
 import { CabinetService } from '../cabinet/cabinet.service';
 import { UserService } from '../user/user.service';
@@ -29,7 +35,7 @@ export class LentService {
         );
       }
       // 캐비넷이 존재하는지 확인
-      if (!await this.cabinetService.isCabinetExist(cabinet_id)) {
+      if (!(await this.cabinetService.isCabinetExist(cabinet_id))) {
         throw new HttpException(
           `🚨 해당 캐비넷이 존재하지 않습니다. 🚨`,
           HttpStatus.BAD_REQUEST,

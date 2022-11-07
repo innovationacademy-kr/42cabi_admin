@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import BanLog from 'src/entities/ban.log.entity';
 import { BanService } from './ban.service';
@@ -10,9 +10,7 @@ const repo = {
 };
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([BanLog]),
-  ],
+  imports: [TypeOrmModule.forFeature([BanLog])],
   providers: [BanService, repo],
   exports: [BanService],
 })

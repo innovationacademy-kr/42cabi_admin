@@ -1,4 +1,4 @@
-import { UserDto } from "src/v3/user/dto/user.dto";
+import { UserDto } from 'src/v3/user/dto/user.dto';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IUserRepository {
@@ -7,5 +7,5 @@ export interface IUserRepository {
    * 존재하면 해당 유저의 UserDto를 반환합니다.
    * @param user_id
    */
-   getUserIfExist(user_id: number): Promise<UserDto>;
+  getUserIfExist(user_id: number): Promise<UserDto>;
 }

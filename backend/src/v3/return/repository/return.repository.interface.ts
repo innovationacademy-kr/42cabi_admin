@@ -1,6 +1,6 @@
-import Lent from "src/entities/lent.entity";
-import { UserDto } from "src/v3/user/dto/user.dto";
-import { ReturnCabinetDataDto } from "../dto/return.cabinet.data.dto";
+import Lent from 'src/entities/lent.entity';
+import { UserDto } from 'src/v3/user/dto/user.dto';
+import { ReturnCabinetDataDto } from '../dto/return.cabinet.data.dto';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IReturnRepository {

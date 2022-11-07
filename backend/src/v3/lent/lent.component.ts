@@ -1,13 +1,17 @@
-import { forwardRef, Inject, Injectable, Logger } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import CabinetStatusType from "src/enums/cabinet.status.type.enum";
-import LentExceptionType from "src/enums/lent.exception.enum";
-import LentType from "src/enums/lent.type.enum";
-import { IsolationLevel, Propagation, runOnTransactionComplete, Transactional } from "typeorm-transactional";
-import { CabinetService } from "../cabinet/cabinet.service";
-import { UserDto } from "../user/dto/user.dto";
-import { LentService } from "./lent.service";
-import { ILentRepository } from "./repository/lent.repository.interface";
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import CabinetStatusType from 'src/enums/cabinet.status.type.enum';
+import LentExceptionType from 'src/enums/lent.exception.enum';
+import LentType from 'src/enums/lent.type.enum';
+import {
+  IsolationLevel,
+  Propagation,
+  runOnTransactionComplete,
+  Transactional,
+} from 'typeorm-transactional';
+import { CabinetService } from '../cabinet/cabinet.service';
+import { UserDto } from '../user/dto/user.dto';
+import { ILentRepository } from './repository/lent.repository.interface';
 
 @Injectable()
 export class LentTools {
@@ -25,7 +29,7 @@ export class LentTools {
    * @param last_lent_time
    * @param lent_type
    */
-   @Transactional({
+  @Transactional({
     propagation: Propagation.REQUIRED,
     isolationLevel: IsolationLevel.SERIALIZABLE,
   })

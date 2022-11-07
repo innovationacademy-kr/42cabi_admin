@@ -4,7 +4,6 @@ import { AuthModule } from 'src/auth/auth.module';
 import Cabinet from 'src/entities/cabinet.entity';
 import Lent from 'src/entities/lent.entity';
 import LentLog from 'src/entities/lent.log.entity';
-import User from 'src/entities/user.entity';
 import { BanModule } from '../ban/ban.module';
 import { CabinetModule } from '../cabinet/cabinet.module';
 import { LentModule } from '../lent/lent.module';
@@ -22,6 +21,13 @@ const repo = {
 @Module({
   controllers: [ReturnController],
   providers: [ReturnService, ReturnTools, repo],
-  imports: [AuthModule, TypeOrmModule.forFeature([Cabinet, Lent, LentLog]), CabinetModule, LentModule, BanModule, UserModule], // for JWTAuthGuard
+  imports: [
+    AuthModule,
+    TypeOrmModule.forFeature([Cabinet, Lent, LentLog]),
+    CabinetModule,
+    LentModule,
+    BanModule,
+    UserModule,
+  ], // for JWTAuthGuard
 })
 export class ReturnModule {}
