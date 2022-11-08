@@ -3,9 +3,12 @@ import UserDetail from "../Components/UserDetail";
 import PrevCabinetTable from "../Tables/PrevCabinetTable";
 import PrevUserTable from "../Tables/PrevUserTable";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import { GetTargetResponse } from "../ReduxModules/SearchResponse";
+import { useAppDispatch } from "../redux/hook";
+// import { GetTargetResponse } from "../ReduxModules/SearchResponse";
+import { GetTargetResponse } from "../../src/redux/slices/searchResponseSlice";
 import { RootState } from "../ReduxModules/rootReducer";
-import { dataInitialize } from "../ReduxModules/SearchResponse";
+// import { dataInitialize } from "../ReduxModules/SearchResponse";
+import { searchResponseInitialize } from "../../src/redux/slices/searchResponseSlice";
 import NoPrevLog from "../Components/NoPrevLog";
 import { useSearchParams } from "react-router-dom";
 import * as API from "../Networks/APIType";
@@ -31,7 +34,8 @@ const SearchDashboard = () => {
 
   const [searchParams] = useSearchParams();
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const getSearchData = useCallback(async () => {
@@ -81,7 +85,8 @@ const SearchDashboard = () => {
   // 페이지 벗어날 때 redux state 초기화 -> 다른 페이지에서 가져다 쓰거나 다시 돌아왔을 때 남아있는 현상 방지
   useEffect(() => {
     return () => {
-      dispatch(dataInitialize());
+      // dispatch(dataInitialize());
+      dispatch(searchResponseInitialize());
     };
   }, [dispatch]);
 
