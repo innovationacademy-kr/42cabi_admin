@@ -6,6 +6,11 @@ import svgrPlugin from "vite-plugin-svgr";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), viteTsconfigPaths(), svgrPlugin()],
+  resolve: {
+    alias: {
+      "@mui/styled-engine": "@mui/styled-engine-sc",
+    },
+  },
   build: {
     outDir: "build",
   },

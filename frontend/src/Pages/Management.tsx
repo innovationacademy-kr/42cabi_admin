@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { GetBanCabinetResponse } from "../ReduxModules/TaskBanCabinet";
 import SearchBar from "../Components/SearchBar";
+import ThreeToggleButton from "../Components/ThreeTogleButton";
 import UserDetail from "../Components/UserDetail";
 import CabinetDetail from "../Components/CabinetDetail";
 import PrevUserTable from "../Tables/PrevUserTable";
@@ -67,9 +68,7 @@ const Management = () => {
   return (
     <DashboardBox>
       <LeftBox>
-        <GrayBgBox>
-          <div>Toggle Button</div>
-        </GrayBgBox>
+        <ThreeToggleButton />
         <GrayBgBox>
           <TempTable />
         </GrayBgBox>
