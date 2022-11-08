@@ -1,6 +1,7 @@
-import { useSelector, shallowEqual } from "react-redux";
+// import { useSelector, shallowEqual } from "react-redux";
 import { useEffect, useMemo } from "react";
-import { RootState } from "../ReduxModules/rootReducer";
+// import { RootState } from "../ReduxModules/rootReducer";
+import { useAppSelector } from "../redux/hook";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import ExpiredInfo from "./ExpiredInfo";
@@ -11,10 +12,12 @@ import styled from "styled-components";
 // import * as API from "../Networks/APIType";
 
 const CabinetDetail = () => {
-  const SearchResponseRedux = useSelector(
-    (state: RootState) => state.SearchResponse,
-    shallowEqual
-  );
+  // const SearchResponseRedux = useSelector(
+  //   (state: RootState) => state.SearchResponse,
+  //   shallowEqual
+  // );
+  const SearchResponseRedux = useAppSelector((state) => state.searchResponse);
+
   // const DisableResponseRedux = useSelector(
   //   (state: RootState) => state.StatusDisabled
   // );

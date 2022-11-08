@@ -1,8 +1,9 @@
 import { useMemo } from "react";
 import { expiredTableStruct } from "./expiredTableStruct";
 import { usePagination, useSortBy, useTable } from "react-table";
-import { useSelector, shallowEqual } from "react-redux";
-import { RootState } from "../ReduxModules/rootReducer";
+// import { useSelector, shallowEqual } from "react-redux";
+// import { RootState } from "../ReduxModules/rootReducer";
+import { useAppSelector } from "../redux/hook";
 import {
   TableHead,
   TableIndexBox,
@@ -16,10 +17,11 @@ import { StatusResponseExpired } from "../type";
 import { PrevLogBox } from "../Components/DashboardStyleComponent";
 
 export const ExpiredTable = (props: any) => {
-  const StatusExpiredRedux = useSelector(
-    (state: RootState) => state.StatusExpired,
-    shallowEqual
-  );
+  // const StatusExpiredRedux = useSelector(
+  //   (state: RootState) => state.StatusExpired,
+  //   shallowEqual
+  // );
+  const StatusExpiredRedux = useAppSelector((state) => state.statusExpired);
 
   const columns = useMemo(() => expiredTableStruct, []);
   const data = useMemo(() => StatusExpiredRedux || [], [StatusExpiredRedux]);

@@ -2,11 +2,11 @@ import CabinetDetail from "../Components/CabinetDetail";
 import UserDetail from "../Components/UserDetail";
 import PrevCabinetTable from "../Tables/PrevCabinetTable";
 import PrevUserTable from "../Tables/PrevUserTable";
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import { useAppDispatch } from "../redux/hook";
+// import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
 // import { GetTargetResponse } from "../ReduxModules/SearchResponse";
 import { GetTargetResponse } from "../../src/redux/slices/searchResponseSlice";
-import { RootState } from "../ReduxModules/rootReducer";
+// import { RootState } from "../ReduxModules/rootReducer";
 // import { dataInitialize } from "../ReduxModules/SearchResponse";
 import { searchResponseInitialize } from "../../src/redux/slices/searchResponseSlice";
 import NoPrevLog from "../Components/NoPrevLog";
@@ -27,10 +27,11 @@ import { SearchQueryBody } from "../type";
 
 const SearchDashboard = () => {
   const [isLoading, setisLoading] = useState(true);
-  const SearchResponseRedux = useSelector(
-    (state: RootState) => state.SearchResponse,
-    shallowEqual
-  );
+  // const SearchResponseRedux = useSelector(
+  //   (state: RootState) => state.SearchResponse,
+  //   shallowEqual
+  // );
+  const SearchResponseRedux = useAppSelector((state) => state.searchResponse);
 
   const [searchParams] = useSearchParams();
 

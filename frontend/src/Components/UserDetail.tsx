@@ -1,6 +1,7 @@
-import { useSelector, shallowEqual } from "react-redux";
+// import { useSelector, shallowEqual } from "react-redux";
 import { useMemo, useEffect } from "react";
-import { RootState } from "../ReduxModules/rootReducer";
+// import { RootState } from "../ReduxModules/rootReducer";
+import { useAppSelector } from "../redux/hook";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import ExpiredInfo from "./ExpiredInfo";
@@ -9,10 +10,12 @@ import LentDisabledInfo from "./LentDisabled";
 import styled from "styled-components";
 
 const UserDetail = () => {
-  const SearchResponseRedux = useSelector(
-    (state: RootState) => state.SearchResponse,
-    shallowEqual
-  );
+  // const SearchResponseRedux = useSelector(
+  //   (state: RootState) => state.SearchResponse,
+  //   shallowEqual
+  // );
+  const SearchResponseRedux = useAppSelector((state) => state.searchResponse);
+
   const data = useMemo(
     () => SearchResponseRedux.resultFromLent,
     [SearchResponseRedux.resultFromLent]

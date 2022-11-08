@@ -12,21 +12,23 @@ import {
 } from "./ModalStyleComponent";
 import * as API from "../Networks/APIType";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../ReduxModules/rootReducer";
+// import { useSelector } from "react-redux";
+// import { RootState } from "../ReduxModules/rootReducer";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 // import { useDispatch } from "react-redux";
-import { useAppDispatch } from "../redux/hook";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
 // import { GetTargetResponse } from "../ReduxModules/SearchResponse";
 // import { GetBanCabinetResponse } from "../ReduxModules/TaskBanCabinet";
 import { GetTargetResponse } from "../../src/redux/slices/searchResponseSlice";
 import { GetBanCabinetResponse } from "../../src/redux/slices/taskBanCabinetSlice";
 
 const ActivationModal = (props: any) => {
-  const SearchResponseRedux = useSelector(
-    (state: RootState) => state.SearchResponse
-  );
+  // const SearchResponseRedux = useSelector(
+  //   (state: RootState) => state.SearchResponse
+  // );
+  const SearchResponseRedux = useAppSelector((state) => state.searchResponse);
+
   // const dispatch = useDispatch();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
