@@ -11,6 +11,9 @@ import { SearchModule } from './search/search.module';
 import { join } from 'path';
 import TypeOrmConfigService from './config/typeorm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { V3Module } from './v3/v3.module';
+import { addTransactionalDataSource } from 'typeorm-transactional';
+import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
@@ -21,6 +24,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useClass: TypeOrmConfigService,
+      async dataSourceFactory(options) {
+        if (!options) {
+          throw new Error('No options');
+        }
+        return addTransactionalDataSource(new DataSource(options));
+      },
     }),
     ActivationModule,
     AuthModule,
@@ -32,6 +41,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       rootPath: join(__dirname, '../../', 'frontend/build/'),
       serveRoot: '',
     }),
+    V3Module,
   ],
 })
 export class AppModule {}

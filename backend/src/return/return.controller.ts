@@ -1,10 +1,8 @@
 import {
   BadRequestException,
   Controller,
-  Delete,
   Get,
   Logger,
-  Param,
   ParseIntPipe,
   Patch,
   Query,

@@ -18,7 +18,7 @@ export class SearchRepository implements ISearchRepository {
   async getLentByIntraId(intraId: string): Promise<LentDto[]> {
     const result = await this.userRepository
       .createQueryBuilder('u')
-      .select(['u.intra_id', 'u.state', 'u.user_id'])
+      .select(['u.intra_id', 'u.user_id'])
       .addSelect([
         'c.cabinet_id',
         'c.cabinet_num',
@@ -32,12 +32,13 @@ export class SearchRepository implements ISearchRepository {
       .leftJoin('cabinet', 'c', 'c.cabinet_id = l.lent_cabinet_id')
       .where('u.intra_id = :intraId', { intraId })
       .execute();
+
     if (result.length === 0) {
       return [];
     }
     const blocked = await this.userRepository.manager.findOne(BanLog, {
       where: {
-        ban_user_id: result.u_user_id,
+        ban_user_id: result[0].u_user_id,
       },
       order: {
         unbanned_date: 'DESC',
