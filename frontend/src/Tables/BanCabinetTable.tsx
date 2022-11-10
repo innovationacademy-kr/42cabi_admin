@@ -1,8 +1,9 @@
 import { useMemo } from "react";
 import { banCabinetTableStruct } from "./banCabinetTableStruct";
 import { usePagination, useSortBy, useTable } from "react-table";
-import { useSelector } from "react-redux";
-import { RootState } from "../ReduxModules/rootReducer";
+// import { useSelector } from "react-redux";
+// import { RootState } from "../ReduxModules/rootReducer";
+import { useAppSelector } from "../redux/hook";
 import {
   TableHead,
   TableSheet,
@@ -16,9 +17,10 @@ import { TaskBanCabinet } from "../type";
 import { PrevLogBox } from "../Components/DashboardStyleComponent";
 
 export const BanCabinetTable = (props: any) => {
-  const TaskBanCabinetRedux = useSelector(
-    (state: RootState) => state.TaskBanCabinet
-  );
+  // const TaskBanCabinetRedux = useSelector(
+  //   (state: RootState) => state.TaskBanCabinet
+  // );
+  const TaskBanCabinetRedux = useAppSelector((state) => state.taskBanCabinet);
 
   const columns = useMemo(() => banCabinetTableStruct, []);
   const data = useMemo(() => TaskBanCabinetRedux || [], [TaskBanCabinetRedux]);

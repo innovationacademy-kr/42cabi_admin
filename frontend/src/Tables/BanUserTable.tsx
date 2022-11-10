@@ -1,8 +1,9 @@
 import { useMemo } from "react";
 import { banUserTableStruct } from "./banUserTableStruct";
 import { usePagination, useSortBy, useTable } from "react-table";
-import { useSelector, shallowEqual } from "react-redux";
-import { RootState } from "../ReduxModules/rootReducer";
+// import { useSelector, shallowEqual } from "react-redux";
+// import { RootState } from "../ReduxModules/rootReducer";
+import { useAppSelector } from "../redux/hook";
 import {
   TableHead,
   TableIndexBox,
@@ -16,10 +17,11 @@ import { TaskBanUser } from "../type";
 import { PrevLogBox } from "../Components/DashboardStyleComponent";
 
 export const BanUserTable = (props: any) => {
-  const TaskBanUserRedux = useSelector(
-    (state: RootState) => state.TaskBanUser,
-    shallowEqual
-  );
+  // const TaskBanUserRedux = useSelector(
+  //   (state: RootState) => state.TaskBanUser,
+  //   shallowEqual
+  // );
+  const TaskBanUserRedux = useAppSelector((state) => state.taskBanUser);
 
   const columns = useMemo(() => banUserTableStruct, []);
   const data = useMemo(() => TaskBanUserRedux || [], [TaskBanUserRedux]);

@@ -1,8 +1,9 @@
 import { useMemo } from "react";
 import { prevUserTableStruct } from "./prevUserTableStruct";
 import { useTable, useSortBy } from "react-table";
-import { useSelector, shallowEqual } from "react-redux";
-import { RootState } from "../ReduxModules/rootReducer";
+// import { useSelector, shallowEqual } from "react-redux";
+// import { RootState } from "../ReduxModules/rootReducer";
+import { useAppSelector } from "../redux/hook";
 import {
   TableHead,
   TableSheet,
@@ -16,10 +17,11 @@ import { useNavigate, createSearchParams } from "react-router-dom";
 import { SearchResponseFromLentLog } from "../type";
 
 export const PrevUserTable = () => {
-  const SearchResponseRedux = useSelector(
-    (state: RootState) => state.SearchResponse,
-    shallowEqual
-  );
+  // const SearchResponseRedux = useSelector(
+  //   (state: RootState) => state.SearchResponse,
+  //   shallowEqual
+  // );
+  const SearchResponseRedux = useAppSelector((state) => state.searchResponse);
 
   const columns = useMemo(() => prevUserTableStruct, []);
   const data = useMemo(

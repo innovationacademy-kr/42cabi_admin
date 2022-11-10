@@ -1,11 +1,18 @@
 import { ExpiredTable } from "../Tables/ExpiredTable";
 import { BanUserTable } from "../Tables/BanUserTable";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../redux/hook";
 import * as API from "../Networks/APIType";
-import { GetExpiredResponse } from "../ReduxModules/StatusExpired";
-import { GetBanUserResponse } from "../ReduxModules/TaskBanUser";
-import { GetTargetResponse } from "../ReduxModules/SearchResponse";
-import { dataInitialize } from "../ReduxModules/SearchResponse";
+// import { GetExpiredResponse } from "../ReduxModules/StatusExpired";
+// import { GetBanUserResponse } from "../ReduxModules/TaskBanUser";
+// import { GetTargetResponse } from "../ReduxModules/SearchResponse";
+// import { dataInitialize } from "../ReduxModules/SearchResponse";
+import { GetExpiredResponse } from "../../src/redux/slices/statusExpiredSlice";
+import { GetBanUserResponse } from "../../src/redux/slices/taskBanUserSlice";
+import {
+  GetTargetResponse,
+  searchResponseInitialize,
+} from "../../src/redux/slices/searchResponseSlice";
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -19,7 +26,8 @@ import UserDetail from "../Components/UserDetail";
 import ButtonSet from "../Components/ButtonSet";
 
 const Status = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const token = localStorage.getItem("accessToken");
   const [paramUser, setParamUser] = useState("");
@@ -94,7 +102,8 @@ const Status = () => {
   // 페이지 벗어날 때 redux state 초기화 -> 다른 페이지에서 가져다 쓰거나 다시 돌아왔을 때 남아있는 현상 방지
   useEffect(() => {
     return () => {
-      dispatch(dataInitialize());
+      // dispatch(dataInitialize());
+      dispatch(searchResponseInitialize());
     };
   }, [dispatch]);
 
