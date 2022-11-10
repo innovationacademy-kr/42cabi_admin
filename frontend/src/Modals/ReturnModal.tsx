@@ -10,13 +10,17 @@ import {
 } from "./ModalStyleComponent";
 import * as API from "../Networks/APIType";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { GetTargetResponse } from "../ReduxModules/SearchResponse";
-import { GetExpiredResponse } from "../ReduxModules/StatusExpired";
+// import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../redux/hook";
+// import { GetTargetResponse } from "../ReduxModules/SearchResponse";
+// import { GetExpiredResponse } from "../ReduxModules/StatusExpired";
+import { GetTargetResponse } from "../../src/redux/slices/searchResponseSlice";
+import { GetExpiredResponse } from "../../src/redux/slices/statusExpiredSlice";
 import { SearchQueryBody } from "../type";
 
 const ReturnModal = (props: any) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
