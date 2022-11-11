@@ -33,6 +33,7 @@ export class CabinetRepository implements ICabinetRepository {
       max_user: result.max_user,
       status: result.status,
       section: result.section,
+      status_note: result.status_note,
       lent_info: result.lent
         ? result.lent.map((l) => ({
             user_id: l.user.user_id,

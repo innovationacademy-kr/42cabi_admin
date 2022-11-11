@@ -1,6 +1,7 @@
-import { useSelector, shallowEqual } from "react-redux";
-import { useEffect, useMemo } from "react";
-import { RootState } from "../ReduxModules/rootReducer";
+// import { useSelector, shallowEqual } from "react-redux";
+import { useCallback, useEffect, useMemo } from "react";
+// import { RootState } from "../ReduxModules/rootReducer";
+import { useAppSelector } from "../redux/hook";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import ExpiredInfo from "./ExpiredInfo";
@@ -8,13 +9,22 @@ import { DetailBox, BigFontSize } from "./DetailStyleComponent";
 import LentDisabledInfo from "./LentDisabled";
 // import { GetDisabledResponse } from "../ReduxModules/StatusDisabled";
 import styled from "styled-components";
-// import * as API from "../Networks/APIType";
+import { useState } from "react";
+import * as API from "../Networks/APIType";
+import { singleCircleCabinetInfo } from "../type";
+
+interface circleData {
+  circleName: string;
+  circleMaster: string;
+}
 
 const CabinetDetail = () => {
-  const SearchResponseRedux = useSelector(
-    (state: RootState) => state.SearchResponse,
-    shallowEqual
-  );
+  // const SearchResponseRedux = useSelector(
+  //   (state: RootState) => state.SearchResponse,
+  //   shallowEqual
+  // );
+  const SearchResponseRedux = useAppSelector((state) => state.searchResponse);
+
   // const DisableResponseRedux = useSelector(
   //   (state: RootState) => state.StatusDisabled
   // );
@@ -28,6 +38,12 @@ const CabinetDetail = () => {
   // const dispatch = useDispatch();
   const currentPage = window.location.pathname.split("/")[2];
 
+  const [isCircle, setIsCircle] = useState<boolean>(false);
+  const [circleData, setCircleData] = useState<circleData>({
+    circleName: "",
+    circleMaster: "",
+  });
+
   useEffect(() => {
     if (currentPage === "search" && data?.length === 0) {
       navigate("/saerom/search/invalidSearchResult", {
@@ -35,6 +51,65 @@ const CabinetDetail = () => {
       });
     }
   }, [currentPage, data, navigate]);
+
+  const getTargetCabinetData = async (cabinetId: number) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const res = await API.axiosFormat(
+        {
+          method: "GET",
+          url: API.url(`/api/v3/cabinet/${cabinetId}`),
+        },
+        token
+      );
+      return res;
+    } catch (e) {
+      console.log(e);
+      const axiosError = e as API.axiosError;
+      API.HandleError(navigate, axiosError);
+    }
+    return null;
+  };
+
+  useEffect(() => {
+    if (
+      data !== undefined &&
+      data[0] !== undefined &&
+      data[0].cabinet_id !== undefined
+    ) {
+      const res = getTargetCabinetData(data[0].cabinet_id).then((res) => {
+        const data: singleCircleCabinetInfo | null = res?.data;
+        if (data !== null && data.lent_type === "CIRCLE") setIsCircle(true);
+      });
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (
+      data !== undefined &&
+      data[0] !== undefined &&
+      data[0].cabinet_id &&
+      isCircle &&
+      circleData.circleName === ""
+    ) {
+      const res = getTargetCabinetData(data[0].cabinet_id).then((res) => {
+        const data: singleCircleCabinetInfo | null = res?.data;
+        if (
+          data?.cabinet_title !== undefined &&
+          data.status_note !== undefined
+        ) {
+          setCircleData({
+            circleName: data?.cabinet_title,
+            circleMaster: data.status_note,
+          });
+        }
+      });
+    }
+  });
+
+  useEffect(() => {
+    setCircleData({ circleName: "", circleMaster: "" });
+  }, []);
 
   const CabinetInfo =
     data !== undefined && data[0] !== undefined
@@ -125,8 +200,18 @@ const CabinetDetail = () => {
       <DetailBox>
         <LentDisabledInfo />
         <BigFontSize>{CabinetInfo}</BigFontSize>
-        <p>현재 대여자 : {CabinetUserInfo}</p>
-        <p>대여 기간 : {CabinetLentInfo}</p>
+        {isCircle ? (
+          <>
+            <p>동아리 사물함입니다.</p>
+            <p>동아리 : {circleData.circleName}</p>
+            <p>동아리장 : {circleData.circleMaster}</p>
+          </>
+        ) : (
+          <>
+            <p>현재 대여자 : {CabinetUserInfo}</p>
+            <p>대여 기간 : {CabinetLentInfo}</p>
+          </>
+        )}
         <CabinetStatusMessage>{CabinetActivationInfo}</CabinetStatusMessage>
         {/* {CabinetActivationInfo === "사용 불가" && (
           <p>비활성화 사유 : {CabinetDisabledReason}</p>
