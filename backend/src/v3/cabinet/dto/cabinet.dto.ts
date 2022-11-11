@@ -56,4 +56,10 @@ export class CabinetDto {
     example: 'Oasis',
   })
   section: string; // 사물함의 섹션 종류 (오아시스 등)
+
+  @ApiProperty({
+    description: '사물함 상태와 관련해 추가적인 설명',
+    example: '건전지 교체 필요',
+  })
+  status_note?: string; // 고장 사유  
 }
