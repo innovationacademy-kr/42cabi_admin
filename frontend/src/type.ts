@@ -76,3 +76,22 @@ export type PieData = { name: string; value: number };
 export type SearchQueryBody =
   | { intraId: string | null }
   | { floor: string | null; cabinetNum: string | null };
+
+export type singleCabinetLentData = {
+  user_id: number;
+  intra_id: string;
+  lent_id: number;
+  lent_time: string;
+  expire_time: string;
+};
+
+export type singleCircleCabinetInfo = {
+  cabinet_id: number;
+  cabinet_num: number;
+  lent_type: string;
+  cabinet_title: string;
+  status_note: string;
+  status: string;
+  section: string;
+  lent_info: singleCabinetLentData | null;
+};
