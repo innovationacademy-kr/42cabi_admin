@@ -1,5 +1,5 @@
 import React, { HTMLProps, useMemo, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppSelector } from "../redux/hook";
 import { RootState } from "../ReduxModules/rootReducer";
 
 import "./tempTable.css";
@@ -20,9 +20,7 @@ export const TempTable = () => {
 
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const TaskBanCabinetRedux = useSelector(
-    (state: RootState) => state.TaskBanCabinet
-  );
+  const TaskBanCabinetRedux = useAppSelector((state) => state.taskBanCabinet);
 
   const columns = React.useMemo<ColumnDef<TaskBanCabinet>[]>(
     () => [
@@ -87,6 +85,8 @@ export const TempTable = () => {
     getPaginationRowModel: getPaginationRowModel(),
     debugTable: false,
   });
+
+  console.log(TaskBanCabinetRedux);
 
   return (
     <div className="p-2">

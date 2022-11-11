@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppSelector, useAppDispatch } from "../redux/hook";
 import { GetBanCabinetResponse } from "../ReduxModules/TaskBanCabinet";
 import SearchBar from "../Components/SearchBar";
 import ThreeToggleButton from "../Components/ThreeTogleButton";
@@ -24,10 +24,34 @@ import { TempTable } from "../Tables/TempTable";
 
 const Management = () => {
   const [isLoading, setisLoading] = useState(true);
-
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const token = localStorage.getItem("accessToken");
+
+  const getCabinetDataByType = async (
+    selectedCabinetType: string,
+    index: number,
+    length: number
+  ) => {
+    try {
+      const res = await API.axiosFormat(
+        {
+          method: "GET",
+          url: API.url(
+            `/api/v3/search/cabinet/lent_type/${selectedCabinetType}`
+          ),
+          params: { index: index, length: length },
+        },
+        token
+      );
+      // dispatch();
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+      const axiosError = e as API.axiosError;
+      API.HandleError(navigate, axiosError);
+    }
+  };
 
   const getBanCabinetData = async () => {
     try {
@@ -68,7 +92,7 @@ const Management = () => {
   return (
     <DashboardBox>
       <LeftBox>
-        <ThreeToggleButton />
+        <ThreeToggleButton handleClick={getCabinetDataByType} />
         <GrayBgBox>
           <TempTable />
         </GrayBgBox>
