@@ -1,16 +1,18 @@
 import CabiButton from "./CabiButton";
-import { useSelector, shallowEqual } from "react-redux";
-import { RootState } from "../ReduxModules/rootReducer";
+// import { useSelector, shallowEqual } from "react-redux";
+// import { RootState } from "../ReduxModules/rootReducer";
+import { useAppSelector } from "../redux/hook";
 import { useState } from "react";
 import ReturnModal from "../Modals/ReturnModal";
 import ActivationModal from "../Modals/ActivationModal";
 import Toast from "./Toast";
 
 const ButtonSet = (props: any) => {
-  const SearchResponseRedux = useSelector(
-    (state: RootState) => state.SearchResponse,
-    shallowEqual
-  );
+  // const SearchResponseRedux = useSelector(
+  //   (state: RootState) => state.SearchResponse,
+  //   shallowEqual
+  // );
+  const SearchResponseRedux = useAppSelector((state) => state.searchResponse);
 
   const isLent: boolean =
     SearchResponseRedux.resultFromLent !== undefined &&

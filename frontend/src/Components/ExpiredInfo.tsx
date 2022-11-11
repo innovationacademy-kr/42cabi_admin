@@ -1,13 +1,16 @@
-import { useSelector, shallowEqual } from "react-redux";
+// import { useSelector, shallowEqual } from "react-redux";
 import moment from "moment";
-import { RootState } from "../ReduxModules/rootReducer";
+// import { RootState } from "../ReduxModules/rootReducer";
+import { useAppSelector } from "../redux/hook";
 import styled from "styled-components";
 
 const ExpiredInfo = () => {
-  const SearchResponseRedux = useSelector(
-    (state: RootState) => state.SearchResponse,
-    shallowEqual
-  );
+  // const SearchResponseRedux = useSelector(
+  //   (state: RootState) => state.SearchResponse,
+  //   shallowEqual
+  // );
+  const SearchResponseRedux = useAppSelector((state) => state.searchResponse);
+
   if (
     SearchResponseRedux.resultFromLent === undefined ||
     SearchResponseRedux.resultFromLent.length === 0 ||

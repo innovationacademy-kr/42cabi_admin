@@ -4,7 +4,6 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { CabinetLentLogDto } from './dto/cabinet-lent-log.dto';
 import { LogPagenationDto } from './dto/log.pagenation.dto';
 import { ILogRepository } from './repository/log.repository.interface';
 

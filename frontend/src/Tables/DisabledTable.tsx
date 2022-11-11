@@ -1,8 +1,9 @@
 import { useMemo } from "react";
 import { disabledTableStruct } from "./disabledTableStruct";
 import { usePagination, useSortBy, useTable } from "react-table";
-import { useSelector, shallowEqual } from "react-redux";
-import { RootState } from "../ReduxModules/rootReducer";
+// import { useSelector, shallowEqual } from "react-redux";
+// import { RootState } from "../ReduxModules/rootReducer";
+import { useAppSelector } from "../redux/hook";
 import {
   TableHead,
   TableSheet,
@@ -16,10 +17,11 @@ import { StatusResponseDisabled } from "../type";
 import { PrevLogBox } from "../Components/DashboardStyleComponent";
 
 export const DisabledTable = (props: any) => {
-  const StatusDisabledRedux = useSelector(
-    (state: RootState) => state.StatusDisabled,
-    shallowEqual
-  );
+  // const StatusDisabledRedux = useSelector(
+  //   (state: RootState) => state.StatusDisabled,
+  //   shallowEqual
+  // );
+  const StatusDisabledRedux = useAppSelector((state) => state.statusDisable);
 
   const columns = useMemo(() => disabledTableStruct, []);
   const data = useMemo(() => StatusDisabledRedux || [], [StatusDisabledRedux]);

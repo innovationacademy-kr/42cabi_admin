@@ -154,7 +154,7 @@ export class SearchRepository implements ISearchRepository {
   ): Promise<BrokenCabinetInfoPagenationDto> {
     const result = await this.cabinetRepository.findAndCount({
       where: {
-        status: CabinetStatusType.BANNED,
+        status: CabinetStatusType.BROKEN,
       },
       order: { cabinet_id: 'ASC' },
       take: length,
