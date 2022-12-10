@@ -61,12 +61,12 @@ const ReturnModal = (props: any) => {
   const ReturnAPI = async () => {
     try {
       const cabinetIdx = data !== undefined ? data.cabinet_id : "";
-      const urlReturn = "/api/return?cabinetIdx=" + cabinetIdx;
+      const urlReturn = "/api/v3/return/cabinet/" + cabinetIdx;
       const token = localStorage.getItem("accessToken");
       let params: SearchQueryBody;
       await API.axiosFormat(
         {
-          method: "PATCH",
+          method: "DELETE",
           url: API.url(urlReturn),
         },
         token
