@@ -49,12 +49,12 @@ const ReturnModal = (props: any) => {
         token
       );
       dispatch(GetTargetResponse(resSearch.data));
+      close(true);
     } catch (e) {
       console.log(e);
       const axiosError = e as API.axiosError;
+      close(false);
       API.HandleError(navigate, axiosError);
-    } finally {
-      close(true);
     }
   };
 
@@ -92,12 +92,12 @@ const ReturnModal = (props: any) => {
         };
       }
       UpdateInfo(params);
+      close(true);
     } catch (e) {
       console.log(e);
       const axiosError = e as API.axiosError;
+      close(false);
       API.HandleError(navigate, axiosError);
-    } finally {
-      close(true);
     }
   };
 
