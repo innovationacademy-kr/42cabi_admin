@@ -95,3 +95,14 @@ export type singleCircleCabinetInfo = {
   section: string;
   lent_info: singleCabinetLentData | null;
 };
+
+export type singleShareCabinetInfo = {
+  cabinet_id: number;
+  cabinet_num: number;
+  lent_type: string;
+  cabinet_title: string | null;
+  status_note: string | null;
+  status: string;
+  section: string;
+  lent_info: singleCabinetLentData[];
+};
