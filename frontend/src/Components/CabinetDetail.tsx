@@ -11,7 +11,7 @@ import LentDisabledInfo from "./LentDisabled";
 import styled from "styled-components";
 import { useState } from "react";
 import * as API from "../Networks/APIType";
-import { singleCircleCabinetInfo } from "../type";
+import { singleCircleCabinetInfo, singleShareCabinetInfo } from "../type";
 
 interface circleData {
   circleName: string;
@@ -43,6 +43,9 @@ const CabinetDetail = () => {
     circleName: "",
     circleMaster: "",
   });
+
+  const [isShare, setIsShare] = useState<boolean>(false);
+  const [sharingUsers, setSharingUsers] = useState<string[]>([]);
 
   useEffect(() => {
     if (currentPage === "search" && data?.length === 0) {
@@ -80,6 +83,7 @@ const CabinetDetail = () => {
       const res = getTargetCabinetData(data[0].cabinet_id).then((res) => {
         const data: singleCircleCabinetInfo | null = res?.data;
         if (data !== null && data.lent_type === "CIRCLE") setIsCircle(true);
+        else if (data !== null && data.lent_type === "SHARE") setIsShare(true);
       });
     }
   }, [data]);
@@ -110,6 +114,31 @@ const CabinetDetail = () => {
   useEffect(() => {
     setCircleData({ circleName: "", circleMaster: "" });
   }, []);
+
+  useEffect(() => {
+    if (
+      data !== undefined &&
+      data[0] !== undefined &&
+      data[0].cabinet_id &&
+      isShare &&
+      sharingUsers.length === 0
+    ) {
+      const res = getTargetCabinetData(data[0].cabinet_id).then((res) => {
+        const data: singleShareCabinetInfo | null = res?.data;
+        if (
+          data !== null &&
+          data.lent_info !== null &&
+          data.lent_info.length !== 0
+        ) {
+          let sharingUserList: string[] = [];
+          for (let i = 0; i < data?.lent_info.length; i++) {
+            sharingUserList.push(data.lent_info[i].intra_id);
+          }
+          setSharingUsers(sharingUserList);
+        }
+      });
+    }
+  });
 
   const CabinetInfo =
     data !== undefined && data[0] !== undefined
@@ -200,16 +229,23 @@ const CabinetDetail = () => {
       <DetailBox>
         <LentDisabledInfo />
         <BigFontSize>{CabinetInfo}</BigFontSize>
-        {isCircle ? (
+        {!isCircle && !isShare && (
+          <>
+            <p>현재 대여자 : {CabinetUserInfo}</p>
+            <p>대여 기간 : {CabinetLentInfo}</p>
+          </>
+        )}
+        {isCircle && (
           <>
             <p>동아리 사물함입니다.</p>
             <p>동아리 : {circleData.circleName}</p>
             <p>동아리장 : {circleData.circleMaster}</p>
           </>
-        ) : (
+        )}
+        {isShare && (
           <>
-            <p>현재 대여자 : {CabinetUserInfo}</p>
-            <p>대여 기간 : {CabinetLentInfo}</p>
+            <p>공유 사물함입니다.</p>
+            <p>현재 대여자 : {sharingUsers.join(", ")}</p>
           </>
         )}
         <CabinetStatusMessage>{CabinetActivationInfo}</CabinetStatusMessage>
